@@ -55,6 +55,7 @@ public class ResidentCasterService extends Service {
 			Bundle extra = intent.getExtras();
 			if(extra!=null) {
 				String tweakit = extra.getString("TWEAKIT");	// intentからtweakメッセージを生成する。
+				Log.d("ResidentService","Tweet Message="+tweakit);
 				//
 				try {
 					Intent twit = new Intent("com.twidroid.SendTweet");
