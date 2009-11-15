@@ -30,10 +30,11 @@ public class ResidentCasterService extends Service {
 
 		if(START_ACTION.equals(intent.getAction()) || INTERVAL_ACTION.equals(intent.getAction()) || STOP_ACTION.equals(intent.getAction())) {
 			// 定期(INTERVAL)に自分を呼び出す準備
-			String message = getString(R.string.hello);
+			String message = getString(R.string.app_name);
 			message += "action = [" + intent.getAction() + "]";
 			//Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
 			Log.d("ResidentService",message);
+			//
 			Intent i = new Intent();
 			i.setClassName("jp.android.fukuoka.scorecaster", "jp.android.fukuoka.scorecaster.ResidentCasterService");
 			i.setAction(INTERVAL_ACTION);
