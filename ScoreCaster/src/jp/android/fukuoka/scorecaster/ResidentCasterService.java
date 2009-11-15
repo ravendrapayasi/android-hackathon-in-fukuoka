@@ -70,10 +70,10 @@ public class ResidentCasterService extends Service {
 
 /**
  *  memo:activityからの呼び出し方法
-	String tweak_message=null;
+	String tweak_message=null;		// メッセージ設定
 	Intent tweakit = new Intent(context,ResidentCasterService.class);
 	tweakit.setAction(ResidentCasterService.TWEAK_ACTION);
 	tweakit.putExtra("TWEAKIT", tweak_message);
-	context.startService(tweakit);
+	startActivity(tweakit)
  *
  **/
