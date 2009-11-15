@@ -7,6 +7,7 @@ import jp.android.fukuoka.scorecaster.db.DatabaseHelper;
 import jp.android.fukuoka.scorecaster.db.Score;
 import jp.android.fukuoka.scorecaster.db.ScoreDao;
 import android.app.Activity;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
@@ -108,6 +109,7 @@ public class ScoreCaster extends Activity {
 		switch (item.getItemId()) {
 			case 0://設定
 				//設定画面への遷移
+				startActivityForResult(new Intent(ScoreCaster.this,SettingActivity.class),0);
 				break;
 			case 1://DBテスト追加
 				DatabaseHelper dbHelper = new DatabaseHelper(this);
