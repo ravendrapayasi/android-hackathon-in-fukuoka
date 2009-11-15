@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.os.SystemClock;
 import android.util.Log;
+import android.view.ViewDebug.FlagToString;
 
 /**
  * intentメッセージをやりとりするサービス。
@@ -56,6 +57,7 @@ public class ResidentCasterService extends Service {
 			if(extra!=null) {
 				String tweakit = extra.getString("TWEAKIT");	// intentからtweakメッセージを生成する。
 				Intent twit = new Intent("com.twidroid.SendDirect");
+				twit.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 				twit.putExtra("com.twidroid", tweakit);
 				//
 				try {
