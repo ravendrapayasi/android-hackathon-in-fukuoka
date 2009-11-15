@@ -13,13 +13,13 @@
 			android:entryValues="@array/time_list_values"/>
 		<EditTextPreference
 			android:id="@+id/twitter_id"
-			android:key="edittext_key"
+			android:key="twitter_id"
 			android:title="@string/twitter_id_title"
 			android:summary="@string/twitter_id_summary"
 			android:dialogTitle="@string/twitter_id_dialogtitle"/>
 		<EditTextPreference
 			android:id="@+id/twitter_pswd"
-			android:key="edittext_key"
+			android:key="twitter_pswd"
 			android:title="@string/twitter_pswd_title"
 			android:summary="@string/twitter_pswd_summary"
 			android:dialogTitle="@string/twitter_pswd_dialogtitle"

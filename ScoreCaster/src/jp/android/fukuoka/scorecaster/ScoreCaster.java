@@ -7,9 +7,12 @@ import jp.android.fukuoka.scorecaster.db.DatabaseHelper;
 import jp.android.fukuoka.scorecaster.db.Score;
 import jp.android.fukuoka.scorecaster.db.ScoreDao;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -100,6 +103,7 @@ public class ScoreCaster extends Activity {
 		menu.add(0,1,1, "DB追加").setIcon(android.R.drawable.ic_menu_edit);
 		menu.add(0,2,2, "DB取得").setIcon(android.R.drawable.ic_menu_edit);
 		menu.add(0,3,3, "スコア一覧").setIcon(android.R.drawable.ic_menu_edit);
+		menu.add(0,4,4, "preference").setIcon(android.R.drawable.ic_menu_preferences);//設定のデバッグ用です。後で消す。
 		return true;
 	}
 
@@ -110,6 +114,10 @@ public class ScoreCaster extends Activity {
 			case 0://設定
 				//設定画面への遷移
 				startActivityForResult(new Intent(ScoreCaster.this,SettingActivity.class),0);
+				break;
+			case 4://設定のデバッグ用　あとで消す。
+				SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this.getBaseContext());
+				Log.i("shika_log",sp.getAll().toString());
 				break;
 			case 1://DBテスト追加
 				DatabaseHelper dbHelper = new DatabaseHelper(this);
