@@ -10,7 +10,10 @@ import android.os.IBinder;
 import android.os.SystemClock;
 import android.util.Log;
 
-
+/**
+ * intentメッセージをやりとりするサービス。
+ * 一度startで起動されると、以後定期的に自分を呼び出す。
+ */
 public class ResidentCasterService extends Service {
 	long INTERVAL = 15;		// 定期的に起動する間隔。
 

@@ -5,7 +5,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-
+/**
+ * 起動時にサービスを起動させる。ブロードキャストレシーバ。
+ */
 public class ResidentCasterServiceStarter extends BroadcastReceiver {
 	public static final String BROADCAST_START_ACTION ="BROADCAST_START_ACTION";
 	public static final String BROADCAST_STOP_ACTION ="BROADCAST_STOP_ACTION";
