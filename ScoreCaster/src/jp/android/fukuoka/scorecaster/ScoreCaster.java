@@ -2,26 +2,96 @@ package jp.android.fukuoka.scorecaster;
 
 import java.util.List;
 
+import jp.android.fukuoka.scorecaster.R.id;
 import jp.android.fukuoka.scorecaster.db.DatabaseHelper;
 import jp.android.fukuoka.scorecaster.db.Score;
 import jp.android.fukuoka.scorecaster.db.ScoreDao;
 import android.app.Activity;
-import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.preference.PreferenceActivity;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.TextView;
 
 public class ScoreCaster extends Activity {
+	
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+        
+        //　画面表示の初期化
+        this.initialize();
+        
+        //////////////////////////////////////////////////////
+        // 得点関連の動作定義
+        //////////////////////////////////////////////////////
+		// Aチームスコアボタンの動作定義
+        final Button aScoreButton = (Button) findViewById(id.ATeamScoreButton);
+		final TextView aScore = (TextView) findViewById(id.ATeamScore);
+		aScoreButton.setOnClickListener( new OnClickListener() {
+			public void onClick(View v) {
+				int score = Integer.valueOf(aScore.getText().toString());
+				aScore.setText(String.valueOf(score + 1));
+			}
+		});
+        
+		// Bチームスコアボタンの動作定義
+		final Button bScoreButton = (Button) findViewById(id.BTeamScoreButton);
+		final TextView bScore = (TextView) findViewById(id.BTeamScore);
+		bScoreButton.setOnClickListener( new OnClickListener() {
+			public void onClick(View v) {
+				int score = Integer.valueOf(aScore.getText().toString());
+				bScore.setText(String.valueOf(score + 1));
+			}
+		});
+        
+        //////////////////////////////////////////////////////
+        // タイマー関連の動作定義
+        //////////////////////////////////////////////////////
+        // ボタンの動作定義
+        final Button start = (Button) findViewById(id.Start);
+        final Button stop = (Button) findViewById(id.Stop);
+        final Button reset = (Button) findViewById(id.Reset);
+		
+		// スタートボタンの動作定義
+        start.setOnClickListener( new OnClickListener() {
+			public void onClick(View v) {
+				start.setVisibility(View.GONE);
+				stop.setVisibility(View.VISIBLE);
+				
+				// TODO カウントダウンの開始
+			}
+		});
+		
+		// ストップボタンの動作定義
+        stop.setOnClickListener( new OnClickListener() {
+			public void onClick(View v) {
+				start.setVisibility(View.VISIBLE);
+				stop.setVisibility(View.GONE);
+				
+				// TODO カウントダウンの停止
+			}
+		});
+        
+		// リセットボタンの動作定義
+        reset.setOnClickListener( new OnClickListener() {
+			public void onClick(View v) {
+				initialize();
+			}
+		});
     }
-    
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+	}
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
@@ -63,5 +133,28 @@ public class ScoreCaster extends Activity {
 				
 		}
 		return true;
+	}
+	
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+	}
+	
+	private void initialize() {
+		// 得点の初期化
+		TextView aScore = (TextView) findViewById(id.ATeamScore);
+		TextView bScore = (TextView) findViewById(id.BTeamScore);
+		aScore.setText("0");
+		bScore.setText("0");
+		
+		// 時間の初期化
+		TextView time = (TextView) findViewById(id.Time);
+		// TODO SharedPreferenceからの時間読み込み
+		
+		// ボタン表示の初期化
+		Button start = (Button) findViewById(id.Start);
+		Button stop = (Button) findViewById(id.Stop);
+		start.setVisibility(View.VISIBLE);
+		stop.setVisibility(View.GONE);
 	}
 }
