@@ -58,9 +58,9 @@ public class ResidentCasterService extends Service {
 				String tweakit = extra.getString("TWEAKIT");	// intentからtweakメッセージを生成する。
 				//
 				try {
-					Intent twit = new Intent("com.twidroid.SendDirect");
+					Intent twit = new Intent("com.twidroid.SendTweet");
 					twit.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);		// 必須
-					twit.putExtra("com.twidroid", tweakit);
+					twit.putExtra("com.twidroid.extra.MESSAGE", tweakit);
 					// start
 					startActivity(twit);
 				} catch(ActivityNotFoundException e) {
