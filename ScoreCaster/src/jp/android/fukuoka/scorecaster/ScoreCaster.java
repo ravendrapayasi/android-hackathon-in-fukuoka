@@ -25,7 +25,7 @@ import android.widget.TextView;
 
 public class ScoreCaster extends Activity {
 	/** 時間管理。 */
-	private static long base_time = 0;
+	private static long log_time = 0;
 	
     /** Called when the activity is first created. */
     @Override
@@ -76,10 +76,10 @@ public class ScoreCaster extends Activity {
 				Chronometer chronometer = (Chronometer) findViewById(R.id.chronometer_id);
 				
 				// setBaseで基準時刻のセット
-				if (base_time == 0)
-					chronometer.setBase(SystemClock.elapsedRealtime());
-				else 
-					chronometer.setBase(base_time);
+//				if (log_time == 0)
+//					chronometer.setBase(SystemClock.elapsedRealtime());
+//				else 
+					chronometer.setBase(SystemClock.elapsedRealtime() - log_time);
 				chronometer.start();
 			}
 		});
@@ -93,7 +93,7 @@ public class ScoreCaster extends Activity {
 				// TODO カウントダウンの停止
 				Chronometer chronometer = (Chronometer) findViewById(R.id.chronometer_id);
 				chronometer.stop();
-				base_time = chronometer.getBase();
+				log_time = SystemClock.elapsedRealtime() - chronometer.getBase();
 			}
 		});
         
@@ -133,7 +133,7 @@ public class ScoreCaster extends Activity {
 				SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this.getBaseContext());
 				Log.i("shika_log",sp.getAll().toString());
 				break;
-			case 1://DBテスト追加
+			case 1://DBテスト追加　デバッグ用。後で削除。
 				DatabaseHelper dbHelper = new DatabaseHelper(this);
 				SQLiteDatabase db = dbHelper.getWritableDatabase();
 				ScoreDao scoreDao = new ScoreDao(db);
@@ -142,7 +142,7 @@ public class ScoreCaster extends Activity {
 				Log.v("debug", "insert: " + String.format("score1: %d, score2: %d", 
 						score.getScore_team1(),score.getScore_team2()));
 				break;
-			case 2://DBテスト取得
+			case 2://DBテスト取得　デバッグ用。後で削除。
 				DatabaseHelper dbHelper2 = new DatabaseHelper(this);
 				SQLiteDatabase db2 = dbHelper2.getWritableDatabase();
 				ScoreDao scoreDao2 = new ScoreDao(db2);
@@ -173,13 +173,12 @@ public class ScoreCaster extends Activity {
 		bScore.setText("0");
 		
 		// 時間の初期化
+		//TODO: 現状chronometerを素で使っているためカウントアップ式になっているが、ラップしてカウントダウン式に切り替えたい。
 		Chronometer chronometer = (Chronometer) findViewById(R.id.chronometer_id);
 		chronometer.stop();
 		chronometer.setBase(SystemClock.elapsedRealtime());
-		base_time = 0;
-
-//		chronometer.
-//		TextView time = (TextView) findViewById(id.Time);
+		log_time = 0;
+		
 		// TODO SharedPreferenceからの時間読み込み
 		
 		// ボタン表示の初期化
