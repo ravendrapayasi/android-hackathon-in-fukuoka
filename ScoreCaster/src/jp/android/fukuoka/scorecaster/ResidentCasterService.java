@@ -47,7 +47,7 @@ public class ResidentCasterService extends Service {
 				manager.cancel(pi);
 			}
 		} if(TWEAK_ACTION.equals(intent.getAction())) {
-			// Twitterへつぶやきを投げる
+			// Twitter (twidroid)へつぶやきを投げる
 			Bundle extra = intent.getExtras();
 			if(extra!=null) {
 				String tweakit = extra.getString("TWEAKIT");	// intentからtweakメッセージを生成する。
@@ -67,3 +67,13 @@ public class ResidentCasterService extends Service {
 		//Toast.makeText(this, R.string.hello, Toast.LENGTH_SHORT).show();
 	}
 }
+
+/**
+ *  memo:activityからの呼び出し方法
+	String tweak_message=null;
+	Intent tweakit = new Intent(context,ResidentCasterService.class);
+	tweakit.setAction(ResidentCasterService.START_ACTION);
+	tweakit.putExtra("TWEAKIT", tweak_message);
+	context.startService(tweakit);
+ *
+ **/
