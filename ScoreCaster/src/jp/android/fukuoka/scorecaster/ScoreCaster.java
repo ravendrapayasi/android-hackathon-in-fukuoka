@@ -46,6 +46,8 @@ public class ScoreCaster extends Activity {
 			public void onClick(View v) {
 				int score = Integer.valueOf(aScore.getText().toString());
 				aScore.setText(String.valueOf(score + 1));
+				
+				tweet("Aチームが1点取ったよ！");
 			}
 		});
         
@@ -56,6 +58,8 @@ public class ScoreCaster extends Activity {
 			public void onClick(View v) {
 				int score = Integer.valueOf(aScore.getText().toString());
 				bScore.setText(String.valueOf(score + 1));
+				
+				tweet("Bチームが1点取ったよ！");
 			}
 		});
         
@@ -81,6 +85,8 @@ public class ScoreCaster extends Activity {
 //				else 
 					chronometer.setBase(SystemClock.elapsedRealtime() - log_time);
 				chronometer.start();
+				
+				tweet("試合開始！");
 			}
 		});
 		
@@ -94,6 +100,8 @@ public class ScoreCaster extends Activity {
 				Chronometer chronometer = (Chronometer) findViewById(R.id.chronometer_id);
 				chronometer.stop();
 				log_time = SystemClock.elapsedRealtime() - chronometer.getBase();
+				
+				tweet("タイム！");
 			}
 		});
         
@@ -186,5 +194,12 @@ public class ScoreCaster extends Activity {
 		Button stop = (Button) findViewById(id.Stop);
 		start.setVisibility(View.VISIBLE);
 		stop.setVisibility(View.GONE);
+	}
+	
+	private void tweet(String message) {
+		Intent tweakit = new Intent(this,ResidentCasterService.class);
+		tweakit.setAction(ResidentCasterService.TWEAK_ACTION);
+		tweakit.putExtra("TWEAKIT", message);
+		startService(tweakit);
 	}
 }
