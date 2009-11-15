@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.os.SystemClock;
 import android.util.Log;
-import android.view.ViewDebug.FlagToString;
 
 /**
  * intentメッセージをやりとりするサービス。
@@ -64,6 +63,7 @@ public class ResidentCasterService extends Service {
 					// start
 					startActivity(twit);
 				} catch(ActivityNotFoundException e) {
+					Log.d("ResidentService Exception:",e.getMessage());
 					// error
 				}
 			}
