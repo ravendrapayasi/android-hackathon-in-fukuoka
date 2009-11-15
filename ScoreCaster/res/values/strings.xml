@@ -11,4 +11,5 @@
     <string name="twitter_pswd_title">twitter passward</string>
     <string name="twitter_pswd_summary">twitter passwardを指定して下さい</string>
     <string name="twitter_pswd_dialogtitle">twitter passwardを指定して下さい</string>
+    <string name="chronometer_format">%s</string>
 </resources>

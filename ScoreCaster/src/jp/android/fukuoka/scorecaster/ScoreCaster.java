@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
@@ -19,9 +20,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.Chronometer;
 import android.widget.TextView;
 
 public class ScoreCaster extends Activity {
+	/** 時間管理。 */
+	private static long base_time = 0;
 	
     /** Called when the activity is first created. */
     @Override
@@ -68,8 +72,15 @@ public class ScoreCaster extends Activity {
 			public void onClick(View v) {
 				start.setVisibility(View.GONE);
 				stop.setVisibility(View.VISIBLE);
-				
 				// TODO カウントダウンの開始
+				Chronometer chronometer = (Chronometer) findViewById(R.id.chronometer_id);
+				
+				// setBaseで基準時刻のセット
+				if (base_time == 0)
+					chronometer.setBase(SystemClock.elapsedRealtime());
+				else 
+					chronometer.setBase(base_time);
+				chronometer.start();
 			}
 		});
 		
@@ -80,6 +91,9 @@ public class ScoreCaster extends Activity {
 				stop.setVisibility(View.GONE);
 				
 				// TODO カウントダウンの停止
+				Chronometer chronometer = (Chronometer) findViewById(R.id.chronometer_id);
+				chronometer.stop();
+				base_time = chronometer.getBase();
 			}
 		});
         
@@ -140,7 +154,8 @@ public class ScoreCaster extends Activity {
 				}
 				break;
 			case 3://スコア一覧画面
-				
+				Intent intent = new Intent(this, ScoreActivity.class);
+				startActivity(intent);
 		}
 		return true;
 	}
@@ -158,7 +173,13 @@ public class ScoreCaster extends Activity {
 		bScore.setText("0");
 		
 		// 時間の初期化
-		TextView time = (TextView) findViewById(id.Time);
+		Chronometer chronometer = (Chronometer) findViewById(R.id.chronometer_id);
+		chronometer.stop();
+		chronometer.setBase(SystemClock.elapsedRealtime());
+		base_time = 0;
+
+//		chronometer.
+//		TextView time = (TextView) findViewById(id.Time);
 		// TODO SharedPreferenceからの時間読み込み
 		
 		// ボタン表示の初期化

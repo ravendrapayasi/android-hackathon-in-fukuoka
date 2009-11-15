@@ -78,7 +78,7 @@
 				android:layout_width="fill_parent" 
 				android:layout_height="wrap_content"
 				android:orientation="vertical">
-				
+				<!-- 
 		<TextView 
 			android:id="@+id/Time"
 			android:layout_width="wrap_content" 
@@ -86,7 +86,13 @@
 			android:textSize="20dip"
 			android:text="10:00">
 		</TextView>
-				
+			 -->
+		<Chronometer
+		  android:id="@+id/chronometer_id"
+		  android:layout_width="wrap_content"
+		  android:layout_height="wrap_content"
+		  android:format="@string/chronometer_format" />
+		  
 		<LinearLayout
 			android:layout_width="fill_parent" 
 			android:layout_height="wrap_content"
