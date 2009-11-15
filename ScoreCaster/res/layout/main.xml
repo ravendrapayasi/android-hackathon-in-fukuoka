@@ -1,122 +1,126 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
-    
-	<LinearLayout 
-				android:layout_width="fill_parent" 
-				android:layout_height="wrap_content"
-				android:orientation="horizontal">
-		<LinearLayout 
-					android:layout_width="wrap_content" 
-					android:layout_height="fill_parent"
-					android:orientation="vertical" 
-					android:gravity="center" 
-					android:layout_margin="10dip">
-			<TextView 
-				android:id="@+id/ATeam"
-				android:layout_width="wrap_content" 
-				android:layout_height="wrap_content"
-				android:textSize="20dip"
-				android:text="A">
-			</TextView>
-					
-			<TextView 
-				android:id="@+id/ATeamScore"
-				android:layout_width="wrap_content" 
-				android:layout_height="wrap_content"
-				android:textSize="20dip"
-				android:text="10">
-			</TextView>
-			
-			<Button
-				android:id="@+id/ATeamScoreButton"
-				android:layout_width="wrap_content" 
-				android:layout_height="wrap_content"
-				android:textSize="20dip"
-				android:text="+">
-			</Button>
-		</LinearLayout>
-		
-		
-		<LinearLayout 
-					android:layout_width="wrap_content" 
-					android:layout_height="fill_parent"
-					android:orientation="vertical" 
-					android:gravity="center" 
-					android:layout_margin="10dip">
-			<TextView 
-				android:id="@+id/BTeam"
-				android:layout_width="wrap_content" 
-				android:layout_height="wrap_content"
-				android:textSize="20dip"
-				android:text="B">
-			</TextView>
-					
-			<TextView 
-				android:id="@+id/BTeamScore"
-				android:layout_width="wrap_content" 
-				android:layout_height="wrap_content"
-				android:textSize="20dip"
-				android:text="20">
-			</TextView>
-			
-			<Button
-				android:id="@+id/BTeamScoreButton"
-				android:layout_width="wrap_content" 
-				android:layout_height="wrap_content"
-				android:textSize="20dip"
-				android:text="+">
-			</Button>
-			
-		</LinearLayout>		
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent">
 
-	</LinearLayout>
-	
-	<LinearLayout 
-				android:layout_width="fill_parent" 
-				android:layout_height="wrap_content"
-				android:orientation="vertical">
-				<!-- 
-		<TextView 
-			android:id="@+id/Time"
-			android:layout_width="wrap_content" 
+	<LinearLayout
+		android:layout_width="fill_parent"
+		android:orientation="horizontal"
+		android:layout_height="wrap_content"
+		android:gravity="center">
+
+		<Button
+			android:id="@+id/ATeamScoreButton"
+			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:textSize="20dip"
-			android:text="10:00">
-		</TextView>
-			 -->
-		<Chronometer
-		  android:id="@+id/chronometer_id"
-		  android:layout_width="wrap_content"
-		  android:layout_height="wrap_content"
-		  android:format="@string/chronometer_format" />
-		  
+			android:text="+"
+			android:textSize="40dip">
+		</Button>
 		<LinearLayout
-			android:layout_width="fill_parent" 
+			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:orientation="horizontal">
-		
+			android:orientation="vertical"
+			android:gravity="center"
+			android:layout_margin="10dip">
+			<TextView
+				android:id="@+id/ATeam"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:textSize="20dip"
+				android:text="A"
+				android:textColor="#ff0000">
+			</TextView>
+
+			<TextView
+				android:id="@+id/ATeamScore"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="10"
+				android:textSize="100dip">
+			</TextView>
+
+		</LinearLayout>
+
+
+		<LinearLayout
+			android:layout_width="wrap_content"
+			android:layout_height="fill_parent"
+			android:orientation="vertical"
+			android:gravity="center"
+			android:layout_margin="10dip">
+			<TextView
+				android:id="@+id/BTeam"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:textSize="20dip"
+				android:text="B"
+				android:textColor="#0f0eff">
+			</TextView>
+
+			<TextView
+				android:id="@+id/BTeamScore"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="20"
+				android:textSize="100dip">
+			</TextView>
+
+
+		</LinearLayout>
+
+		<Button
+			android:id="@+id/BTeamScoreButton"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="+"
+			android:textSize="40dip">
+		</Button>
+	</LinearLayout>
+
+	<LinearLayout
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:orientation="vertical"
+		android:gravity="center">
+		<!--
+			<TextView android:id="@+id/Time" android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:textSize="20dip"
+			android:text="10:00"> </TextView>
+		-->
+		<Chronometer
+			android:id="@+id/chronometer_id"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:format="@string/chronometer_format"
+			android:textSize="50dip"/>
+
+		<LinearLayout
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:orientation="horizontal"
+			android:gravity="center">
+
 			<Button
 				android:id="@+id/Start"
-				android:layout_width="wrap_content" 
+				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:textSize="20dip"
 				android:text="スタート">
 			</Button>
-			
+
 			<Button
 				android:id="@+id/Stop"
-				android:layout_width="wrap_content" 
+				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:textSize="20dip"
 				android:text="タイム">
 			</Button>
-			
+
 			<Button
 				android:id="@+id/Reset"
-				android:layout_width="wrap_content" 
+				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:textSize="20dip"
 				android:text="リセット">
