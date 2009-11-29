@@ -21,11 +21,12 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import jp.android.fukuoka.tegaky.PictUtil;
+
 public class TegakyActivity extends Activity {
 	TegakyView tegakyView;
 
-//	private String mTempFilePath = Environment.getExternalStorageDirectory()+"/hoge.jpg";
-	private String mTempFilePath = Environment.getExternalStorageDirectory()+"/temp.jpg";
+	private String mTempFilePath;
 	
     /** Called when the activity is first created. */
     @Override
@@ -65,64 +66,14 @@ public class TegakyActivity extends Activity {
 		return super.onKeyDown(keyCode, event);
 	}
     
-	// http://www.saturn.dti.ne.jp/npaka/android/SnapShotEx/index.html
-    
 	protected void writeFile(Bitmap bitmap) {
-        //ファイルに保存
-        try {
-            byte[] w=bmp2data(bitmap,Bitmap.CompressFormat.JPEG,80);
-//            writeDataFile("temp.jpg",w);
-          writeDataFile(mTempFilePath,w);
-        } catch (Exception e) {
-            android.util.Log.e("",e.toString());
-        }
+		PictUtil.saveToCacheFile(bitmap);
+		mTempFilePath = PictUtil.getCacheFilename();
 	}
-	
-	
-    //Bitmap→バイトデータ
-    private static byte[] bmp2data(Bitmap src,
-        Bitmap.CompressFormat format,int quality) {
-        ByteArrayOutputStream os=new ByteArrayOutputStream();
-        src.compress(format,quality,os);            
-        return os.toByteArray();
-    }
-   
-    //ファイルへのバイトデータ書き込み
-    private void writeDataFile(String name,byte[] w) throws Exception {
-        OutputStream out=null;
-        try {
-            out=openFileOutput(name,Context.MODE_WORLD_READABLE);
-            out.write(w,0,w.length);
-            out.close();
-        } catch (Exception e) {
-            try {
-                if (out!=null) out.close();
-            } catch (Exception e2) {
-            }
-            throw e;
-        }
-    }
-
 
 	private void doIntent() {
-
-//		String mTempFilePath = "/sdcard/PicSay/picsay-1258543652.jpg";
-//		String mTempFilePath = "/sdcard/hoge.jpg";
-
-		/*
-		Intent intent = new Intent(Intent.ACTION_SENDTO);
-		
-		intent.putExtra(Intent.EXTRA_EMAIL, "teknocat@gmail.com");
-		intent.putExtra(Intent.EXTRA_SUBJECT, "title");
-		intent.putExtra(Intent.EXTRA_TEXT, "body"); 
-*/
-//		Intent intent = new Intent(Intent.ACTION_SENDTO,
-//				Uri.fromParts("mailto", "teknocat@gmail.com", null));
-
 		Intent intent = new Intent(Intent.ACTION_SEND);
 		intent.putExtra(Intent.EXTRA_EMAIL, new String[] {"teknocat@gmail.com"}); 
-//		intent.setDataAndType(Uri.fromFile(new File(mTempFilePath)), "image/jpeg");
-//		intent.setData(Uri.fromFile(new File(mTempFilePath)));
 		intent.setType("jpeg/image");
 		intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(mTempFilePath)));
 		intent.putExtra(Intent.EXTRA_SUBJECT, "title");
