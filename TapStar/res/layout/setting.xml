@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+	<PreferenceCategory android:title="@string/app_name">
+		<ListPreference
+			android:id="@+id/ListKey"
+			android:key="star_amount"
+			android:title="@string/star_setting_title"
+			android:summary="@string/star_setting_summary"
+			android:dialogTitle="@string/star_setting_dialogtitle"
+			android:entries="@array/star_list"
+			android:entryValues="@array/star_list_values"/>
+		<EditTextPreference
+			android:id="@+id/star_image"
+			android:key="star_image"
+			android:title="@string/image_setting_title"
+			android:summary="@string/image_setting_summary"
+			android:dialogTitle="@string/image_setting_dialogtitle"/>
+		<EditTextPreference
+			android:id="@+id/back_image"
+			android:key="back_image"
+			android:title="@string/back_setting_title"
+			android:summary="@string/back_setting_summary"
+			android:dialogTitle="@string/back_setting_dialogtitle"/>
+	</PreferenceCategory>
+</PreferenceScreen>

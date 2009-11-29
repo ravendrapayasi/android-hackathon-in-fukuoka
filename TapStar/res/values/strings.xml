@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="hello">Hello World, TapStarActivity!</string>
-    <string name="app_name">TapStar</string>
+	<string name="hello">Hello World, TapStarActivity!</string>
+	<string name="app_name">TapStar</string>
+	<string name="star_setting_title">星の量</string>
+	<string name="star_setting_summary">星の量を設定して下さい</string>
+	<string name="star_setting_dialogtitle">星の量を設定して下さい</string>
+
+	<string name="image_setting_title">星の画像</string>
+	<string name="image_setting_summary">星の画像を設定して下さい</string>
+	<string name="image_setting_dialogtitle">星の画像を設定して下さい</string>
+
+	<string name="back_setting_title">背景の画像</string>
+	<string name="back_setting_summary">背景の画像を設定して下さい</string>
+	<string name="back_setting_dialogtitle">背景の画像を設定して下さい</string>
 </resources>
