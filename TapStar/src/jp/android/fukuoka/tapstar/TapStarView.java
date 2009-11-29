@@ -15,9 +15,11 @@ public class TapStarView extends SurfaceView implements SurfaceHolder.Callback, 
 	private Bitmap bm;
 	
 	private int starNum = 10;
-	private Bitmap[] starAry;
+	/*private Bitmap[] starAry;
 	private float px = 0;
-	private float py = 0;
+	private float py = 0;*/
+	
+	private int _alpha = 100;
 	
 	private float touchX = 0;
 	private float touchY = 0;
@@ -26,14 +28,13 @@ public class TapStarView extends SurfaceView implements SurfaceHolder.Callback, 
 	{
 		super(context);
 		
-		//-----[画像の読み込み]
 		Resources r = getResources();
 		bm = BitmapFactory.decodeResource(r, R.drawable.icon);
 		
-		//-----[サーフェイスホルダーの生成]
 		holder = getHolder();
 		holder.addCallback(this);
 		holder.setFixedSize(getWidth(), getHeight());
+		
 		
 	}
 	
@@ -58,6 +59,11 @@ public class TapStarView extends SurfaceView implements SurfaceHolder.Callback, 
 		Canvas canvas;
 		while(thread != null)
 		{
+			Paint paint = new Paint();
+			//paint.setAntiAlias(true);
+			//paint.setTextSize(16);
+			paint.setAlpha(_alpha);
+			
 			canvas = holder.lockCanvas();
 			canvas.drawColor(Color.WHITE);
 			
@@ -66,15 +72,19 @@ public class TapStarView extends SurfaceView implements SurfaceHolder.Callback, 
 				float posX = (float) (touchX + Math.random() * 100 - 50);
 				float posY = (float) (touchY + Math.random() * 100 - 50);
 				//starAry[i] = bm;
-				canvas.drawBitmap(bm, posX-bm.getWidth()/2, posY-bm.getHeight()/2, null);
+				canvas.drawBitmap(bm, posX-bm.getWidth()/2, posY-bm.getHeight()/2, paint);
 			}
 			
-			//-----[タッチの描画]
-			Paint paint = new Paint();
-			paint.setAntiAlias(true);
-			paint.setTextSize(16);
+			if(_alpha <= 0)
+			{
+				_alpha = 0;
+			}
+			else
+			{
+				_alpha -= 1;
+			}
 			
-			canvas.drawText("TouchXY="+touchX+" / "+touchY, 0, 20, paint);
+			//canvas.drawText("TouchXY="+touchX+" / "+touchY, 0, 20, paint);
 			
 			
 			//px += (touchX - px) * 0.1;
@@ -107,6 +117,7 @@ public class TapStarView extends SurfaceView implements SurfaceHolder.Callback, 
 	{
 		touchX = (int)e.getX();
 		touchY = (int)e.getY();
+		_alpha = 255;
 		return true;
 	}
 }
