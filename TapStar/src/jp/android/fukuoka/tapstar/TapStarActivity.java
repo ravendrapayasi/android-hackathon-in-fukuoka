@@ -2,10 +2,12 @@ package jp.android.fukuoka.tapstar;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Window;
 
 public class TapStarActivity extends Activity {
 
@@ -13,8 +15,10 @@ public class TapStarActivity extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.main);
-	}
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFormat(PixelFormat.TRANSLUCENT);
+        setContentView(new TapStarView(this));
+        }
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {

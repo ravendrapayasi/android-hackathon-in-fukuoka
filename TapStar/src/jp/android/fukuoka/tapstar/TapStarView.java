@@ -1,5 +1,7 @@
 package jp.android.fukuoka.tapstar;
 
+import java.lang.reflect.Array;
+
 import android.content.res.Resources;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -13,8 +15,10 @@ public class TapStarView extends SurfaceView implements SurfaceHolder.Callback, 
 	private SurfaceHolder holder;
 	private Thread thread;
 	private Bitmap bm;
+	private Bitmap star;
 	
 	private int starNum = 10;
+	private float[][] starMoves = new float[starNum][2];
 	/*private Bitmap[] starAry;
 	private float px = 0;
 	private float py = 0;*/
@@ -23,6 +27,11 @@ public class TapStarView extends SurfaceView implements SurfaceHolder.Callback, 
 	
 	private float touchX = 0;
 	private float touchY = 0;
+	float[] starPosX = new float[starNum];
+	float[] starPosY = new float[starNum];
+	
+	float moveX = 0;
+	float moveY = 0;
 	
 	public TapStarView(Context context)
 	{
@@ -30,11 +39,16 @@ public class TapStarView extends SurfaceView implements SurfaceHolder.Callback, 
 		
 		Resources r = getResources();
 		bm = BitmapFactory.decodeResource(r, R.drawable.icon);
+		star = BitmapFactory.decodeResource(r, R.drawable.star);
 		
 		holder = getHolder();
 		holder.addCallback(this);
 		holder.setFixedSize(getWidth(), getHeight());
 		
+		for(int i=0; i < starNum; i++){
+			starMoves[i][0] = (float)(Math.random() * 1000 - 500);
+			starMoves[i][1] = (float)(Math.random() * 1000 - 500);
+		}
 		
 	}
 	
@@ -54,6 +68,8 @@ public class TapStarView extends SurfaceView implements SurfaceHolder.Callback, 
 		thread = null;
 	}
 	
+
+	
 	public void run()
 	{
 		Canvas canvas;
@@ -67,12 +83,12 @@ public class TapStarView extends SurfaceView implements SurfaceHolder.Callback, 
 			canvas = holder.lockCanvas();
 			canvas.drawColor(Color.WHITE);
 			
-			for (int i = 0; i <= starNum; i++)
+			for (int i = 0; i < starNum; i++)
 			{
-				float posX = (float) (touchX + Math.random() * 100 - 50);
-				float posY = (float) (touchY + Math.random() * 100 - 50);
+				starPosX[i] += (float) ((touchX + starMoves[i][0] - starPosX[i]) * 0.01);
+				starPosY[i] += (float) ((touchY + starMoves[i][1] - starPosY[i]) * 0.01);
 				//starAry[i] = bm;
-				canvas.drawBitmap(bm, posX-bm.getWidth()/2, posY-bm.getHeight()/2, paint);
+				canvas.drawBitmap(star, starPosX[i]-star.getWidth()/2, starPosY[i]-star.getHeight()/2, paint);
 			}
 			
 			if(_alpha <= 0)
@@ -115,9 +131,15 @@ public class TapStarView extends SurfaceView implements SurfaceHolder.Callback, 
 	@Override
 	public boolean onTouchEvent(MotionEvent e)
 	{
-		touchX = (int)e.getX();
-		touchY = (int)e.getY();
-		_alpha = 255;
+		if(e.getAction() == MotionEvent.ACTION_DOWN){
+			touchX = (int)e.getX();
+			touchY = (int)e.getY();
+			for(int i=0; i < starNum; i++){
+				starPosX[i] = touchX;
+				starPosY[i] = touchY;
+			}
+			_alpha = 255;
+		}
 		return true;
 	}
 }
