@@ -1,4 +1,5 @@
 package jp.android.fukuoka.tapstar;
+
 import android.content.res.Resources;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -11,12 +12,12 @@ import android.view.*;
 public class TapStarView extends SurfaceView implements SurfaceHolder.Callback, Runnable {
 	private SurfaceHolder holder;
 	private Thread thread;
-	
 	private Bitmap bm;
+	
+	private int starNum = 10;
+	private Bitmap[] starAry;
 	private float px = 0;
 	private float py = 0;
-	//private int vx = 10;
-	//private int vy = 10;
 	
 	private float touchX = 0;
 	private float touchY = 0;
@@ -33,6 +34,7 @@ public class TapStarView extends SurfaceView implements SurfaceHolder.Callback, 
 		holder = getHolder();
 		holder.addCallback(this);
 		holder.setFixedSize(getWidth(), getHeight());
+		
 	}
 	
 	public void surfaceCreated(SurfaceHolder holder)
@@ -58,8 +60,14 @@ public class TapStarView extends SurfaceView implements SurfaceHolder.Callback, 
 		{
 			canvas = holder.lockCanvas();
 			canvas.drawColor(Color.WHITE);
-			canvas.drawBitmap(bm, px-bm.getWidth()/2, py-bm.getHeight()/2, null);
-			holder.unlockCanvasAndPost(canvas);
+			
+			for (int i = 0; i <= starNum; i++)
+			{
+				float posX = (float) (touchX + Math.random() * 100 - 50);
+				float posY = (float) (touchY + Math.random() * 100 - 50);
+				//starAry[i] = bm;
+				canvas.drawBitmap(bm, posX-bm.getWidth()/2, posY-bm.getHeight()/2, null);
+			}
 			
 			//-----[ƒ^ƒbƒ`‚Ì•`‰æ]
 			Paint paint = new Paint();
@@ -68,14 +76,20 @@ public class TapStarView extends SurfaceView implements SurfaceHolder.Callback, 
 			
 			canvas.drawText("TouchXY="+touchX+" / "+touchY, 0, 20, paint);
 			
-			//-----[ˆÚ“®]
-			/*if(px<0 || getWidth()<px) vx = -vx;
-			if(py<0 || getHeight()<py) vy = -vy;
-			px+=vx;
-			py+=vy;*/
 			
-			px += (touchX - px) * 0.1;
-			py += (touchY - py) * 0.1;
+			//px += (touchX - px) * 0.1;
+			//py += (touchY - py) * 0.1;
+			
+			/*if(touchX == (int)px && touchY == (int)py)
+			{
+				canvas.drawText("stop", 0, 40, paint);
+				canvas.drawColor(Color.WHITE);
+			}*/
+			
+			
+			holder.unlockCanvasAndPost(canvas);
+			
+			
 			
 			try
 			{
