@@ -9,7 +9,7 @@ import android.graphics.Bitmap.CompressFormat;
 import android.os.Environment;
 
 public class PictUtil {
-	public File getSavePath() {
+	public static File getSavePath() {
 	    File path;
 	    if (hasSDCard()) { // SD card
 	        path = new File(getSDCardPath() + "/Tegaky/");
@@ -19,12 +19,12 @@ public class PictUtil {
 	    }
 	    return path;
 	}
-	public String getCacheFilename() {
+	public static String getCacheFilename() {
 	    File f = getSavePath();
 	    return f.getAbsolutePath() + "/cache.png";
 	}
 
-	public Bitmap loadFromFile(String filename) {
+	public static Bitmap loadFromFile(String filename) {
 	    try {
 	        File f = new File(filename);
 	        if (!f.exists()) { return null; }
@@ -34,13 +34,13 @@ public class PictUtil {
 	        return null;
 	    }
 	}
-	public Bitmap loadFromCacheFile() {
-	    return this.loadFromFile(getCacheFilename());
+	public static Bitmap loadFromCacheFile() {
+	    return loadFromFile(getCacheFilename());
 	}
-	public void saveToCacheFile(Bitmap bmp) {
-	    this.saveToFile(getCacheFilename(),bmp);
+	public static void saveToCacheFile(Bitmap bmp) {
+	    saveToFile(getCacheFilename(),bmp);
 	}
-	public void saveToFile(String filename,Bitmap bmp) {
+	public static void saveToFile(String filename,Bitmap bmp) {
 	    try {
 	        FileOutputStream out = new FileOutputStream(filename);
 	        bmp.compress(CompressFormat.PNG, 100, out);
@@ -49,11 +49,11 @@ public class PictUtil {
 	    } catch(Exception e) {}
 	}
 
-	public boolean hasSDCard() { // SDカードがあるか?
+	public static boolean hasSDCard() { // SDカードがあるか?
 	    String status = Environment.getExternalStorageState();
 	    return status.equals(Environment.MEDIA_MOUNTED);
 	}
-	public String getSDCardPath() {
+	public static String getSDCardPath() {
 	    File path = Environment.getExternalStorageDirectory();
 	    return path.getAbsolutePath();
 	}
