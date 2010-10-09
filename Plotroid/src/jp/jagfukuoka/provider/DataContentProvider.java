@@ -132,7 +132,7 @@ public class DataContentProvider extends ContentProvider {
 		//ƒL[‚Ì”‚¾‚¯ŒJ‚è•Ô‚µ
 		for(int i=1; i<=28; i++){
 //			TemperatureData.DEMO_X_AXIS_DATA.add(new Integer(i*5));
-			TemperatureData.DEMO_SERIES_LIST[0].add(new Integer(contentvalues.getAsInteger(""+i*5)));
+//			TemperatureData.DEMO_SERIES_LIST[0].add(new Integer(contentvalues.getAsInteger(""+i*5)));
 		}
 		return null;
 	}
