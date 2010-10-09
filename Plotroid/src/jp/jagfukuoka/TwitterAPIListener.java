@@ -3,6 +3,12 @@ package jp.jagfukuoka;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import jp.jagfukuoka.provider.DataContentProvider;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -12,7 +18,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.R.string;
+import android.R.integer;
+import android.content.ContentResolver;
+import android.content.ContentValues;
+import android.content.Intent;
 import android.util.Log;
 import android.view.View;
 
@@ -20,7 +29,14 @@ public class TwitterAPIListener implements View.OnClickListener {
 
 	private final String TAG = "TwitterAPIListener";
 	
+	private Map<Integer,List<String>> map = new HashMap<Integer, List<String>>();
+	
 	public void onClick(View v) {
+		
+		for(int i=1; i<=28; i++){
+			map.put(i*5, new ArrayList<String>());
+		}
+		
 		HttpClient httpClient = new DefaultHttpClient();
 		
 		HttpGet request = new HttpGet("http://api.twitter.com/1/statuses/public_timeline.json");
@@ -55,12 +71,24 @@ public class TwitterAPIListener implements View.OnClickListener {
 			for (int i = 0; i < jsons.length(); i++) {
 			    JSONObject jsonObj = jsons.getJSONObject(i);
 			    description = jsonObj.getString("description");
+			    
+			    int res = (description.length()+1)/5;
+			    List<String> list = map.get(res*5);
+			    list.add(description);
 			}
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
+
 		
-			
+		ContentValues values = new ContentValues();
+		for(int i=1; i<=28; i++){
+			List<String> list = map.get(i*5);
+			values.put(""+i*5, list.size());
+		}
+		ContentResolver cr = v.getContext().getContentResolver();
+		cr.insert(DataContentProvider.PROVIDER_URI, values);
 	}
+	
 
 }
