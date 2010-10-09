@@ -72,7 +72,10 @@ public class TwitterAPIListener implements View.OnClickListener {
 			JSONArray jsons = new JSONArray(json);
 			for (int i = 0; i < jsons.length(); i++) {
 			    JSONObject jsonObj = jsons.getJSONObject(i);
-			    description = jsonObj.getString("description");
+			    if(jsonObj.isNull("text")){
+			    	continue;
+			    }
+			    description = jsonObj.getString("text");
 			    
 			    int res = (description.length()+1)/5;
 			    List<String> list = map.get(res*5);
