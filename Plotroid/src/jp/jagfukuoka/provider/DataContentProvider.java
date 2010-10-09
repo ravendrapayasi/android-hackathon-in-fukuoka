@@ -1,5 +1,7 @@
 package jp.jagfukuoka.provider;
 
+import java.util.List;
+
 import jp.jagfukuoka.TemperatureData;
 import android.content.ContentProvider;
 import android.content.ContentResolver;
@@ -8,6 +10,7 @@ import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.net.Uri;
 import android.provider.BaseColumns;
+import android.util.Log;
 
 import com.googlecode.chartdroid.core.ColumnSchema;
 
@@ -19,7 +22,6 @@ public class DataContentProvider extends ContentProvider {
 	// This must be the same as what as specified as the Content Provider authority
 	// in the manifest file.
 	static final String AUTHORITY = "jp.jagfukuoka.provider";
-
 
 	public static final Uri PROVIDER_URI = new Uri.Builder()
 		.scheme(ContentResolver.SCHEME_CONTENT)
@@ -83,7 +85,7 @@ public class DataContentProvider extends ContentProvider {
 			int row_index = 0;
 
 			// Add x-axis data
-			for (int i=0; i<TemperatureData.DEMO_X_AXIS_DATA.length; i++) {
+			for (int i=0; i<TemperatureData.DEMO_X_AXIS_DATA.size(); i++) {
 
 
 				//                c.newRow().add( X_AXIS_INDEX ).add( i ).add( TemperatureData.DEMO_X_AXIS_DATA[i] ).add( null );
@@ -91,7 +93,7 @@ public class DataContentProvider extends ContentProvider {
 				.add( row_index )
 				.add( ColumnSchema.X_AXIS_INDEX )
 				.add( 0 )   // Only create data for the first series.
-				.add( TemperatureData.DEMO_X_AXIS_DATA[i] )
+				.add( TemperatureData.DEMO_X_AXIS_DATA.get(i) )
 				.add( null );
 
 				row_index++;
@@ -99,14 +101,14 @@ public class DataContentProvider extends ContentProvider {
 
 			// Add y-axis data
 			for (int i=0; i<TemperatureData.DEMO_SERIES_LIST.length; i++) {
-				for (int j=0; j<TemperatureData.DEMO_SERIES_LIST[i].length; j++) {
+				for (int j=0; j<TemperatureData.DEMO_SERIES_LIST[i].size(); j++) {
 
 					//                    c.newRow().add( Y_AXIS_INDEX ).add( i ).add( TemperatureData.DEMO_SERIES_LIST[i][j] ).add( null );
 					c.newRow()
 					.add( row_index )
 					.add( ColumnSchema.Y_AXIS_INDEX )
 					.add( i )
-					.add( TemperatureData.DEMO_SERIES_LIST[i][j] )
+					.add( TemperatureData.DEMO_SERIES_LIST[i].get(j) )
 					.add( null );
 
 					row_index++;
@@ -125,7 +127,14 @@ public class DataContentProvider extends ContentProvider {
 
 	@Override
 	public Uri insert(Uri uri, ContentValues contentvalues) {
-		throw new UnsupportedOperationException("Not supported by this provider");
+		Log.d("Plotroid",contentvalues.getAsString("test"));
+		//キー名取得
+		//キーの数だけ繰り返し
+		for(int i=1; i<=28; i++){
+			TemperatureData.DEMO_X_AXIS_DATA.add(new Integer(i*5));
+			TemperatureData.DEMO_SERIES_LIST[0].add(new Integer(contentvalues.getAsString(""+i*5)));
+		}
+		return null;
 	}
 
 	@Override
