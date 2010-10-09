@@ -21,7 +21,7 @@ public class DeviceListActivity extends Activity
     implements AdapterView.OnItemClickListener {
     public static String EXTRA_DEVICE_ADDRESS="device_address";
 
-    private BluetoothAdapter     btAdapter;//BTアダプタ
+    public static BluetoothAdapter     btAdapter;//BTアダプタ
     private ArrayAdapter<String> devices;  //デバイス郡
 
     //アプリ生成時に呼ばれる
@@ -36,6 +36,9 @@ public class DeviceListActivity extends Activity
         layout.setOrientation(LinearLayout.VERTICAL);
         setContentView(layout); 
 
+        
+          
+        
         //デバイス
         devices=new ArrayAdapter<String>(this,R.layout.rowdata);
         
