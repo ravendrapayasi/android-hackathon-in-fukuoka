@@ -133,6 +133,11 @@ public class DataContentProvider extends ContentProvider {
 			TemperatureData.DEMO_X_AXIS_DATA.add(new Integer(i*5));
 			TemperatureData.DEMO_SERIES_LIST[0].add(new Integer(contentvalues.getAsInteger(""+i*5)));
 		}
+		String userId;
+		userId = contentvalues.getAsString("userId");
+		if(userId != null){
+			TemperatureData.DEMO_TITLES[0] = userId;
+		}
 		return null;
 	}
 
