@@ -131,8 +131,8 @@ public class DataContentProvider extends ContentProvider {
 		//キー名取得
 		//キーの数だけ繰り返し
 		for(int i=1; i<=28; i++){
-			TemperatureData.DEMO_X_AXIS_DATA.add(new Integer(i*5));
-			TemperatureData.DEMO_SERIES_LIST[0].add(new Integer(contentvalues.getAsString(""+i*5)));
+//			TemperatureData.DEMO_X_AXIS_DATA.add(new Integer(i*5));
+			TemperatureData.DEMO_SERIES_LIST[0].add(new Integer(contentvalues.getAsInteger(""+i*5)));
 		}
 		return null;
 	}
