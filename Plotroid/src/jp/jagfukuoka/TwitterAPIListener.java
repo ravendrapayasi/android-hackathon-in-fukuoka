@@ -18,6 +18,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.googlecode.chartdroid.core.IntentConstants;
+
 import android.R.integer;
 import android.content.ContentResolver;
 import android.content.ContentValues;
@@ -88,6 +90,12 @@ public class TwitterAPIListener implements View.OnClickListener {
 		}
 		ContentResolver cr = v.getContext().getContentResolver();
 		cr.insert(DataContentProvider.PROVIDER_URI, values);
+	
+		// 
+    	Intent i = new Intent(Intent.ACTION_VIEW, DataContentProvider.PROVIDER_URI);
+    	i.putExtra(Intent.EXTRA_TITLE, TemperatureData.DEMO_CHART_TITLE);
+    	i.putExtra(IntentConstants.Meta.Axes.EXTRA_FORMAT_STRING_Y, "%.1f°C");
+    	v.getContext().startActivity(i);
 	}
 	
 
