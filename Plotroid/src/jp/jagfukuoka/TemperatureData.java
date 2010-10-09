@@ -7,7 +7,7 @@ public class TemperatureData {
 	
 
     public static String[] DEMO_AXES_LABELS = { "Count", "Letters" };
-    public static String DEMO_CHART_TITLE = "Twitter”­Œ¾–ˆ‚Ì•¶š”";
+    public static String DEMO_CHART_TITLE = "Twitter”­Œ¾‚Ì•¶š”•ª•z";
    
     
     
