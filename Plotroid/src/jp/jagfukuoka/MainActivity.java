@@ -16,22 +16,10 @@ public class MainActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-                
+        
         final Button button = (Button) findViewById(R.id.ok);
-        button.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-            	// ダイアログの表示
-            	/*AlertDialog.Builder dlg;
-            	dlg = new AlertDialog.Builder(MainActivity.this);
-            	dlg.setTitle("TEST");
-            	dlg.setMessage("Hello, World!");
-            	dlg.setPositiveButton("OK", null);
-            	dlg.show();*/
-            	Intent i = new Intent(Intent.ACTION_VIEW, DataContentProvider.PROVIDER_URI);
-            	i.putExtra(Intent.EXTRA_TITLE, TemperatureData.DEMO_CHART_TITLE);
-            	i.putExtra(IntentConstants.Meta.Axes.EXTRA_FORMAT_STRING_Y, "%.1fﾂｰC");
-            	startActivity(i);
-            }
+        button.setOnClickListener(new TwitterAPIListener() {
+        
         });
     }
 }
