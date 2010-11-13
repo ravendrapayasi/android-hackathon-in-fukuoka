@@ -34,7 +34,6 @@ public class MainActivity extends Activity implements OnClickListener  {
 	
 	private static final int REQUEST_ENABLE_BT = 1;
 	private static final int REQUEST_STATE_CHANGE_BT = 2;
-	private TextView tv_result = null;
 	private BluetoothAdapter mBluetoothAdapter = null;
 	
     /** Called when the activity is first created. */
@@ -42,8 +41,6 @@ public class MainActivity extends Activity implements OnClickListener  {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-        
-        tv_result = (TextView) findViewById(R.id.tv_result);
         
         //-----[ボタンの設定]
         Button button1 = (Button)findViewById(R.id.Button01);
