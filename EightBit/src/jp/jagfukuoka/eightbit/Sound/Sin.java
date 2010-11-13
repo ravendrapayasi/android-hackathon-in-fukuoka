@@ -4,7 +4,7 @@ public class Sin implements Sound {
 
 	private short[] audio;
 	@Override
-	public void createAudio(int time,int interval,float volume){
+	public void createAudio(int time,float interval,float volume){
 		
 		short[] sinWave = new short[SoundCommon.getSampleRate() * time];
 		double freq = interval;
