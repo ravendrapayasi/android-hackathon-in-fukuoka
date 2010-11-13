@@ -10,7 +10,7 @@ public class Triangle implements Sound {
 		double a = 1.0 / interval;
 		double t = 0.0;
 		double dt = 1.0 / SoundCommon.getSampleRate();
-		short maxValue = (short) ((Short.MAX_VALUE)/100 * volume);
+		short maxValue = (short) (Short.MAX_VALUE * volume);
 
 		for (int i = 0; i < triangleWave.length; i++, t += dt) {
 		    triangleWave[i] = (short) (Math.abs((maxValue * 2 * (t / a - Math.floor(t / a + 0.5)))) * 2 - maxValue);
