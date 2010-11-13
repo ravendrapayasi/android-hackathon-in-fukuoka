@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+	xmlns:android="http://schemas.android.com/apk/res/android">
+	<PreferenceCategory android:title="Mail設定">
+		<EditTextPreference
+			android:key="toMail_adr"
+			android:title="送信先メールアドレス"
+			android:summary="メールアドレスを設定してください"
+			android:dialogTitle="メールが届くアドレスを記入してください" />
+		<EditTextPreference
+			android:key="fromMail_adr"
+			android:title="送信元メールアドレスをしてしてください"
+			android:summary="送信元メールアドレス"
+			android:dialogTitle="メールを送る方のアドレスを記入してください" />
+		<EditTextPreference
+			android:key="Subject"
+			android:title="メールタイトル"
+			android:summary="○○君の位置情報"
+			android:dialogTitle="メールタイトル" />
+	</PreferenceCategory>
+</PreferenceScreen>
