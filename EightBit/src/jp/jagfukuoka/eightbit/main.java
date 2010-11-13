@@ -10,4 +10,9 @@ public class main extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
     }
+    
+    @Override
+    public void onStop(){
+    	
+    }
 }
