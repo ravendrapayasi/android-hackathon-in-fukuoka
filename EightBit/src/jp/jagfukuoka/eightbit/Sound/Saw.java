@@ -5,7 +5,7 @@ public class Saw implements Sound {
 	private short[] audio;
 	@Override
 	public void createAudio(int time, float interval, float volume) {
-		short[] sawWave = new short[SoundCommon.getSampleRate() * time];
+		short[] sawWave = SoundCommon.getAudioBlankArray(time);
 		double a = 1.0 / interval;
 		double t = 0.0;
 		double dt = 1.0 / SoundCommon.getSampleRate();

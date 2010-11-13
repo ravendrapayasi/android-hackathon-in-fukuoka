@@ -5,7 +5,7 @@ public class Triangle implements Sound {
 	private short[] audio;
 	@Override
 	public void createAudio(int time, float interval, float volume) {
-		short[] triangleWave = new short[SoundCommon.getSampleRate() * time];
+		short[] triangleWave = SoundCommon.getAudioBlankArray(time);
 
 		double a = 1.0 / interval;
 		double t = 0.0;

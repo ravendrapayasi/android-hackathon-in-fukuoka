@@ -5,7 +5,7 @@ public class Square implements Sound {
 	private short[] audio;
 	@Override
 	public void createAudio(int time, float interval, float volume) {
-		short[] squareWave = new short[SoundCommon.getSampleRate() * time];
+		short[] squareWave = SoundCommon.getAudioBlankArray(time);
 		double t = 0.0;
 		double dt = 1.0 / SoundCommon.getSampleRate();
 		short maxValue = (short) ((Short.MAX_VALUE) * volume);
