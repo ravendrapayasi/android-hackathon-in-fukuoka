@@ -34,41 +34,41 @@ public class main extends Activity {
                         
         Button c5Button = new Button(this);
         c5Button.setText("ƒh");
-        c5Button.setMinWidth(200);
+        c5Button.setMinEms(8);
         Button d5Button = new Button(this);
         d5Button.setText("ƒŒ");
-        d5Button.setMinWidth(200);
+        d5Button.setMinEms(8);
         Button e5Button = new Button(this);
         e5Button.setText("ƒ~");
-        e5Button.setMinWidth(200);
+        e5Button.setMinEms(8);
         Button f5Button = new Button(this);
         f5Button.setText("ƒtƒ@");
-        f5Button.setMinWidth(200);
+        f5Button.setMinEms(8);
         Button g5Button = new Button(this);
         g5Button.setText("ƒ\");
-        g5Button.setMinWidth(200);
+        g5Button.setMinEms(8);
         Button a5Button = new Button(this);
         a5Button.setText("ƒ‰");
-        a5Button.setMinWidth(200);
+        a5Button.setMinEms(8);
         Button b5Button = new Button(this);
         b5Button.setText("ƒV");
-        b5Button.setMinWidth(200);
+        b5Button.setMinEms(8);
         Button c6Button = new Button(this);
         c6Button.setText("ƒh");
-        c6Button.setMinWidth(200);
+        c6Button.setMinEms(8);
         
         Button stopButton = new Button(this);
         stopButton.setText("’âŽ~");
         
         Button triangleButton = new Button(this);
         triangleButton.setText("ŽOŠp”g");
-        triangleButton.setMinWidth(150);             
+        triangleButton.setMinEms(6);
         Button squareButton = new Button(this);
         squareButton.setText("‹éŒ`”g");
-        squareButton.setMinWidth(150);
+        squareButton.setMinEms(6);
         Button sawButton = new Button(this);
         sawButton.setText("‚Ì‚±‚¬‚è”g");
-        sawButton.setMinWidth(150);
+        sawButton.setMinEms(6);
                 
         triangleButton.setOnClickListener(new View.OnClickListener() {
             @Override
