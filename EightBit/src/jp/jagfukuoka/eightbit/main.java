@@ -12,12 +12,13 @@ public class main extends Activity {
         setContentView(R.layout.main);
         this.audio = new AudioMachine();
         Sound sound = new Sin();
-        sound.createAudio(20,400);
+        sound.createAudio(5,400);
         this.audio.Play(sound);
     }
     private AudioMachine audio;
     @Override
-    public void onStop(){
+    public void onPause(){
     	this.audio.Stop();
+    	super.onPause();
     }
 }
