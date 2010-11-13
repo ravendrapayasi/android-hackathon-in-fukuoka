@@ -11,9 +11,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".RecentListActivity"
+          android:label="Recent">
+          </activity>
 		
-		
-	  
+		<provider android:name="RecentContentProvider"
+          android:authorities="jp.jagfukuoka.recentContentProvider" />
     </application>
 
 

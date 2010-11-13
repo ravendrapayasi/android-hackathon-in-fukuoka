@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -16,11 +15,8 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 
-import backport.android.bluetooth.BluetoothAdapter;
-import backport.android.bluetooth.BluetoothDevice;
-
-import jp.jagfukuoka.R;
 import android.app.Activity;
+import android.bluetooth.BluetoothAdapter;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -39,7 +35,7 @@ public class MainActivity extends Activity implements OnClickListener  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         
-        //-----[ボタンの設定]
+        //-----[繝懊ち繝ｳ縺ｮ險ｭ螳咯
         Button button1 = (Button)findViewById(R.id.Button01);
         button1.setOnClickListener(this);
         
@@ -48,11 +44,11 @@ public class MainActivity extends Activity implements OnClickListener  {
         
         
         
-      //-----[BluetoothのMACアドレス取得]
+      //-----[Bluetooth縺ｮMAC繧｢繝峨Ξ繧ｹ蜿門ｾ余
         BluetoothAdapter bt = BluetoothAdapter.getDefaultAdapter();
 		if(bt == null)
 		{
-			Toast.makeText(this, "Bluetoothはサポートされていません", Toast.LENGTH_LONG).show();
+			Toast.makeText(this, "Bluetooth縺ｯ繧ｵ繝昴�繝医＆繧後※縺�∪縺帙ｓ", Toast.LENGTH_LONG).show();
 		}
 		else
 		{
@@ -73,8 +69,7 @@ public class MainActivity extends Activity implements OnClickListener  {
     }
     
     //------------------------------
-    //   クリックイベント
-    //------------------------------
+    //   繧ｯ繝ｪ繝�け繧､繝吶Φ繝�    //------------------------------
     public void onClick(View v) {
     	switch(v.getId())
     	{
@@ -86,27 +81,27 @@ public class MainActivity extends Activity implements OnClickListener  {
     
     private void sendJson()
     {
-    	//-----[クライアント設定]
+    	//-----[繧ｯ繝ｩ繧､繧｢繝ｳ繝郁ｨｭ螳咯
         HttpClient httpclient = new DefaultHttpClient();
 		HttpPost httppost = new HttpPost(url);
 		
-		//-----[JSONの作成]
+		//-----[JSON縺ｮ菴懈�]
 		EditText et = (EditText) findViewById(R.id.EditText01);
 		String json = "{\"screen_name\":\""+et.getText()+"\", \"mac_address\":\""+getMacAddress()+"\"}";
 		
-		//-----[POST送信するデータを格納]
+		//-----[POST騾∽ｿ｡縺吶ｋ繝��繧ｿ繧呈�邏江
 		List<NameValuePair> nameValuePair = new ArrayList<NameValuePair>(1);
 		nameValuePair.add(new BasicNameValuePair("json", json));
 		
 		try
 		{
-			//-----[POST送信]
+			//-----[POST騾∽ｿ｡]
 			httppost.setEntity(new UrlEncodedFormEntity(nameValuePair));
 			HttpResponse response = httpclient.execute(httppost);
 			ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 			response.getEntity().writeTo(byteArrayOutputStream);
 			
-			//-----[サーバーからの応答を取得]
+			//-----[繧ｵ繝ｼ繝舌�縺九ｉ縺ｮ蠢懃ｭ斐ｒ蜿門ｾ余
 			if(response.getStatusLine().getStatusCode() == HttpStatus.SC_OK)
 			{
 				Toast.makeText(this, byteArrayOutputStream.toString(), Toast.LENGTH_LONG).show();
