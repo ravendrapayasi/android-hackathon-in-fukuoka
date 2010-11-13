@@ -22,7 +22,7 @@ public class AudioMachine {
 	
 	public void Play(Sound sound){
 		this.stop = false;		
-		byte[] audio = sound.getAudio();
+		short[] audio = sound.getAudio();
 		track.write(audio, 0, audio.length);		
 	}
 	
