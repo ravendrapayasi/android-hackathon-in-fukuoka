@@ -2,22 +2,23 @@ package jp.jagfukuoka.eightbit.Sound;
 
 public class Sin implements Sound {
 
-	private byte[] audio;
+	private short[] audio;
 	@Override
-	public void createAudio(int time,int interval){
+	public void createAudio(int time,int interval,int volume){
 		
-		byte[] sinWave = new byte[44100 * time];
+		short[] sinWave = new short[SoundCommon.getSampleRate() * time];
 		double freq = interval;
 		double t = 0.0;
-		double dt = 1.0 / 44100;
+		double dt = 1.0 / SoundCommon.getSampleRate();
+		short shortVolume = (short) ((Short.MAX_VALUE)/100 * volume);
 
 		for (int i = 0; i < sinWave.length; i++, t += dt) {
-		    sinWave[i] = (byte) (Short.MAX_VALUE * Math.sin(2.0 * Math.PI * t * freq));
+		    sinWave[i] = (short) (shortVolume * Math.sin(2.0 * Math.PI * t * freq));
 		}
 		this.audio = sinWave;
 	}
 	@Override
-	public byte[] getAudio(){
+	public short[] getAudio(){
 		return this.audio;
 	}
 
