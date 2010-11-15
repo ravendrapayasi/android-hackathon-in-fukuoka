@@ -14,8 +14,6 @@ public class main extends Activity {
 	
 	private static AudioMachine audio;	
 	
-	private static float volume;	
-	private static int length;	
 	private static int type = 1;
 	
 	public final static float C5 = 523.25f;
@@ -56,6 +54,11 @@ public class main extends Activity {
         Button c6Button = new Button(this);
         c6Button.setText("Éh");
         c6Button.setMinEms(8);
+
+        Button demoButton = new Button(this);
+        demoButton.setText("DEMO");
+        demoButton.setMinEms(8);
+        
         
         Button stopButton = new Button(this);
         stopButton.setText("í‚é~");
@@ -118,6 +121,10 @@ public class main extends Activity {
         layout4.setOrientation(LinearLayout.HORIZONTAL);
         layout4.addView(b5Button);
         layout4.addView(c6Button);
+        
+        LinearLayout layout5 = new LinearLayout(this);
+        layout5.setOrientation(LinearLayout.HORIZONTAL);
+        layout5.addView(demoButton);
                 
         //LinearLayout
         LinearLayout linearLayout = new LinearLayout(this);
@@ -127,31 +134,27 @@ public class main extends Activity {
         linearLayout.addView(layout2);
         linearLayout.addView(layout3);
         linearLayout.addView(layout4);                
+        linearLayout.addView(layout5);                
         
         linearLayout.addView(stopButton);
         setContentView(linearLayout);        
                 
-        c5Button.setOnClickListener( createSoundOnClickLisner(5, C5, 1.0f));
-        d5Button.setOnClickListener( createSoundOnClickLisner(5, D5, 1.0f));
-        e5Button.setOnClickListener( createSoundOnClickLisner(5, E5, 1.0f));
-        f5Button.setOnClickListener( createSoundOnClickLisner(5, F5, 1.0f));
-        g5Button.setOnClickListener( createSoundOnClickLisner(5, G5, 1.0f));
-        a5Button.setOnClickListener( createSoundOnClickLisner(5, A5, 1.0f));
-        b5Button.setOnClickListener( createSoundOnClickLisner(5, B5, 1.0f));
-        c6Button.setOnClickListener( createSoundOnClickLisner(5, C6, 1.0f));
+        c5Button.setOnClickListener( createSoundOnClickLisner(50, C5, 1.0f));
+        d5Button.setOnClickListener( createSoundOnClickLisner(50, D5, 1.0f));
+        e5Button.setOnClickListener( createSoundOnClickLisner(50, E5, 1.0f));
+        f5Button.setOnClickListener( createSoundOnClickLisner(50, F5, 1.0f));
+        g5Button.setOnClickListener( createSoundOnClickLisner(50, G5, 1.0f));
+        a5Button.setOnClickListener( createSoundOnClickLisner(50, A5, 1.0f));
+        b5Button.setOnClickListener( createSoundOnClickLisner(50, B5, 1.0f));
+        c6Button.setOnClickListener( createSoundOnClickLisner(50, C6, 1.0f));
+        demoButton.setOnClickListener( createDemoOnClickLisner());
         
         stopButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {            	
-            	new Thread(new Runnable() {
-            			@Override
-            		    public void run() {
-            				if (audio != null){
-            					audio.Stop();
-            				}
-            		    }
-            	}).start();
-             	
+				if (audio != null){
+					audio.Stop();
+				}             	
             }
         });              
     }   
@@ -161,30 +164,35 @@ public class main extends Activity {
     	super.onPause();
     	audio.Stop();
     }    
-
+    public OnClickListener createDemoOnClickLisner(){
+    	return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {            	
+            	Log.w("hoge","onc");
+				audio = new AudioMachine();
+				DemoMusic sound = new DemoMusic();
+				audio.Play(sound);            				
+           }    	
+    	};
+    }
     public OnClickListener createSoundOnClickLisner(final int length,final float onkai,final float volume){
     	return new View.OnClickListener() {
             @Override
             public void onClick(View v) {            	
-            	new Thread(new Runnable() {
-            			@Override
-            		    public void run() {
-            				audio = new AudioMachine();
-            				float newVolume = volume;
-            				Sound sound;
-            				if (type == 1){
-            					sound = new Triangle();            					
-            				} else if (type == 2){
-            					sound = new Square();
-            					newVolume *= 0.3;
-            				} else {
-            					sound = new Saw();
-            					newVolume *= 0.3;
-            				}
-            				sound.createAudio(length,onkai,newVolume);
-            				audio.Play(sound);            				
-            		    }
-            	}).start();             	
+    				audio = new AudioMachine();
+    				float newVolume = volume;
+    				ElectronicSound sound;
+    				if (type == 1){
+    					sound = new Triangle();            					
+    				} else if (type == 2){
+    					sound = new Square();
+    					newVolume *= 0.3;
+    				} else {
+    					sound = new Saw();
+    					newVolume *= 0.3;
+    				}
+    				sound.createAudio(length,onkai,newVolume);
+    				audio.Play(sound);            				
            }    	
     	};
     }

@@ -1,25 +1,18 @@
 package jp.jagfukuoka.eightbit.Sound;
 
-public class Sin implements Sound {
+public class Sin extends ElectronicSound {
 
 	private short[] audio;
 	@Override
-	public void createAudio(int time,float interval,float volume){
-		
-		short[] sinWave = SoundCommon.getAudioBlankArray(time);
+	protected void createWave(float interval, float volume) {
 		double freq = interval;
 		double t = 0.0;
-		double dt = 1.0 / SoundCommon.getSampleRate();
+		double dt = 1.0 / Sound.SAMPLE_RATE;
 		short shortVolume = (short) ((Short.MAX_VALUE) * volume);
-
-		for (int i = 0; i < sinWave.length; i++, t += dt) {
-		    sinWave[i] = (short) (shortVolume * Math.sin(2.0 * Math.PI * t * freq));
+		int waveLength = super.wave.length;		
+		for (int i = 0; i < waveLength; i++, t += dt) {
+		    super.wave[i] = (short) (shortVolume * Math.sin(2.0 * Math.PI * t * freq));
 		}
-		this.audio = sinWave;
-	}
-	@Override
-	public short[] getAudio(){
-		return this.audio;
 	}
 
 }

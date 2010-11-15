@@ -1,29 +1,23 @@
 package jp.jagfukuoka.eightbit.Sound;
 
-public class Square implements Sound {
-
-	private short[] audio;
+public class Square extends ElectronicSound {
+	
 	@Override
-	public void createAudio(int time, float interval, float volume) {
-		short[] squareWave = SoundCommon.getAudioBlankArray(time);
+	protected void createWave(float interval, float volume) {
 		double t = 0.0;
-		double dt = 1.0 / SoundCommon.getSampleRate();
+		double dt = 1.0 / Sound.SAMPLE_RATE;
 		short maxValue = (short) ((Short.MAX_VALUE) * volume);
 		short minValue = (short) ((Short.MIN_VALUE) * volume);
-
-		for (int i = 0; i < squareWave.length; i++, t += dt) {
+		
+		int waveLength = super.wave.length;
+		for (int i = 0; i < waveLength; i++, t += dt) {
 		    if (Math.sin(2.0 * Math.PI * t * interval) > 0) {
-		        squareWave[i] = maxValue;
+		        super.wave[i] = maxValue;
 		    } else {
-		        squareWave[i] = minValue;
+		        super.wave[i] = minValue;
 		    }
 		}
-		this.audio = squareWave;
 	}
 
-	@Override
-	public short[] getAudio() {
-		return this.audio;
-	}
 
 }
