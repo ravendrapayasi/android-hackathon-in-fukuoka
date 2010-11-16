@@ -20,8 +20,6 @@ import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -49,9 +47,9 @@ public class MainActivity extends Activity{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 
-		// -----[ボタンの設定]
-		Button button1 = (Button) findViewById(R.id.OKButton);
-		button1.setOnClickListener(new OnClickListener() {
+		// -----[登録ボタンの設定]
+		Button okButton = (Button) findViewById(R.id.OKButton);
+		okButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				switch (v.getId()) {
@@ -64,7 +62,8 @@ public class MainActivity extends Activity{
 				}
 			}
 		});
-		
+		// Listボタン
+		// RecentListViewに遷移する
 		Button listButton = (Button) findViewById(R.id.ListButton);
 		listButton.setOnClickListener(new OnClickListener() {
 			@Override
