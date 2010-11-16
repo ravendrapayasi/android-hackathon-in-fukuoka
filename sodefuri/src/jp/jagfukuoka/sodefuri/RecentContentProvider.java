@@ -2,13 +2,25 @@ package jp.jagfukuoka.sodefuri;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteDatabase.CursorFactory;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
-
+import android.provider.BaseColumns;
+/**
+ * すれ違ったbluetoothのmac_addressを保存するContentProvider
+ * @author shikajiro
+ *
+ */
 public class RecentContentProvider extends ContentProvider {
+	public static final Uri CONTENT_URI = Uri
+			.parse("content://jp.jagfukuoka.sodefuri.recentcontentprovider");
+	public static final String MAC_ADDRESS = "macaddress";
 	DatabaseHelper databaseHelper;
+
 	@Override
 	public boolean onCreate() {
 		databaseHelper = new DatabaseHelper(getContext());
@@ -16,33 +28,65 @@ public class RecentContentProvider extends ContentProvider {
 	}
 
 	@Override
-	public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-	    SQLiteDatabase db = databaseHelper.getReadableDatabase();
-	    SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
-	    qb.setTables("test"); //テーブル名
-	    Cursor c = qb.query(db, projection, selection, selectionArgs, null, null, null);
-	    return c;	
-	}
-
-	@Override
-	public int update(Uri uri, ContentValues contentvalues, String s, String[] as) {
-		throw new UnsupportedOperationException("Not supported by this provider");
-	}
-
-
-	@Override
 	public Uri insert(Uri uri, ContentValues contentvalues) {
-	    SQLiteDatabase db = databaseHelper.getWritableDatabase();
-	    db.insert("test", null, contentvalues); //testがテーブル名
-	    return null;	}
+		SQLiteDatabase db = databaseHelper.getWritableDatabase();
+		db.insert("test", null, contentvalues);
+		return null;
+	}
+
+	@Override
+	public Cursor query(Uri uri, String[] projection, String selection,
+			String[] selectionArgs, String sortOrder) {
+		SQLiteDatabase db = databaseHelper.getReadableDatabase();
+		SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
+		qb.setTables("test");
+		Cursor c = qb.query(db, projection, selection, selectionArgs, null,
+				null, sortOrder);
+		return c;
+	}
+
+	@Override
+	public int update(Uri uri, ContentValues contentvalues, String s,
+			String[] as) {
+		// TODO
+		throw new UnsupportedOperationException(
+				"Not supported by this provider");
+	}
 
 	@Override
 	public int delete(Uri uri, String s, String[] as) {
-		throw new UnsupportedOperationException("Not supported by this provider");
+		// TODO
+		throw new UnsupportedOperationException(
+				"Not supported by this provider");
 	}
 
 	@Override
 	public String getType(Uri uri) {
 		return null;
+	}
+
+	/**
+	 * DBへアクセスするヘルパークラス
+	 * 
+	 * @author shikajiro
+	 * 
+	 */
+	private class DatabaseHelper extends SQLiteOpenHelper {
+		public DatabaseHelper(Context context) {
+			super(context, "test.db", null, 1);
+		}
+
+		@Override
+		public void onCreate(SQLiteDatabase db) {
+			db.execSQL("CREATE TABLE test (" + BaseColumns._ID
+					+ " INTEGER PRIMARY KEY,"
+					+ RecentContentProvider.MAC_ADDRESS + " TEXT"+ ");");
+		}
+
+		@Override
+		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+			db.execSQL("DROP TABLE IF EXISTS test");
+			onCreate(db);
+		}
 	}
 }
