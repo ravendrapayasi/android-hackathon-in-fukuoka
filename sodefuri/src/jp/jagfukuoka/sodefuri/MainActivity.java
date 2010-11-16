@@ -1,4 +1,4 @@
-package jp.jagfukuoka;
+package jp.jagfukuoka.sodefuri;
 
 
 import java.io.ByteArrayOutputStream;
@@ -48,8 +48,7 @@ public class MainActivity extends Activity implements OnClickListener  {
     }
     
     //------------------------------
-    //   クリックイベント
-    //------------------------------
+    //   クリ�?��イベン�?    //------------------------------
     public void onClick(View v) {
     	switch(v.getId())
     	{
@@ -65,13 +64,13 @@ public class MainActivity extends Activity implements OnClickListener  {
 		
 		if (mBluetoothAdapter == null)
 		{
-			//Bluetoothはサポートされてません
+			//Bluetoothはサポ�?トされてません
 		}
 		else
 		{
 			if (mBluetoothAdapter.isEnabled())
 			{
-				//-----[利用可能なので次の処理へ]
+				//-----[利用可能なので次の処�?��]
 				 getLocalInformation();
 			}
 			else
@@ -97,7 +96,7 @@ public class MainActivity extends Activity implements OnClickListener  {
 			}
 			else if (resultCode == RESULT_CANCELED)
 			{
-				//Bluetoothは利用不可です
+				//Bluetoothは利用不可で�?			
 			}
 		}
 		else if (requestCode == REQUEST_STATE_CHANGE_BT)
@@ -167,11 +166,11 @@ public class MainActivity extends Activity implements OnClickListener  {
         HttpClient httpclient = new DefaultHttpClient();
 		HttpPost httppost = new HttpPost(url);
 		
-		//-----[JSONの作成]
+		//-----[JSONの作�?]
 		EditText et = (EditText) findViewById(R.id.EditText01);
 		String json = "{\"screen_name\":\""+et.getText()+"\", \"mac_address\":\""+address+"\"}";
 		
-		//-----[POST送信するデータを格納]
+		//-----[POST送信する�??タを�?納]
 		List<NameValuePair> nameValuePair = new ArrayList<NameValuePair>(1);
 		nameValuePair.add(new BasicNameValuePair("json", json));
 		
@@ -183,7 +182,7 @@ public class MainActivity extends Activity implements OnClickListener  {
 			ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 			response.getEntity().writeTo(byteArrayOutputStream);
 			
-			//-----[サーバーからの応答を取得]
+			//-----[サーバ�?からの応答を取得]
 			if(response.getStatusLine().getStatusCode() == HttpStatus.SC_OK)
 			{
 				Toast.makeText(this, "登録しました", Toast.LENGTH_LONG).show();

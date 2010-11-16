@@ -1,4 +1,4 @@
-package jp.jagfukuoka;
+package jp.jagfukuoka.sodefuri;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;

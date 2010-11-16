@@ -1,4 +1,4 @@
-package jp.jagfukuoka;
+package jp.jagfukuoka.sodefuri;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -13,7 +13,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	public DatabaseHelper(Context context, String name, CursorFactory factory,
 			int version) {
 		super(context, name, factory, version);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
@@ -28,7 +27,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-    	// TODO Auto-generated method stub
     	db.execSQL("DROP TABLE IF EXISTS test");
     	onCreate(db);
 	}

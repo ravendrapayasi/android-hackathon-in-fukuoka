@@ -1,7 +1,9 @@
-package jp.jagfukuoka;
+package jp.jagfukuoka.sodefuri;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import jp.jagfukuoka.R;
 
 import android.app.ListActivity;
 import android.content.ContentResolver;
@@ -19,7 +21,7 @@ import android.widget.Toast;
 
 public class RecentListViewActivity extends ListActivity {
 	boolean debug = true;
-	public static final Uri CONTENT_URI =  Uri.parse("content://jp.jagfukuoka.recentprovider");
+	public static final Uri CONTENT_URI =  Uri.parse("content://jp.jagfukuoka.recentContentProvider");
 	public static final String SCREEN_NAME =  "SCREEN_NAME";
 	public static final String MAC_ADDRESS =  "MAC_ADDRESS";
 	String[] projection = new String[] {
