@@ -44,6 +44,7 @@ public class DemoMusic implements Sound{
 		music[i++] = new ElectronicNote(1,Note.A5,0);
 		music[i++] = new ElectronicNote(10,Note.C6S,1f);
 
+
 		music[i++] = new ElectronicNote(5,Note.D6,1f);
 		music[i++] = new ElectronicNote(5,Note.C6S,1f);
 		music[i++] = new ElectronicNote(10,Note.A5,1f);

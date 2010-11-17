@@ -10,7 +10,11 @@ public abstract class ElectronicSound implements Sound{
 		createAudio(note.time,note.interval,note.volume);
 	}
 	public void createAudio(int time,float interval,float volume){
-		again = (int)(interval * time / 100);
+		if(time <= 0){
+			again = -1;
+		}else{
+			again = (int)(interval * time / 100);
+		}
 		againCount = 0;
 		this.wave = new short[(int) (Sound.SAMPLE_RATE / interval)];
 		createWave(interval,volume);
@@ -18,13 +22,16 @@ public abstract class ElectronicSound implements Sound{
 	protected abstract void createWave(float interval,float volume);
 	@Override
 	public short[] getAudio() {
+
+		if(again==-1){
+			return this.wave;
+		}
 		if(againCount<again){
 			againCount++;
 			return this.wave;
-		}else{
-			againCount = 0;
-			return null;
 		}
+		againCount = 0;
+		return null;
 	}
 
 	
