@@ -1,4 +1,4 @@
-package jp.jagfukuoka.sodefuri;
+package jp.jagfukuoka.sodefuri.provider;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;
@@ -16,9 +16,10 @@ import android.provider.BaseColumns;
  *
  */
 public class RecentContentProvider extends ContentProvider {
+	// TODO •¶Žš—ñ‚ðvalue‰»
 	public static final Uri CONTENT_URI = Uri
-			.parse("content://jp.jagfukuoka.sodefuri.recentcontentprovider");
-	public static final String MAC_ADDRESS = "macaddress";
+			.parse("content://jp.jagfukuoka.sodefuri.provider.recentcontentprovider");
+	public static final String MAC_ADDRESS = "mac_address";
 	DatabaseHelper databaseHelper;
 
 	@Override

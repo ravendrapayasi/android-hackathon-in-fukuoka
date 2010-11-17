@@ -6,6 +6,8 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
+import jp.jagfukuoka.sodefuri.provider.RecentContentProvider;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.NameValuePair;
@@ -18,7 +20,9 @@ import org.apache.http.message.BasicNameValuePair;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
+import android.content.ContentValues;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -54,6 +58,7 @@ public class MainActivity extends Activity{
 			public void onClick(View v) {
 				switch (v.getId()) {
 				case R.id.OKButton:
+					// TODO thread処理化
 					ProgressDialog.show(MainActivity.this, null, "登録中...", true);
 					checkBluetooth();
 					startActivity(new Intent(MainActivity.this,
@@ -153,6 +158,10 @@ public class MainActivity extends Activity{
 			if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
 				Toast.makeText(MainActivity.this, "登録しました", Toast.LENGTH_LONG)
 						.show();
+				ContentValues values = new ContentValues();
+				values.put(RecentContentProvider.MAC_ADDRESS, address);
+				Uri uri = getContentResolver().insert(
+						RecentContentProvider.CONTENT_URI, values);
 			} else {
 				Toast.makeText(MainActivity.this,
 						"[error]: " + response.getStatusLine(),

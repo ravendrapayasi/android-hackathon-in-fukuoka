@@ -14,8 +14,8 @@
         <activity android:name=".RecentListViewActivity" android:label="Recent">
         </activity>
         
-		<provider android:name="RecentContentProvider"
-          android:authorities="jp.jagfukuoka.sodefuri.recentcontentprovider" />
+		<provider android:name=".provider.RecentContentProvider"
+          android:authorities="jp.jagfukuoka.sodefuri.provider.recentcontentprovider" />
     </application>
 
 <uses-permission android:name="android.permission.INTERNET"></uses-permission>
