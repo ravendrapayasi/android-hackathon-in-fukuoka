@@ -12,13 +12,19 @@ public class AudioMachine {
 	public AudioMachine(){
 		this.init();
 	}
+	
 	AudioTrack track;
 	private void init(){		
 		int bufferSize = 16000;//android.media.AudioTrack.getMinBufferSize(Sound.SAMPLE_RATE, Sound.CHANNEL_CONFIGURATION, Sound.ENCODING);
 		this.track = new AudioTrack(AudioManager.STREAM_MUSIC, Sound.SAMPLE_RATE, Sound.CHANNEL_CONFIGURATION, Sound.ENCODING, bufferSize, AudioTrack.MODE_STREAM);		
 		this.track.play();		
 	}
-	
+	public void restart(){
+		this.track.play();
+	}
+	public void SetVolume(float volume){
+		this.track.setStereoVolume(volume, volume);
+	}
 	private class Decoder implements Runnable{
 
 		private Buffer buffer;
@@ -55,8 +61,10 @@ public class AudioMachine {
 	}
 	
 	public void Play(final Sound sound){
-		
-		this.isStop = false;		
+		if(isStop){
+			init();
+			this.isStop = false;		
+		}
 		Buffer buffer = new Buffer();
 		Decoder decoder = new Decoder(buffer, sound);
 		Thread decodeThread = new Thread(decoder);

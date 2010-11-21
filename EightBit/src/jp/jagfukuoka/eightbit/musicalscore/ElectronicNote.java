@@ -6,8 +6,14 @@ public class ElectronicNote {
 	public float volume;
 	
 	public ElectronicNote(int time, float interval, float volume){
-		this.time = time*3;
+		this.time = time;
 		this.interval = interval;
 		this.volume = volume;
+	}
+	public boolean equals(Note n){
+		if(this.time == n.time && this.interval== n.interval && this.volume == n.volume){
+			return true;
+		}
+		return false;
 	}
 }

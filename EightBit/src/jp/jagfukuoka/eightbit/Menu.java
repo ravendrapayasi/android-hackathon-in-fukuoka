@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.content.Intent;
+import android.graphics.Shader.TileMode;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -21,6 +22,14 @@ public class Menu extends Activity {
 	    	@Override
 			public void onClick(View v) {
 	    		Intent i = new Intent(getApplicationContext(),Buttons.class);
+	    		startActivity(i);
+	    	}
+	    });
+	    final Button telminMode = (Button)findViewById(R.id.ThelminMode);
+	    telminMode.setOnClickListener(new OnClickListener(){
+	    	@Override
+	    	public void onClick(View v){
+	    		Intent i = new Intent(getApplicationContext(),Telmin.class);
 	    		startActivity(i);
 	    	}
 	    });

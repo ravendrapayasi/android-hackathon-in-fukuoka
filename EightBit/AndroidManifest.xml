@@ -13,6 +13,7 @@
             </intent-filter>
 	    </activity>
         <activity android:label="@string/app_name" android:name=".Buttons"></activity>
+        <activity android:label="@string/app_name" android:name=".Telmin"></activity>
 	    
 	</application>
     <uses-sdk android:minSdkVersion="4" />
