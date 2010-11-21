@@ -13,6 +13,8 @@
         </activity>
         <activity android:name=".RecentListViewActivity" android:label="Recent">
         </activity>
+        <activity android:name=".TimeLineActivity" android:label="TimeLine">
+        </activity>
         
 		<provider android:name=".provider.RecentContentProvider"
           android:authorities="jp.jagfukuoka.sodefuri.provider.recentcontentprovider" />

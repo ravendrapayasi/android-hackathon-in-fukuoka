@@ -5,7 +5,7 @@
 	<TextView android:layout_width="fill_parent"
 		android:layout_height="wrap_content" android:text="Twitterのスクリーンネームを登録してください"
 		android:id="@+id/tv_result" />
-	<EditText android:text="_simo" android:id="@+id/EditText01"
+	<EditText android:text="test" android:id="@+id/EditText01"
 		android:layout_width="wrap_content" android:layout_height="wrap_content"></EditText>
 	<Button android:text="OK" android:id="@+id/OKButton"
 		android:layout_width="wrap_content" android:layout_height="wrap_content"></Button>

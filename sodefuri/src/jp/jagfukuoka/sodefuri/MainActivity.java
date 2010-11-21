@@ -44,13 +44,23 @@ public class MainActivity extends Activity{
 	private static final int REQUEST_ENABLE_BT = 1;
 	private static final int REQUEST_STATE_CHANGE_BT = 2;
 	private BluetoothAdapter mBluetoothAdapter = null;
+	private static final boolean isDebug = true;
 
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
-
+		
+		// debug. test data insert
+		if(isDebug){
+			ContentValues values = new ContentValues();
+			values.put(RecentContentProvider.MAC_ADDRESS, "00:00:00:00:00:00");
+			values.put(RecentContentProvider.MAC_ADDRESS, "E8:E5:D6:4C:52:3A");// _simo
+			values.put(RecentContentProvider.MAC_ADDRESS, "F8:DB:7F:02:2E:EE");// shikajiro
+			getContentResolver().insert(RecentContentProvider.CONTENT_URI, values);
+		}
+		
 		// -----[登録ボタンの設定]
 		Button okButton = (Button) findViewById(R.id.OKButton);
 		okButton.setOnClickListener(new OnClickListener() {
@@ -61,13 +71,12 @@ public class MainActivity extends Activity{
 					// TODO thread処理化
 					ProgressDialog.show(MainActivity.this, null, "登録中...", true);
 					checkBluetooth();
-					startActivity(new Intent(MainActivity.this,
-							RecentListViewActivity.class));
+					startActivity(new Intent(MainActivity.this,	RecentListViewActivity.class));
 					break;
 				}
 			}
 		});
-		// Listボタン
+		// debug用Listボタン
 		// RecentListViewに遷移する
 		Button listButton = (Button) findViewById(R.id.ListButton);
 		listButton.setOnClickListener(new OnClickListener() {

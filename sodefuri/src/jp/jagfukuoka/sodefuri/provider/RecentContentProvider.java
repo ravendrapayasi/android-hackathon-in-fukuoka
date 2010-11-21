@@ -5,18 +5,18 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.provider.BaseColumns;
+
 /**
  * ‚·‚êˆá‚Á‚½bluetooth‚Ìmac_address‚ð•Û‘¶‚·‚éContentProvider
+ * 
  * @author shikajiro
- *
+ * 
  */
 public class RecentContentProvider extends ContentProvider {
-	// TODO •¶Žš—ñ‚ðvalue‰»
 	public static final Uri CONTENT_URI = Uri
 			.parse("content://jp.jagfukuoka.sodefuri.provider.recentcontentprovider");
 	public static final String MAC_ADDRESS = "mac_address";
@@ -81,7 +81,7 @@ public class RecentContentProvider extends ContentProvider {
 		public void onCreate(SQLiteDatabase db) {
 			db.execSQL("CREATE TABLE test (" + BaseColumns._ID
 					+ " INTEGER PRIMARY KEY,"
-					+ RecentContentProvider.MAC_ADDRESS + " TEXT"+ ");");
+					+ RecentContentProvider.MAC_ADDRESS + " TEXT" + ");");
 		}
 
 		@Override
