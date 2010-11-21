@@ -10,7 +10,6 @@ import java.util.List;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -19,14 +18,14 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.ListActivity;
-import android.database.DataSetObserver;
 import android.os.Bundle;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
 import android.widget.Toast;
-
+/**
+ * ユーザーのタイムラインを一覧で表示するActivity
+ * @author shikajiro
+ *
+ */
 public class TimeLineActivity extends ListActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

@@ -1,6 +1,5 @@
 package jp.jagfukuoka.sodefuri;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -16,13 +15,14 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.content.ContentValues;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -52,15 +52,6 @@ public class MainActivity extends Activity{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 		
-		// debug. test data insert
-		if(isDebug){
-			ContentValues values = new ContentValues();
-			values.put(RecentContentProvider.MAC_ADDRESS, "00:00:00:00:00:00");
-			values.put(RecentContentProvider.MAC_ADDRESS, "E8:E5:D6:4C:52:3A");// _simo
-			values.put(RecentContentProvider.MAC_ADDRESS, "F8:DB:7F:02:2E:EE");// shikajiro
-			getContentResolver().insert(RecentContentProvider.CONTENT_URI, values);
-		}
-		
 		// -----[登録ボタンの設定]
 		Button okButton = (Button) findViewById(R.id.OKButton);
 		okButton.setOnClickListener(new OnClickListener() {
@@ -70,6 +61,14 @@ public class MainActivity extends Activity{
 				case R.id.OKButton:
 					// TODO thread処理化
 					ProgressDialog.show(MainActivity.this, null, "登録中...", true);
+					// debug. test data insert
+					if(isDebug){
+						ContentValues values = new ContentValues();
+						values.put(RecentContentProvider.MAC_ADDRESS, "00:00:00:00:00:00");
+						values.put(RecentContentProvider.MAC_ADDRESS, "E8:E5:D6:4C:52:3A");// _simo
+						values.put(RecentContentProvider.MAC_ADDRESS, "F8:DB:7F:02:2E:EE");// shikajiro
+						getContentResolver().insert(RecentContentProvider.CONTENT_URI, values);
+					}
 					checkBluetooth();
 					startActivity(new Intent(MainActivity.this,	RecentListViewActivity.class));
 					break;
@@ -101,7 +100,8 @@ public class MainActivity extends Activity{
 		if (mBluetoothAdapter.isEnabled()) {
 			// -----[利用可能なので次の処理]
 			String mac_address = mBluetoothAdapter.getAddress();
-			sendJson(mac_address);
+			String screen_name = ((EditText)findViewById(R.id.EditText01)).getText().toString();
+			this.registerScreenName(screen_name, mac_address);
 		} else {
 			// -----[利用不可なので許可アラート表示]
 			Intent enableBTIntent = new Intent(
@@ -129,7 +129,8 @@ public class MainActivity extends Activity{
 		if (resultCode == RESULT_OK) {
 			// Bluetoothが利用可能になりました
 			String mac_address = mBluetoothAdapter.getAddress();
-			sendJson(mac_address);
+			String screen_name = ((EditText)findViewById(R.id.EditText01)).getText().toString();
+			registerScreenName(screen_name, mac_address);
 		} else if (resultCode == RESULT_CANCELED) {
 			// Bluetoothは利用不可です
 		}
@@ -139,38 +140,42 @@ public class MainActivity extends Activity{
 	 * jsonをPostで送信する
 	 * 
 	 * @author _simo
-	 * @param address
+	 * @param mac_address
 	 */
-	private void sendJson(final String address) {
+	private void registerScreenName(String screen_name, String mac_address) {
 
 		// -----[クライアント設定]
 		HttpClient httpclient = new DefaultHttpClient();
 		HttpPost httppost = new HttpPost(REQUEST_URL);
 
 		// -----[JSONの作成]
-		EditText et = (EditText) findViewById(R.id.EditText01);
-		String json = "{\"screen_name\":\"" + et.getText()
-				+ "\", \"mac_address\":\"" + address + "\"}";
+		JSONObject jsonObject = new JSONObject();
+		try {
+			jsonObject.put("screen_name", screen_name);
+			jsonObject.put("mac_address", mac_address);
+		} catch (JSONException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		String json = jsonObject.toString();
 
 		// -----[POST送信するListを作成]
-		List<NameValuePair> nameValuePair = new ArrayList<NameValuePair>(1);
+		List<NameValuePair> nameValuePair = new ArrayList<NameValuePair>();
 		nameValuePair.add(new BasicNameValuePair("json", json));
 
 		try {
 			// -----[POST送信]
 			httppost.setEntity(new UrlEncodedFormEntity(nameValuePair));
 			HttpResponse response = httpclient.execute(httppost);
-			ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-			response.getEntity().writeTo(byteArrayOutputStream);
 
+			// TODO response handler化
 			// -----[サーバーからの応答を取得]
 			if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
-				Toast.makeText(MainActivity.this, "登録しました", Toast.LENGTH_LONG)
-						.show();
+				Toast.makeText(MainActivity.this, "登録しました", Toast.LENGTH_LONG).show();
+				// DB登録
 				ContentValues values = new ContentValues();
-				values.put(RecentContentProvider.MAC_ADDRESS, address);
-				Uri uri = getContentResolver().insert(
-						RecentContentProvider.CONTENT_URI, values);
+				values.put(RecentContentProvider.MAC_ADDRESS, mac_address);
+				getContentResolver().insert(RecentContentProvider.CONTENT_URI, values);
 			} else {
 				Toast.makeText(MainActivity.this,
 						"[error]: " + response.getStatusLine(),
