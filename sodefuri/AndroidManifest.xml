@@ -15,7 +15,7 @@
         </activity>
         <activity android:name=".TimeLineActivity" android:label="TimeLine">
         </activity>
-        
+        <service android:name=".service.RecentService"  android:enabled="true"/>
 		<provider android:name=".provider.RecentContentProvider"
           android:authorities="jp.jagfukuoka.sodefuri.provider.recentcontentprovider" />
     </application>

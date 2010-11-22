@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jp.jagfukuoka.sodefuri.provider.RecentContentProvider;
+import jp.jagfukuoka.sodefuri.service.RecentReceiver;
+import jp.jagfukuoka.sodefuri.service.RecentService;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -23,6 +25,7 @@ import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -90,6 +93,9 @@ public class MainActivity extends Activity {
 						RecentListViewActivity.class));
 			}
 		});
+		// serviceの起動
+		startService(new Intent(this,RecentService.class));
+	    registerReceiver(new RecentReceiver(), new IntentFilter(RecentService.MEET));
 	}
 
 	/**
