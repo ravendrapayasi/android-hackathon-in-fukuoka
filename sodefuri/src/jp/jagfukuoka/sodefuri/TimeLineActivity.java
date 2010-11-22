@@ -10,7 +10,9 @@ import java.util.List;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
@@ -27,27 +29,37 @@ import android.widget.Toast;
  *
  */
 public class TimeLineActivity extends ListActivity {
+	private static final String TIMELINE_URL = "http://api.twitter.com/1/statuses/public_timeline.json";
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		// timeline取得処理
 		String screenName = getIntent().getStringExtra("screen_name");
-		List<String> list = getTimeLine(screenName);
+		List<String> list = this.getTimeLine(screenName,new ResponseHandler<HttpResponse>() {
+			@Override
+			public HttpResponse handleResponse(HttpResponse response)
+					throws ClientProtocolException, IOException {
+				if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+				} else {
+				}
+				return response;
+			}
+		});
 
 		setListAdapter(new ArrayAdapter<String>(this, R.layout.timeline_item, list));
 	}
 
-	private List<String> getTimeLine(String screenName) {
+	private List<String> getTimeLine(String screenName, ResponseHandler<HttpResponse> handler) {
 		List<String> result = new ArrayList<String>();
 
 		HttpClient httpClient = new DefaultHttpClient();
-		HttpGet request = new HttpGet("http://api.twitter.com/1/statuses/public_timeline.json");
+		HttpGet request = new HttpGet(TIMELINE_URL);
 		try {
-			HttpResponse response = httpClient.execute(request);
+			HttpResponse response = httpClient.execute(request,handler);
 			if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
-				Toast.makeText(this, "publicタイムラインを取得しました", Toast.LENGTH_LONG)
-						.show();
+				Toast.makeText(TimeLineActivity.this, "publicタイムラインを取得しました", Toast.LENGTH_LONG).show();
 
 				InputStream is = response.getEntity().getContent();
 				BufferedReader br = new BufferedReader(
@@ -64,10 +76,9 @@ public class TimeLineActivity extends ListActivity {
 					String screen_name = jsonObj.getString("text");
 					result.add(screen_name);
 				}
-			} else {
-				Toast.makeText(this,
-						"[タイムライン取得error]: " + response.getStatusLine(),
-						Toast.LENGTH_LONG).show();
+
+			}else{
+				Toast.makeText(TimeLineActivity.this,"[タイムライン取得error]: " + response.getStatusLine(),	Toast.LENGTH_LONG).show();
 			}
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();

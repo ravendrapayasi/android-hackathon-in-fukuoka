@@ -26,7 +26,6 @@ import android.app.ListActivity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -40,9 +39,10 @@ import android.widget.Toast;
  *
  */
 public class RecentListViewActivity extends ListActivity {
+	private static final String FIND_SCREEN_NAME_URL = "http://sodefuri.appspot.com/find_name";
+
 	boolean debug = true;
 	public static final String SCREEN_NAME = "SCREEN_NAME";
-	private static final String REQUEST_URL = "http://sodefuri.appspot.com/find_name";
 
 	String[] projection = new String[] { RecentContentProvider.MAC_ADDRESS, };
 
@@ -50,15 +50,8 @@ public class RecentListViewActivity extends ListActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		// debug mac_addressの一覧表示
-		// DB 取得処理
-//		Cursor managedCursor = managedQuery(RecentContentProvider.CONTENT_URI, projection, null, null, null);
-//		List<String> list = this.getColumnData(managedCursor);
-//		setListAdapter(new ArrayAdapter<String>(this, R.layout.list_item,list));
-		
 		//サーバーにscreen_nameとmac_addressを登録する
-		List<String> screenNames = getScreenName();
-		Log.d("screenNames : ", screenNames.toString());
+		List<String> screenNames = this.getScreenName();
 		
 		//Listへの登録
 		setListAdapter(new ArrayAdapter<String>(this, R.layout.list_item, screenNames));
@@ -87,63 +80,70 @@ public class RecentListViewActivity extends ListActivity {
 	private List<String> getScreenName() {
 
 		// json作成
-		// test data get
 		String json = this.getMacAddressJson();
 
-		// -----[POST送信するListを作成]
-		List<String> result = requestJson(json);
-
-		return result;
+		// jsonでスクリーンネームを問い合わせる
+		List<String> list = this.findScreenNames(json);
+		return list;
 	}
 
-	private List<String> requestJson(String json) {
+	/**
+	 * スクリーンネーム取得処理
+	 * 
+	 * @param json
+	 * @param handler
+	 * @return
+	 */
+	public List<String> findScreenNames(String json) {
 		List<String> result = new ArrayList<String>();
-		List<NameValuePair> nameValuePair = new ArrayList<NameValuePair>();
-		nameValuePair.add(new BasicNameValuePair("json", json));
-
 		try {
 			// -----[POST送信]
 			// -----[クライアント設定]
+			List<NameValuePair> nameValuePair = new ArrayList<NameValuePair>();
+			nameValuePair.add(new BasicNameValuePair("json", json));
 			HttpClient httpclient = new DefaultHttpClient();
-			HttpPost httpPost = new HttpPost(REQUEST_URL);
+			HttpPost httpPost = new HttpPost(FIND_SCREEN_NAME_URL);
 			httpPost.setEntity(new UrlEncodedFormEntity(nameValuePair));
 			HttpResponse response = httpclient.execute(httpPost);
-			
+
 			// -----[サーバーからの応答を取得]
 			if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
-				Toast.makeText(RecentListViewActivity.this, "スクリーンネームを取得しました",
-						Toast.LENGTH_LONG).show();
-				
+				Toast.makeText(RecentListViewActivity.this, "スクリーンネームを取得しました", Toast.LENGTH_LONG).show();
+
 				InputStream is = response.getEntity().getContent();
-				BufferedReader br = new BufferedReader(new InputStreamReader(is));
-				String line;
+				BufferedReader br = new BufferedReader(
+						new InputStreamReader(is));
 				String responsJson = "";
-		        while((line = br.readLine()) != null){
-		        	responsJson += line;
-		        }
-		        
-		        JSONArray jsonArrays = new JSONArray(responsJson);
-				for (int i = 0; i < jsonArrays.length(); i++) {
-				    JSONObject jsonObj = jsonArrays.getJSONObject(i);
-				    String screen_name = jsonObj.getString("screen_name");
-				    result.add(screen_name);
+				String line;
+				while ((line = br.readLine()) != null) {
+					responsJson += line;
 				}
 
-			} else {
-				Toast.makeText(RecentListViewActivity.this,
-						"[スクリーンネーム取得error]: " + response.getStatusLine(),
-						Toast.LENGTH_LONG).show();
-			}
+				JSONArray jsonArrays = new JSONArray(responsJson);
+				for (int i = 0; i < jsonArrays.length(); i++) {
+					JSONObject jsonObj = jsonArrays.getJSONObject(i);
+					String screen_name = jsonObj.getString("screen_name");
+					result.add(screen_name);
+				}
+
+		} else {
+			Toast.makeText(RecentListViewActivity.this, "[スクリーンネーム取得error]: " + response.getStatusLine(),
+					Toast.LENGTH_LONG).show();
+		}
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
 		} catch (JSONException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		return result;
 	}
-
+	
+	/**
+	 * json型のmac_address一覧を取得する
+	 * @return
+	 */
 	private String getMacAddressJson() {
 		Cursor managedCursor = managedQuery(RecentContentProvider.CONTENT_URI,
 				projection, null, null, null);
@@ -156,11 +156,9 @@ public class RecentListViewActivity extends ListActivity {
 				array.put(obj);
 			}
 		} catch (JSONException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		String json = array.toString();
-		return json;
+		return  array.toString();
 	}
 
 	/**

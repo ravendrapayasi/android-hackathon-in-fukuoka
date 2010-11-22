@@ -37,9 +37,8 @@ import android.widget.Toast;
  * @author shikajiro
  * 
  */
-public class MainActivity extends Activity{
-
-	private static final String REQUEST_URL = "http://sodefuri.appspot.com/register";
+public class MainActivity extends Activity {
+	private static final String REGISTER_URL = "http://sodefuri.appspot.com/register";
 
 	private static final int REQUEST_ENABLE_BT = 1;
 	private static final int REQUEST_STATE_CHANGE_BT = 2;
@@ -51,7 +50,7 @@ public class MainActivity extends Activity{
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
-		
+
 		// -----[登録ボタンの設定]
 		Button okButton = (Button) findViewById(R.id.OKButton);
 		okButton.setOnClickListener(new OnClickListener() {
@@ -60,17 +59,23 @@ public class MainActivity extends Activity{
 				switch (v.getId()) {
 				case R.id.OKButton:
 					// TODO thread処理化
-					ProgressDialog.show(MainActivity.this, null, "登録中...", true);
+					ProgressDialog
+							.show(MainActivity.this, null, "登録中...", true);
 					// debug. test data insert
-					if(isDebug){
+					if (isDebug) {
 						ContentValues values = new ContentValues();
-						values.put(RecentContentProvider.MAC_ADDRESS, "00:00:00:00:00:00");
-						values.put(RecentContentProvider.MAC_ADDRESS, "E8:E5:D6:4C:52:3A");// _simo
-						values.put(RecentContentProvider.MAC_ADDRESS, "F8:DB:7F:02:2E:EE");// shikajiro
-						getContentResolver().insert(RecentContentProvider.CONTENT_URI, values);
+						values.put(RecentContentProvider.MAC_ADDRESS,
+								"00:00:00:00:00:00");
+						values.put(RecentContentProvider.MAC_ADDRESS,
+								"E8:E5:D6:4C:52:3A");// _simo
+						values.put(RecentContentProvider.MAC_ADDRESS,
+								"F8:DB:7F:02:2E:EE");// shikajiro
+						getContentResolver().insert(
+								RecentContentProvider.CONTENT_URI, values);
 					}
 					checkBluetooth();
-					startActivity(new Intent(MainActivity.this,	RecentListViewActivity.class));
+					startActivity(new Intent(MainActivity.this,
+							RecentListViewActivity.class));
 					break;
 				}
 			}
@@ -81,7 +86,8 @@ public class MainActivity extends Activity{
 		listButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				startActivity(new Intent(MainActivity.this,RecentListViewActivity.class));
+				startActivity(new Intent(MainActivity.this,
+						RecentListViewActivity.class));
 			}
 		});
 	}
@@ -100,7 +106,8 @@ public class MainActivity extends Activity{
 		if (mBluetoothAdapter.isEnabled()) {
 			// -----[利用可能なので次の処理]
 			String mac_address = mBluetoothAdapter.getAddress();
-			String screen_name = ((EditText)findViewById(R.id.EditText01)).getText().toString();
+			String screen_name = ((EditText) findViewById(R.id.EditText01))
+					.getText().toString();
 			this.registerScreenName(screen_name, mac_address);
 		} else {
 			// -----[利用不可なので許可アラート表示]
@@ -129,63 +136,58 @@ public class MainActivity extends Activity{
 		if (resultCode == RESULT_OK) {
 			// Bluetoothが利用可能になりました
 			String mac_address = mBluetoothAdapter.getAddress();
-			String screen_name = ((EditText)findViewById(R.id.EditText01)).getText().toString();
-			registerScreenName(screen_name, mac_address);
+			String screen_name = ((EditText) findViewById(R.id.EditText01))
+					.getText().toString();
+			this.registerScreenName(screen_name, mac_address);
 		} else if (resultCode == RESULT_CANCELED) {
 			// Bluetoothは利用不可です
 		}
 	}
 
 	/**
-	 * jsonをPostで送信する
+	 * twitterのスクリーンネームとbluetootuのmacAddress登録処理
 	 * 
-	 * @author _simo
 	 * @param mac_address
 	 */
 	private void registerScreenName(String screen_name, String mac_address) {
 
 		// -----[クライアント設定]
 		HttpClient httpclient = new DefaultHttpClient();
-		HttpPost httppost = new HttpPost(REQUEST_URL);
+		HttpPost httppost = new HttpPost(REGISTER_URL);
 
 		// -----[JSONの作成]
 		JSONObject jsonObject = new JSONObject();
 		try {
 			jsonObject.put("screen_name", screen_name);
 			jsonObject.put("mac_address", mac_address);
-		} catch (JSONException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		String json = jsonObject.toString();
 
-		// -----[POST送信するListを作成]
-		List<NameValuePair> nameValuePair = new ArrayList<NameValuePair>();
-		nameValuePair.add(new BasicNameValuePair("json", json));
+			String json = jsonObject.toString();
 
-		try {
+			// -----[POST送信するListを作成]
+			List<NameValuePair> nameValuePair = new ArrayList<NameValuePair>();
+			nameValuePair.add(new BasicNameValuePair("json", json));
+
 			// -----[POST送信]
 			httppost.setEntity(new UrlEncodedFormEntity(nameValuePair));
 			HttpResponse response = httpclient.execute(httppost);
-
-			// TODO response handler化
 			// -----[サーバーからの応答を取得]
 			if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
-				Toast.makeText(MainActivity.this, "登録しました", Toast.LENGTH_LONG).show();
-				// DB登録
-				ContentValues values = new ContentValues();
-				values.put(RecentContentProvider.MAC_ADDRESS, mac_address);
-				getContentResolver().insert(RecentContentProvider.CONTENT_URI, values);
-			} else {
-				Toast.makeText(MainActivity.this,
-						"[error]: " + response.getStatusLine(),
+				Toast.makeText(MainActivity.this, "スクリーンネームとブルートゥース機器を登録しました。",
 						Toast.LENGTH_LONG).show();
+			} else {
+				Toast.makeText(
+						MainActivity.this,
+						"[error]:スクリーンネームとブルートゥース機器を登録できませんでした。"
+								+ response.getStatusLine(), Toast.LENGTH_LONG)
+						.show();
 			}
+		} catch (JSONException e) {
+			e.printStackTrace();
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
 	}
+
 }
