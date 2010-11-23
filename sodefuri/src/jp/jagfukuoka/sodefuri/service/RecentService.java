@@ -33,7 +33,7 @@ public class RecentService extends Service {
 				sendBroadcast(new Intent(MEET));
 			}
 		};
-		timer.schedule(task, 60 * 1000);
+		timer.schedule(task, 30 * 1000);
 	}
 
 }

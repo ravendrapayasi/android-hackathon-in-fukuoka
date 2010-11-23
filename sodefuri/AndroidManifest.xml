@@ -11,10 +11,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".RecentListViewActivity" android:label="Recent">
-        </activity>
-        <activity android:name=".TimeLineActivity" android:label="TimeLine">
-        </activity>
+        <activity android:name=".RecentListViewActivity" android:label="Recent" />
+        <activity android:name=".TimeLineActivity" android:label="TimeLine" />
+        <activity android:name=".BluetoothFoundActivity" android:label="TimeLine" />
+        
         <service android:name=".service.RecentService"  android:enabled="true"/>
 		<provider android:name=".provider.RecentContentProvider"
           android:authorities="jp.jagfukuoka.sodefuri.provider.recentcontentprovider" />

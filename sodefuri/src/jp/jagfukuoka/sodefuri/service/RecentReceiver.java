@@ -1,8 +1,11 @@
 package jp.jagfukuoka.sodefuri.service;
 
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.widget.Toast;
 
 /**
@@ -17,10 +20,11 @@ public class RecentReceiver extends BroadcastReceiver {
 	 */
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		Toast.makeText(context, "Time over!", Toast.LENGTH_LONG).show();
-		// TODO bluetoothåüçı
+		Toast.makeText(context, "BluetoothåüçıíÜ", Toast.LENGTH_LONG).show();
 		
-		// TODO DBìoò^
+		// TODO bluetoothåüçı
+		BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+		bluetoothAdapter.startDiscovery();
 	}
 
 }

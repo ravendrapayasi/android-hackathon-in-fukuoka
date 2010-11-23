@@ -62,23 +62,9 @@ public class MainActivity extends Activity {
 				switch (v.getId()) {
 				case R.id.OKButton:
 					// TODO thread処理化
-					ProgressDialog
-							.show(MainActivity.this, null, "登録中...", true);
-					// debug. test data insert
-					if (isDebug) {
-						ContentValues values = new ContentValues();
-						values.put(RecentContentProvider.MAC_ADDRESS,
-								"00:00:00:00:00:00");
-						values.put(RecentContentProvider.MAC_ADDRESS,
-								"E8:E5:D6:4C:52:3A");// _simo
-						values.put(RecentContentProvider.MAC_ADDRESS,
-								"F8:DB:7F:02:2E:EE");// shikajiro
-						getContentResolver().insert(
-								RecentContentProvider.CONTENT_URI, values);
-					}
+					ProgressDialog.show(MainActivity.this, null, "登録中...", true);
 					checkBluetooth();
-					startActivity(new Intent(MainActivity.this,
-							RecentListViewActivity.class));
+					startActivity(new Intent(MainActivity.this,	RecentListViewActivity.class));
 					break;
 				}
 			}
@@ -89,8 +75,22 @@ public class MainActivity extends Activity {
 		listButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				startActivity(new Intent(MainActivity.this,
-						RecentListViewActivity.class));
+				startActivity(new Intent(MainActivity.this,	RecentListViewActivity.class));
+				// debug. test data insert
+				if (isDebug) {
+					ContentValues values = new ContentValues();
+					values.put(RecentContentProvider.MAC_ADDRESS,"00:00:00:00:00:00");
+					values.put(RecentContentProvider.MAC_ADDRESS,"E8:E5:D6:4C:52:3A");// _simo
+					values.put(RecentContentProvider.MAC_ADDRESS,"F8:DB:7F:02:2E:EE");// shikajiro
+					getContentResolver().insert(RecentContentProvider.CONTENT_URI, values);
+				}
+			}
+		});
+		Button BtFoundButton = (Button) findViewById(R.id.BtFoundButton);
+		BtFoundButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				startActivity(new Intent(MainActivity.this, BluetoothFoundActivity.class));
 			}
 		});
 		// serviceの起動
@@ -106,6 +106,7 @@ public class MainActivity extends Activity {
 
 		if (mBluetoothAdapter == null) {
 			// Bluetoothはサポートされてません
+			Toast.makeText(MainActivity.this, "Bluetoothはサポートされてません",	Toast.LENGTH_LONG).show();
 			return;
 		}
 
@@ -117,13 +118,10 @@ public class MainActivity extends Activity {
 			this.registerScreenName(screen_name, mac_address);
 		} else {
 			// -----[利用不可なので許可アラート表示]
-			Intent enableBTIntent = new Intent(
-					BluetoothAdapter.ACTION_REQUEST_ENABLE);
+			Intent enableBTIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
 			startActivityForResult(enableBTIntent, REQUEST_ENABLE_BT);
-			Intent stateChangedBTIntent = new Intent(
-					BluetoothAdapter.ACTION_STATE_CHANGED);
-			startActivityForResult(stateChangedBTIntent,
-					REQUEST_STATE_CHANGE_BT);
+//			Intent stateChangedBTIntent = new Intent(BluetoothAdapter.ACTION_STATE_CHANGED);
+//			startActivityForResult(stateChangedBTIntent,REQUEST_STATE_CHANGE_BT);
 		}
 	}
 
@@ -135,9 +133,9 @@ public class MainActivity extends Activity {
 	 */
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if (requestCode != REQUEST_ENABLE_BT) {
-			return;
-		}
+//		if (requestCode != REQUEST_ENABLE_BT) {
+//			return;
+//		}
 
 		if (resultCode == RESULT_OK) {
 			// Bluetoothが利用可能になりました
