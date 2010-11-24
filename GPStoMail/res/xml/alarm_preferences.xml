@@ -1,21 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen
 	xmlns:android="http://schemas.android.com/apk/res/android">
-	<PreferenceCategory android:title="Mail設定">
+	<PreferenceCategory android:title="@string/Perf_Mail_title">
 		<EditTextPreference
 			android:key="toMail_adr"
-			android:title="送信先メールアドレス"
-			android:summary="メールアドレスを設定してください"
-			android:dialogTitle="メールが届くアドレスを記入してください" />
+			android:title="@string/Perf_Mail_DestMailAdr_title"
+			android:summary="@string/Perf_Mail_DestMailAdr_summary"
+			android:dialogTitle="@string/Perf_Mail_DestMailAdr_dialogTitle" />
 		<EditTextPreference
 			android:key="fromMail_adr"
-			android:title="送信元メールアドレスをしてしてください"
-			android:summary="送信元メールアドレス"
-			android:dialogTitle="メールを送る方のアドレスを記入してください" />
+			android:title="@string/Perf_Mail_FromMailAdr_title"
+			android:summary="@string/Perf_Mail_FromMailAdr_summary"
+			android:dialogTitle="@string/Perf_Mail_FromMailAdr_dialogTitle" />
 		<EditTextPreference
-			android:key="Subject"
+			android:key="Mail_Subject"
 			android:title="メールタイトル"
 			android:summary="○○君の位置情報"
-			android:dialogTitle="メールタイトル" />
+			android:dialogTitle="メールタイトル"
+			android:defaultValue="○○君の位置情報" />
 	</PreferenceCategory>
+	<PreferenceCategory android:title="@string/Perf_Gmail_title">
+		<EditTextPreference
+			android:key="Gmail_account"
+			android:title="@string/Perf_Gmail_account_title"
+			android:summary="@string/Perf_Gmail_account_summary"
+			android:dialogTitle="Gmail UserName" />
+		<EditTextPreference
+			android:key="Gmail_password"
+			android:title="@string/Perf_Gmail_password_title"
+			android:summary="@string/Perf_Gmail_password_summary"
+			android:dialogTitle="Gmail Password"
+			 />
+	</PreferenceCategory>
+	
 </PreferenceScreen>

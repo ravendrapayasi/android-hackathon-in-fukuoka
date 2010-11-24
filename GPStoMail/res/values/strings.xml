@@ -2,6 +2,31 @@
 <resources>
     
     <string name="app_name">GPStoMail</string>
-<string name="StartTimer">設定</string>
+<string name="StartTimer">セット</string>
 <string name="App_End">終了</string>
+
+<string name="Perf_Gmail_title">Gmail設定</string><string name="Perf_Gmail_account_title">Gmailのユーザー名</string>
+<string name="Perf_Gmail_account_summary">アカウントのユーザー名を設定してください</string>
+<string name="Perf_Gmail_password_title">Gmailのパスワード</string>
+<string name="Perf_Gmail_password_summary">アカウントのパスワードを設定してください</string>
+
+<string name="Perf_Mail_title">Mail設定</string>
+<string name="Perf_Mail_DestMailAdr_title">送信先メールアドレス</string>
+<string name="Perf_Mail_DestMailAdr_summary">メールアドレスを設定してください</string>
+<string name="Perf_Mail_DestMailAdr_dialogTitle">メールが届くアドレスを記入してください</string>
+
+
+<string name="Perf_Mail_FromMailAdr_title">送信元メールアドレス</string><string name="Perf_Mail_FromMailAdr_summary">送信元メールアドレス</string><string name="Perf_Mail_FromMailAdr_dialogTitle">メールを送る方のアドレスを記入してください</string>
+
+
+<string name="Preferences">設定画面</string>
+<string name="War_Mailadr_invalid_title">Sorry!!</string>
+<string name="War_Mailadr_invalid_Cont">メールアドレスの形式を確認してください。</string>
+<string name="War_Gmail_invalid_title">Sorry!!</string>
+<string name="War_Gmail_invalid_Cont">Gmailアカウントの設定を確認してください。</string>
+<string name="Error_Message_Gmail_Title">Gmail Error</string>
+<string name="Error_Message_Gmail_msg">Gmailの送信に失敗しました</string>
+<string name="Succeed_Message_Gmail_msg">位置情報を送信しました</string>
+<string name="Sendmail_immediate">いますぐにメール送信する</string>
+
 </resources>
