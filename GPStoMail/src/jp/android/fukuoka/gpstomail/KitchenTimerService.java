@@ -10,7 +10,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 public class KitchenTimerService extends Service {
-	private boolean DebugMode = true;
+	private boolean DebugMode = false;
 	
 	class KitchenTimerBinder extends Binder {
 		
@@ -82,7 +82,7 @@ public class KitchenTimerService extends Service {
 	}
 	
 	// クライアントから呼び出されるメソッド
-	public void schedule(long delay) {
+	public void schedule(long delay,boolean immediate) {
 		if (timer != null) {
 			timer.cancel();
 		}
@@ -92,6 +92,10 @@ public class KitchenTimerService extends Service {
 				sendBroadcast(new Intent(ACTION));
 			}
 		};
-		timer.schedule(timerTask, delay);
+		if (immediate){
+			timer.schedule(timerTask, 0,delay);
+		}else{
+			timer.schedule(timerTask, delay,delay);
+		}
 	}
 }

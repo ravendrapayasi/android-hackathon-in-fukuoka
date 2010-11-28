@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
@@ -20,9 +21,31 @@ public class SendMail extends Activity {
 	private String mPassword;
 	private MediaPlayer mp;
 	private Context context;
+	private ProgressDialog progressDialog;
 	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+        progressDialog = new ProgressDialog(this);
+        // プログレスダイアログのタイトルを設定します
+        progressDialog.setTitle(R.string.app_name);
+        // プログレスダイアログのメッセージを設定します
+        progressDialog.setMessage(getText(R.string.Sending_Message));
+        // プログレスダイアログの確定（false）／不確定（true）を設定します
+        progressDialog.setIndeterminate(false);
+        // プログレスダイアログのスタイルを円スタイルに設定します
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        // プログレスダイアログの最大値を設定します
+        progressDialog.setMax(100);
+        // プログレスダイアログの値を設定します
+        progressDialog.incrementProgressBy(30);
+        // プログレスダイアログのセカンダリ値を設定します
+//        progressDialog.incrementSecondaryProgressBy(70);
+        // プログレスダイアログのキャンセルが可能かどうかを設定します
+        progressDialog.setCancelable(false);
+        // プログレスダイアログを表示します
+        progressDialog.show();
+		
         //Notificationの準備
         mNM = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
 		Bundle extras = getIntent().getExtras();
@@ -77,7 +100,7 @@ public class SendMail extends Activity {
 
 		} catch (Exception e) {
 			// Notificationの表示
-			notification = new Notification(R.drawable.icon, getText(R.string.app_name),System.currentTimeMillis());
+			notification = new Notification(R.drawable.icon_no, getText(R.string.app_name),System.currentTimeMillis());
 			PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
 					new Intent(this, jp.android.fukuoka.gpstomail.Main.class),
 					Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -88,5 +111,6 @@ public class SendMail extends Activity {
 			
 			Log.e("SendMail", e.getMessage(), e);
 		}
+//		progressDialog.dismiss();
 	}
 }

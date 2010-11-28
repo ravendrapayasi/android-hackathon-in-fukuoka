@@ -29,4 +29,14 @@
 <string name="Succeed_Message_Gmail_msg">位置情報を送信しました</string>
 <string name="Sendmail_immediate">いますぐにメール送信する</string>
 
+<string name="Message_Longitude">経度：</string>
+<string name="Massage_Latitude">緯度：</string>
+<string name="Massage_Altitude">標高：</string>
+<string name="Message_Accuracy">計測精度：</string>
+<string name="Message_Time">計測時刻：</string>
+<string name="Message_Map_info">Google Mapsで位置が確認できます</string>
+<string name="Ch_GPS_Message">GPSが有効になっていません。\n有効化しますか？</string>
+<string name="Ch_GPS_Positive_btn">GPS設定起動</string>
+<string name="Ch_GPS_Negative_btn">キャンセル</string>
+<string name="Sending_Message">位置情報を送信中</string>
 </resources>

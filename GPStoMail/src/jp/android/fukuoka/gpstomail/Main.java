@@ -1,17 +1,17 @@
 package jp.android.fukuoka.gpstomail;
 
 import android.app.Activity;
-import android.app.AlarmManager;
-import android.app.PendingIntent;
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -28,30 +28,25 @@ public class Main extends Activity implements OnClickListener {
 	private Intent intentgps;
 	private Intent intent_Service;
 	private IntentFilter filter_Service;
-//	private AlarmManager am;
-//	private PendingIntent sender;
 	
 	private String TAG = "GPS2MAIL";
 	private boolean DebugMode = true;
 	private CheckBox mCheckBox;
+	private LocationManager lm;
 
-	
 	//設定時間で呼び出される処理
 	private class KitchenTimerReceiver extends BroadcastReceiver {
 
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			try {
-				
 				if(DebugMode){
 					Log.i(TAG, "Timer Restar");
 				}
 				
 				//位置情報取得処理
 				intentgps = new Intent(context ,LocationGet.class);
-				intentgps.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-				startActivity(intentgps);
-
+				startService(intentgps);
 			} catch (Exception e) {
 				// 例外は発生しない
 			}
@@ -72,7 +67,6 @@ public class Main extends Activity implements OnClickListener {
 		public void onServiceDisconnected(ComponentName className) {
 			kitchenTimerService = null;
 		}
-
 	};
 
 	@Override
@@ -82,8 +76,8 @@ public class Main extends Activity implements OnClickListener {
         
 		timePicker = (TimePicker)findViewById(R.id.TimePicker01);
 		timePicker.setIs24HourView(true);
-		timePicker.setCurrentHour(0);
-		timePicker.setCurrentMinute(1);
+		timePicker.setCurrentHour(1);
+		timePicker.setCurrentMinute(0);
 		
 		btn1 = (Button)findViewById(R.id.Button_SET);
 		btn1.setOnClickListener(this);
@@ -106,6 +100,12 @@ public class Main extends Activity implements OnClickListener {
 		// いったんアンバインドしてから再度バインド
 		unbindService(serviceConnection);
 		bindService(intent_Service, serviceConnection, Context.BIND_AUTO_CREATE);
+		
+		// LocationManagerでGPSの値を取得するための設定
+		lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+		
+		//GPSのOnをチェック
+		chkGpsService();
 	}
 
 	public void onClick(View view) {
@@ -116,40 +116,15 @@ public class Main extends Activity implements OnClickListener {
 			break;
 			
 		case R.id.Button_SET:
-			//AlarmManagerで実装？
-//			Intent intent = new Intent(this, KitchenTimerReceiver.class);
-//			intent.setAction(ACTION);        
-//			    
-//			sender = PendingIntent.getBroadcast(this, 0, intent, 0);
-//			am = (AlarmManager)(this.getSystemService(ALARM_SERVICE));
-//			
-//			long hour = timePicker.getCurrentHour();
-//			long min = timePicker.getCurrentMinute();
-//			
-//			long interval = ((hour * 60 + min) * 60 * 1000);
-//			long firstTime = SystemClock.elapsedRealtime();
-//			if (!mCheckBox.isChecked()){
-//				firstTime =+ interval;
-//			}
-//			am.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,firstTime , interval, sender);
-			
 			//タイマー設定処理
 			long hour = timePicker.getCurrentHour();
 			long min = timePicker.getCurrentMinute();
 			
 			//Timer set
-			kitchenTimerService.schedule((hour * 60 + min) * 60 * 1000);
-			
-			//SendMail Immediateがtrueなら送信
-			if (mCheckBox.isChecked()){
-				//位置情報取得処理
-				intentgps = new Intent(this ,LocationGet.class);
-				intentgps.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-				startActivity(intentgps);
-			}
+			kitchenTimerService.schedule((hour * 60 + min) * 60 * 1000,mCheckBox.isChecked());
 
 			//Activity を非表示へセット
-//			moveTaskToBack(true);
+			moveTaskToBack(true);
 			break;
 			
 		case R.id.Button_PREF:
@@ -163,7 +138,6 @@ public class Main extends Activity implements OnClickListener {
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-//		am.cancel(sender);
 		unbindService(serviceConnection); // バインド解除
 		unregisterReceiver(receiver); // 登録解除
 		kitchenTimerService.stopSelf(); // サービスは必要ないので終了させる。
@@ -171,13 +145,45 @@ public class Main extends Activity implements OnClickListener {
 	@Override
 	public void onStart() {
 		super.onStart();
-
 	}
 
 	@Override
 	public void onStop() {
 		super.onStop();
-//		am.cancel(sender);
 	}
-	
+
+	// GPSが有効かCheck
+	// 有効になっていなければ、設面の表示確認ダイアログ
+	private void chkGpsService() {
+		
+
+		//GPSセンサーが利用可能か？
+		if (!lm.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+
+			AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+			alertDialogBuilder.setMessage(R.string.Ch_GPS_Message);
+			alertDialogBuilder.setCancelable(false);
+
+			//GPS設定画面起動用ボタンとイベントの定義
+			alertDialogBuilder.setPositiveButton(R.string.Ch_GPS_Positive_btn,
+					new DialogInterface.OnClickListener(){
+				public void onClick(DialogInterface dialog, int id){
+					Intent callGPSSettingIntent = new Intent(
+							android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+					//					callGPSSettingIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+					startActivity(callGPSSettingIntent);
+				}
+			});
+			//キャンセルボタン処理
+			alertDialogBuilder.setNegativeButton(R.string.Ch_GPS_Negative_btn,
+					new DialogInterface.OnClickListener(){
+				public void onClick(DialogInterface dialog, int id){
+					dialog.cancel();
+				}
+			});
+			AlertDialog alert = alertDialogBuilder.create();
+			// 設定画面へ移動するかの問い合わせダイアログを表示
+			alert.show();
+		}
+	}
 }
