@@ -8,6 +8,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
+import jp.jagfukuoka.sodefuri.preference.MainPreferenceActivity;
 import jp.jagfukuoka.sodefuri.provider.RecentContentProvider;
 
 import org.apache.http.HttpResponse;
@@ -26,6 +27,8 @@ import android.app.ListActivity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -70,6 +73,33 @@ public class RecentListViewActivity extends ListActivity {
 			}
 
 		});
+	}
+
+	private static final int GROUP_ID = 1;
+	private static final int SETTING_ITEM_ID = 1;
+	private static final String SETTING = "設定";
+
+	/**
+	 * オプションメニュー
+	 */
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		menu.add(GROUP_ID, SETTING_ITEM_ID, 0, SETTING).setIcon(
+				android.R.drawable.ic_menu_preferences);
+		return super.onCreateOptionsMenu(menu);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case SETTING_ITEM_ID:
+			startActivity(new Intent(this, MainPreferenceActivity.class));
+			break;
+
+		default:
+			break;
+		}
+		return super.onOptionsItemSelected(item);
 	}
 
 	/**

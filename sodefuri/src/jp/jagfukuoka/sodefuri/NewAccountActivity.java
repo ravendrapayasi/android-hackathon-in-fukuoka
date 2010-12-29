@@ -5,7 +5,6 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
-import jp.jagfukuoka.sodefuri.preference.MainPreferenceActivity;
 import jp.jagfukuoka.sodefuri.provider.RecentContentProvider;
 import jp.jagfukuoka.sodefuri.service.RecentReceiver;
 import jp.jagfukuoka.sodefuri.service.RecentService;
@@ -31,8 +30,6 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -46,7 +43,7 @@ import android.widget.Toast;
  * @author shikajiro
  * 
  */
-public class MainActivity extends Activity implements OnClickListener {
+public class NewAccountActivity extends Activity implements OnClickListener {
 	private static final String REGISTER_URL = "http://sodefuri.appspot.com/register";
 
 	private static final int REQUEST_ENABLE_BT = 1;
@@ -81,7 +78,7 @@ public class MainActivity extends Activity implements OnClickListener {
 		// -----[登録ボタンの設定]
 		case R.id.OKButton:
 			// TODO thread処理化
-			progressDialog = ProgressDialog.show(MainActivity.this, null, "登録中...", true);
+			progressDialog = ProgressDialog.show(NewAccountActivity.this, null, "登録中...", true);
 			Runnable runnable = new Runnable() {
 				@Override
 				public void run() {
@@ -91,7 +88,7 @@ public class MainActivity extends Activity implements OnClickListener {
 					editor.putString("pre_twitter_name", screen_name);
 					editor.commit();
 //					checkBluetooth();
-					startActivity(new Intent(MainActivity.this,RecentListViewActivity.class));
+					startActivity(new Intent(NewAccountActivity.this,RecentListViewActivity.class));
 					progressDialog.dismiss();
 				}
 			};
@@ -100,7 +97,7 @@ public class MainActivity extends Activity implements OnClickListener {
 		// debug用Listボタン
 		// 直接RecentListViewに遷移する
 		case R.id.ListButton:
-			startActivity(new Intent(MainActivity.this,
+			startActivity(new Intent(NewAccountActivity.this,
 					RecentListViewActivity.class));
 			// debug. test data insert
 			if (isDebug) {
@@ -117,37 +114,10 @@ public class MainActivity extends Activity implements OnClickListener {
 			// debug用bluetooth検索ボタン
 			// bluetooth検索処理を実行する
 		case R.id.BtFoundButton:
-			startActivity(new Intent(MainActivity.this,
+			startActivity(new Intent(NewAccountActivity.this,
 					BluetoothFoundActivity.class));
 		}
 
-	}
-
-	private static final int GROUP_ID = 1;
-	private static final int SETTING_ITEM_ID = 1;
-	private static final String SETTING = "設定";
-
-	/**
-	 * オプションメニュー
-	 */
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		menu.add(GROUP_ID, SETTING_ITEM_ID, 0, SETTING).setIcon(
-				android.R.drawable.ic_menu_preferences);
-		return super.onCreateOptionsMenu(menu);
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case SETTING_ITEM_ID:
-			startActivity(new Intent(this, MainPreferenceActivity.class));
-			break;
-
-		default:
-			break;
-		}
-		return super.onOptionsItemSelected(item);
 	}
 
 	/**
@@ -158,7 +128,7 @@ public class MainActivity extends Activity implements OnClickListener {
 
 		if (mBluetoothAdapter == null) {
 			// Bluetoothはサポートされてません
-			Toast.makeText(MainActivity.this, "Bluetoothはサポートされてません",
+			Toast.makeText(NewAccountActivity.this, "Bluetoothはサポートされてません",
 					Toast.LENGTH_LONG).show();
 			return;
 		}
@@ -231,11 +201,11 @@ public class MainActivity extends Activity implements OnClickListener {
 			HttpResponse response = httpclient.execute(httppost);
 			// -----[サーバーからの応答を取得]
 			if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
-				Toast.makeText(MainActivity.this, "スクリーンネームとブルートゥース機器を登録しました。",
+				Toast.makeText(NewAccountActivity.this, "スクリーンネームとブルートゥース機器を登録しました。",
 						Toast.LENGTH_LONG).show();
 			} else {
 				Toast.makeText(
-						MainActivity.this,
+						NewAccountActivity.this,
 						"[error]:スクリーンネームとブルートゥース機器を登録できませんでした。"
 								+ response.getStatusLine(), Toast.LENGTH_LONG)
 						.show();

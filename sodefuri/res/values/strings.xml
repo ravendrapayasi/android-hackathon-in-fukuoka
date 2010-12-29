@@ -2,6 +2,7 @@
 <resources>
     <string name="app_name">sodefuri</string>
     <string name="pref_title">sodefuri 設定</string>
+    <string name="recent_list">すれ違いリスト</string>
     <string name="pref_twitter_name_title">twitterスクリーンネーム</string>
     <string name="pref_twitter_name_summary">twitterのスクリーンネームを設定します</string>
 	<string name="timeline">TimeLine</string>
