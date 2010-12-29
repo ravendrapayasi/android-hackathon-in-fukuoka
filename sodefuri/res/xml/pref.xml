@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+	xmlns:android="http://schemas.android.com/apk/res/android">
+	<PreferenceCategory android:title="@string/pref_title">
+		<EditTextPreference
+			android:key="pre_twitter_name"
+			android:title="@string/pref_twitter_name_title"
+			android:summary="@string/pref_twitter_name_summary"
+			android:dialogTitle="@string/pref_twitter_name_title" />
+	</PreferenceCategory>
+</PreferenceScreen>

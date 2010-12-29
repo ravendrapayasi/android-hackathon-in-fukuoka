@@ -19,7 +19,6 @@ public class BluetoothFoundActivity extends ListActivity {
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		
 		setListAdapter(new ArrayAdapter<String>(this, R.layout.list_item, mArrayAdapter));

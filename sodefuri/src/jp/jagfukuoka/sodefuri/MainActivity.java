@@ -5,6 +5,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
+import jp.jagfukuoka.sodefuri.preference.MainPreferenceActivity;
 import jp.jagfukuoka.sodefuri.provider.RecentContentProvider;
 import jp.jagfukuoka.sodefuri.service.RecentReceiver;
 import jp.jagfukuoka.sodefuri.service.RecentService;
@@ -26,7 +27,12 @@ import android.bluetooth.BluetoothAdapter;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -40,7 +46,7 @@ import android.widget.Toast;
  * @author shikajiro
  * 
  */
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements OnClickListener {
 	private static final String REGISTER_URL = "http://sodefuri.appspot.com/register";
 
 	private static final int REQUEST_ENABLE_BT = 1;
@@ -54,48 +60,94 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 
-		// -----[登録ボタンの設定]
 		Button okButton = (Button) findViewById(R.id.OKButton);
-		okButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				switch (v.getId()) {
-				case R.id.OKButton:
-					// TODO thread処理化
-					ProgressDialog.show(MainActivity.this, null, "登録中...", true);
-					checkBluetooth();
-					startActivity(new Intent(MainActivity.this,	RecentListViewActivity.class));
-					break;
-				}
-			}
-		});
-		// debug用Listボタン
-		// RecentListViewに遷移する
+		okButton.setOnClickListener(this);
 		Button listButton = (Button) findViewById(R.id.ListButton);
-		listButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				startActivity(new Intent(MainActivity.this,	RecentListViewActivity.class));
-				// debug. test data insert
-				if (isDebug) {
-					ContentValues values = new ContentValues();
-					values.put(RecentContentProvider.MAC_ADDRESS,"00:00:00:00:00:00");
-					values.put(RecentContentProvider.MAC_ADDRESS,"E8:E5:D6:4C:52:3A");// _simo
-					values.put(RecentContentProvider.MAC_ADDRESS,"F8:DB:7F:02:2E:EE");// shikajiro
-					getContentResolver().insert(RecentContentProvider.CONTENT_URI, values);
-				}
-			}
-		});
+		listButton.setOnClickListener(this);
 		Button BtFoundButton = (Button) findViewById(R.id.BtFoundButton);
-		BtFoundButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				startActivity(new Intent(MainActivity.this, BluetoothFoundActivity.class));
+		BtFoundButton.setOnClickListener(this);
+
+		// bluetooth検索serviceの起動
+		startService(new Intent(this, RecentService.class));
+		registerReceiver(new RecentReceiver(), new IntentFilter(RecentService.MEET));
+	}
+	ProgressDialog progressDialog;
+	/**
+	 * マウスクリック処理
+	 */
+	@Override
+	public void onClick(View v) {
+		switch (v.getId()) {
+		// -----[登録ボタンの設定]
+		case R.id.OKButton:
+			// TODO thread処理化
+			progressDialog = ProgressDialog.show(MainActivity.this, null, "登録中...", true);
+			Runnable runnable = new Runnable() {
+				@Override
+				public void run() {
+					String screen_name = ((EditText) findViewById(R.id.EditText01)).getText().toString();
+					SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+					Editor editor = preferences.edit();
+					editor.putString("pre_twitter_name", screen_name);
+					editor.commit();
+//					checkBluetooth();
+					startActivity(new Intent(MainActivity.this,RecentListViewActivity.class));
+					progressDialog.dismiss();
+				}
+			};
+			new Thread(runnable).start();
+			break;
+		// debug用Listボタン
+		// 直接RecentListViewに遷移する
+		case R.id.ListButton:
+			startActivity(new Intent(MainActivity.this,
+					RecentListViewActivity.class));
+			// debug. test data insert
+			if (isDebug) {
+				ContentValues values = new ContentValues();
+				values.put(RecentContentProvider.MAC_ADDRESS,
+						"00:00:00:00:00:00");
+				values.put(RecentContentProvider.MAC_ADDRESS,
+						"E8:E5:D6:4C:52:3A");// _simo
+				values.put(RecentContentProvider.MAC_ADDRESS,
+						"F8:DB:7F:02:2E:EE");// shikajiro
+				getContentResolver().insert(RecentContentProvider.CONTENT_URI,
+						values);
 			}
-		});
-		// serviceの起動
-		startService(new Intent(this,RecentService.class));
-	    registerReceiver(new RecentReceiver(), new IntentFilter(RecentService.MEET));
+			// debug用bluetooth検索ボタン
+			// bluetooth検索処理を実行する
+		case R.id.BtFoundButton:
+			startActivity(new Intent(MainActivity.this,
+					BluetoothFoundActivity.class));
+		}
+
+	}
+
+	private static final int GROUP_ID = 1;
+	private static final int SETTING_ITEM_ID = 1;
+	private static final String SETTING = "設定";
+
+	/**
+	 * オプションメニュー
+	 */
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		menu.add(GROUP_ID, SETTING_ITEM_ID, 0, SETTING).setIcon(
+				android.R.drawable.ic_menu_preferences);
+		return super.onCreateOptionsMenu(menu);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case SETTING_ITEM_ID:
+			startActivity(new Intent(this, MainPreferenceActivity.class));
+			break;
+
+		default:
+			break;
+		}
+		return super.onOptionsItemSelected(item);
 	}
 
 	/**
@@ -106,7 +158,8 @@ public class MainActivity extends Activity {
 
 		if (mBluetoothAdapter == null) {
 			// Bluetoothはサポートされてません
-			Toast.makeText(MainActivity.this, "Bluetoothはサポートされてません",	Toast.LENGTH_LONG).show();
+			Toast.makeText(MainActivity.this, "Bluetoothはサポートされてません",
+					Toast.LENGTH_LONG).show();
 			return;
 		}
 
@@ -118,10 +171,12 @@ public class MainActivity extends Activity {
 			this.registerScreenName(screen_name, mac_address);
 		} else {
 			// -----[利用不可なので許可アラート表示]
-			Intent enableBTIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+			Intent enableBTIntent = new Intent(
+					BluetoothAdapter.ACTION_REQUEST_ENABLE);
 			startActivityForResult(enableBTIntent, REQUEST_ENABLE_BT);
-//			Intent stateChangedBTIntent = new Intent(BluetoothAdapter.ACTION_STATE_CHANGED);
-//			startActivityForResult(stateChangedBTIntent,REQUEST_STATE_CHANGE_BT);
+			// Intent stateChangedBTIntent = new
+			// Intent(BluetoothAdapter.ACTION_STATE_CHANGED);
+			// startActivityForResult(stateChangedBTIntent,REQUEST_STATE_CHANGE_BT);
 		}
 	}
 
@@ -133,9 +188,9 @@ public class MainActivity extends Activity {
 	 */
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//		if (requestCode != REQUEST_ENABLE_BT) {
-//			return;
-//		}
+		// if (requestCode != REQUEST_ENABLE_BT) {
+		// return;
+		// }
 
 		if (resultCode == RESULT_OK) {
 			// Bluetoothが利用可能になりました

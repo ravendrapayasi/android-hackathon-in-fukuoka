@@ -7,11 +7,11 @@
 		android:id="@+id/tv_result" />
 	<EditText android:text="test" android:id="@+id/EditText01"
 		android:layout_width="wrap_content" android:layout_height="wrap_content"></EditText>
-	<Button android:text="OK" android:id="@+id/OKButton"
+	<Button android:text="登録" android:id="@+id/OKButton"
 		android:layout_width="wrap_content" android:layout_height="wrap_content"></Button>
-	<Button android:text="List" android:id="@+id/ListButton"
+	<Button android:text="すれ違いリスト" android:id="@+id/ListButton"
 		android:layout_width="wrap_content" android:layout_height="wrap_content"></Button>
-	<Button android:text="BTFound" android:id="@+id/BtFoundButton"
+	<Button android:text="BlueTooth検索" android:id="@+id/BtFoundButton"
 		android:layout_width="wrap_content" android:layout_height="wrap_content"></Button>
 
 </LinearLayout>
