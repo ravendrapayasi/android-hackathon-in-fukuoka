@@ -12,7 +12,11 @@ import android.os.IBinder;
  *
  */
 public class RecentService extends Service {
-	public static final String MEET = "meet";
+	protected static final String TAG = "RecentService";
+	public static final String SEARCH = "search";
+	// ƒ^ƒCƒ}[‚Ì•bŠÔŠu
+	private static final int SECOND = 30;
+
 	private Timer timer;
 
 	@Override
@@ -21,7 +25,7 @@ public class RecentService extends Service {
 		return null;
 	}
 	/**
-	 * ‚P•ª‚¨‚«‚Ébluetooth‚ğŒŸõ‚·‚é
+	 * ˆê’èŠúŠÔ‚²‚Æ‚Ébluetooth‚ğŒŸõ‚·‚é
 	 */
 	@Override
 	public void onCreate() {
@@ -30,10 +34,9 @@ public class RecentService extends Service {
 		TimerTask task = new TimerTask() {
 			@Override
 			public void run() {
-				sendBroadcast(new Intent(MEET));
+				sendBroadcast(new Intent(SEARCH));
 			}
 		};
-		timer.schedule(task, 30 * 1000);
+		timer.schedule(task, 0, SECOND * 1000);
 	}
-
 }

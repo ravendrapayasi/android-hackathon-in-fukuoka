@@ -10,6 +10,8 @@ import java.util.List;
 
 import jp.jagfukuoka.sodefuri.preference.MainPreferenceActivity;
 import jp.jagfukuoka.sodefuri.provider.RecentContentProvider;
+import jp.jagfukuoka.sodefuri.service.RecentReceiver;
+import jp.jagfukuoka.sodefuri.service.RecentService;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -24,9 +26,16 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.ListActivity;
+import android.bluetooth.BluetoothDevice;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -48,16 +57,42 @@ public class RecentListViewActivity extends ListActivity {
 	public static final String SCREEN_NAME = "SCREEN_NAME";
 
 	String[] projection = new String[] { RecentContentProvider.MAC_ADDRESS, };
-
+	List<String> screenNames;
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
+		
+		//設定するスクリーンネームを取得する
+		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+		preferences.registerOnSharedPreferenceChangeListener(new OnSharedPreferenceChangeListener() {
+			@Override
+			public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
+					String key) {
+				// TODO screen_name 登録処理
+				if(key.equals("pre_twitter_name")){
+					
+				}
+			}
+		});
+		String screen_name = preferences.getString("pre_twitter_name", "");
+		if(screen_name.length() < 1){
+			//スクリーンネームを登録していない場合は、登録画面へ
+			startActivity(new Intent(this,NewAccountActivity.class));
+			return;
+		}
+		
+		// bluetooth検索serviceの起動
+		startService(new Intent(this, RecentService.class));
+		registerReceiver(new RecentReceiver(), new IntentFilter(RecentService.SEARCH));
+		
+		// bluetoothデバイスが見つかった時のreceiver登録
+		registerReceiver(mReceiver, new IntentFilter(BluetoothDevice.ACTION_FOUND));
+		
 		//サーバーにscreen_nameとmac_addressを登録する
-		List<String> screenNames = this.getScreenName();
+		screenNames = getScreenName();
 		
 		//Listへの登録
-		setListAdapter(new ArrayAdapter<String>(this, R.layout.list_item, screenNames));
+		setListAdapter(new ArrayAdapter<String>(getApplicationContext(), R.layout.list_item, screenNames));
 		
 		ListView lv = getListView();
 		lv.setTextFilterEnabled(true);
@@ -71,13 +106,34 @@ public class RecentListViewActivity extends ListActivity {
 				intent.putExtra("screen_name", screen_name);
 				startActivity(intent);
 			}
-
 		});
-	}
 
+	}
+	List<String> mArrayAdapter = new ArrayList<String>();
+
+	private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
+	    public void onReceive(Context context, Intent intent) {
+			Toast.makeText(context, "Bluetoothが見つかりました", Toast.LENGTH_LONG).show();
+
+	        String action = intent.getAction();
+	        // When discovery finds a device
+	        if (BluetoothDevice.ACTION_FOUND.equals(action)) {
+	    		Toast.makeText(context, "ACTION_FOUND", Toast.LENGTH_LONG).show();
+
+	            // Get the BluetoothDevice object from the Intent
+	            BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+	            // Add the name and address to an array adapter to show in a ListView
+	            screenNames.add(device.getName() + "\n" + device.getAddress());
+	        }
+			setListAdapter(new ArrayAdapter<String>(getApplicationContext(), R.layout.list_item, screenNames));
+
+	    }
+	};
 	private static final int GROUP_ID = 1;
 	private static final int SETTING_ITEM_ID = 1;
+	private static final int BLUETOOTH_ITEM_ID = 2;
 	private static final String SETTING = "設定";
+	private static final CharSequence BLUETOOTH = "周辺検索";
 
 	/**
 	 * オプションメニュー
@@ -86,6 +142,7 @@ public class RecentListViewActivity extends ListActivity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		menu.add(GROUP_ID, SETTING_ITEM_ID, 0, SETTING).setIcon(
 				android.R.drawable.ic_menu_preferences);
+		menu.add(GROUP_ID, BLUETOOTH_ITEM_ID, 0, BLUETOOTH);//FIXME bluetoothのアイコン
 		return super.onCreateOptionsMenu(menu);
 	}
 
@@ -95,7 +152,9 @@ public class RecentListViewActivity extends ListActivity {
 		case SETTING_ITEM_ID:
 			startActivity(new Intent(this, MainPreferenceActivity.class));
 			break;
-
+		case BLUETOOTH_ITEM_ID:
+			startActivity(new Intent(this, BluetoothFoundActivity.class));
+			break;
 		default:
 			break;
 		}

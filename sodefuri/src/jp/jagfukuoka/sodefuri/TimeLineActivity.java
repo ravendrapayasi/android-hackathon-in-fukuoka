@@ -10,9 +10,7 @@ import java.util.List;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
@@ -37,33 +35,23 @@ public class TimeLineActivity extends ListActivity {
 
 		// timelineæ“¾ˆ—
 		String screenName = getIntent().getStringExtra("screen_name");
-		List<String> list = this.getTimeLine(screenName,new ResponseHandler<HttpResponse>() {
-			@Override
-			public HttpResponse handleResponse(HttpResponse response)
-					throws ClientProtocolException, IOException {
-				if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
-				} else {
-				}
-				return response;
-			}
-		});
+		List<String> list = this.getTimeLine(screenName);
 
 		setListAdapter(new ArrayAdapter<String>(this, R.layout.timeline_item, list));
 	}
 
-	private List<String> getTimeLine(String screenName, ResponseHandler<HttpResponse> handler) {
+	private List<String> getTimeLine(String screenName) {
 		List<String> result = new ArrayList<String>();
 
 		HttpClient httpClient = new DefaultHttpClient();
 		HttpGet request = new HttpGet(TIMELINE_URL);
 		try {
-			HttpResponse response = httpClient.execute(request,handler);
+			HttpResponse response = httpClient.execute(request);
 			if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
 				Toast.makeText(TimeLineActivity.this, "publicƒ^ƒCƒ€ƒ‰ƒCƒ“‚ğæ“¾‚µ‚Ü‚µ‚½", Toast.LENGTH_LONG).show();
 
 				InputStream is = response.getEntity().getContent();
-				BufferedReader br = new BufferedReader(
-						new InputStreamReader(is));
+				BufferedReader br = new BufferedReader(new InputStreamReader(is));
 				String line;
 				String responsJson = "";
 				while ((line = br.readLine()) != null) {

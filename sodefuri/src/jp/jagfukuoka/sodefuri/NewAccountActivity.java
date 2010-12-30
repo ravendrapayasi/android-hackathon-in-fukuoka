@@ -5,10 +5,6 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
-import jp.jagfukuoka.sodefuri.provider.RecentContentProvider;
-import jp.jagfukuoka.sodefuri.service.RecentReceiver;
-import jp.jagfukuoka.sodefuri.service.RecentService;
-
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.NameValuePair;
@@ -23,9 +19,7 @@ import org.json.JSONObject;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
-import android.content.ContentValues;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
@@ -49,7 +43,6 @@ public class NewAccountActivity extends Activity implements OnClickListener {
 	private static final int REQUEST_ENABLE_BT = 1;
 	private static final int REQUEST_STATE_CHANGE_BT = 2;
 	private BluetoothAdapter mBluetoothAdapter = null;
-	private static final boolean isDebug = true;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -59,14 +52,7 @@ public class NewAccountActivity extends Activity implements OnClickListener {
 
 		Button okButton = (Button) findViewById(R.id.OKButton);
 		okButton.setOnClickListener(this);
-		Button listButton = (Button) findViewById(R.id.ListButton);
-		listButton.setOnClickListener(this);
-		Button BtFoundButton = (Button) findViewById(R.id.BtFoundButton);
-		BtFoundButton.setOnClickListener(this);
 
-		// bluetooth検索serviceの起動
-		startService(new Intent(this, RecentService.class));
-		registerReceiver(new RecentReceiver(), new IntentFilter(RecentService.MEET));
 	}
 	ProgressDialog progressDialog;
 	/**
@@ -94,28 +80,6 @@ public class NewAccountActivity extends Activity implements OnClickListener {
 			};
 			new Thread(runnable).start();
 			break;
-		// debug用Listボタン
-		// 直接RecentListViewに遷移する
-		case R.id.ListButton:
-			startActivity(new Intent(NewAccountActivity.this,
-					RecentListViewActivity.class));
-			// debug. test data insert
-			if (isDebug) {
-				ContentValues values = new ContentValues();
-				values.put(RecentContentProvider.MAC_ADDRESS,
-						"00:00:00:00:00:00");
-				values.put(RecentContentProvider.MAC_ADDRESS,
-						"E8:E5:D6:4C:52:3A");// _simo
-				values.put(RecentContentProvider.MAC_ADDRESS,
-						"F8:DB:7F:02:2E:EE");// shikajiro
-				getContentResolver().insert(RecentContentProvider.CONTENT_URI,
-						values);
-			}
-			// debug用bluetooth検索ボタン
-			// bluetooth検索処理を実行する
-		case R.id.BtFoundButton:
-			startActivity(new Intent(NewAccountActivity.this,
-					BluetoothFoundActivity.class));
 		}
 
 	}
