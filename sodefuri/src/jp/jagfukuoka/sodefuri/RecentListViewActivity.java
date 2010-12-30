@@ -139,9 +139,7 @@ public class RecentListViewActivity extends ListActivity {
 	};
 	private static final int GROUP_ID = 1;
 	private static final int SETTING_ITEM_ID = 1;
-	private static final int BLUETOOTH_ITEM_ID = 2;
 	private static final String SETTING = "設定";
-	private static final CharSequence BLUETOOTH = "周辺検索";
 
 	/**
 	 * オプションメニュー
@@ -150,7 +148,6 @@ public class RecentListViewActivity extends ListActivity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		menu.add(GROUP_ID, SETTING_ITEM_ID, 0, SETTING).setIcon(
 				android.R.drawable.ic_menu_preferences);
-		menu.add(GROUP_ID, BLUETOOTH_ITEM_ID, 0, BLUETOOTH);//FIXME bluetoothのアイコン
 		return super.onCreateOptionsMenu(menu);
 	}
 
@@ -159,9 +156,6 @@ public class RecentListViewActivity extends ListActivity {
 		switch (item.getItemId()) {
 		case SETTING_ITEM_ID:
 			startActivity(new Intent(this, MainPreferenceActivity.class));
-			break;
-		case BLUETOOTH_ITEM_ID:
-			startActivity(new Intent(this, BluetoothFoundActivity.class));
 			break;
 		default:
 			break;
