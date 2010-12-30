@@ -25,6 +25,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import twitter4j.Twitter;
+import twitter4j.TwitterException;
+import twitter4j.TwitterFactory;
+import twitter4j.http.AccessToken;
+import twitter4j.http.RequestToken;
 import android.app.ListActivity;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
@@ -34,6 +39,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.Menu;
@@ -56,6 +62,8 @@ public class RecentListViewActivity extends ListActivity {
 	boolean debug = true;
 	public static final String SCREEN_NAME = "SCREEN_NAME";
 
+
+	
 	String[] projection = new String[] { RecentContentProvider.MAC_ADDRESS, };
 	List<String> screenNames;
 	@Override
@@ -70,7 +78,7 @@ public class RecentListViewActivity extends ListActivity {
 					String key) {
 				// TODO screen_name ìoò^èàóù
 				if(key.equals("pre_twitter_name")){
-					
+
 				}
 			}
 		});

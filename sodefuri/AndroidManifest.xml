@@ -13,6 +13,7 @@
         <activity android:name=".NewAccountActivity" android:label="@string/new_account" />
         <activity android:name=".TimeLineActivity" android:label="TimeLine" />
         <activity android:name=".BluetoothFoundActivity" android:label="TimeLine" />
+        <activity android:name=".PinActivity" android:label="Pin" />
         
         <activity android:name=".preference.MainPreferenceActivity" android:label="Preference" />
         

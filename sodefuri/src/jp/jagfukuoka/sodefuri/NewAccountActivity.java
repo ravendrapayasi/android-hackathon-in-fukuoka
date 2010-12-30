@@ -16,12 +16,19 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import twitter4j.Twitter;
+import twitter4j.TwitterException;
+import twitter4j.TwitterFactory;
+import twitter4j.http.AccessToken;
+import twitter4j.http.RequestToken;
+
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.View;
@@ -37,7 +44,7 @@ import android.widget.Toast;
  * @author shikajiro
  * 
  */
-public class NewAccountActivity extends Activity implements OnClickListener {
+public class NewAccountActivity extends BaseActivity implements OnClickListener {
 	private static final String REGISTER_URL = "http://sodefuri.appspot.com/register";
 
 	private static final int REQUEST_ENABLE_BT = 1;
@@ -48,12 +55,23 @@ public class NewAccountActivity extends Activity implements OnClickListener {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.main);
+		
+		setContentView(R.layout.screen_name);
 
 		Button okButton = (Button) findViewById(R.id.OKButton);
 		okButton.setOnClickListener(this);
 
 	}
+	@Override
+	protected void onStart() {
+		super.onStart();
+		if(isRequestToken()){
+			startActivity(new Intent(this,PinActivity.class));
+		}else if(isAccessToken()){
+			startActivity(new Intent(this,RecentListViewActivity.class));
+		}
+	}
+	
 	ProgressDialog progressDialog;
 	/**
 	 * マウスクリック処理
@@ -68,15 +86,25 @@ public class NewAccountActivity extends Activity implements OnClickListener {
 			Runnable runnable = new Runnable() {
 				@Override
 				public void run() {
-					String screen_name = ((EditText) findViewById(R.id.EditText01)).getText().toString();
-					SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-					Editor editor = preferences.edit();
-					editor.putString("pre_twitter_name", screen_name);
-					editor.commit();
-//					checkBluetooth();
-					startActivity(new Intent(NewAccountActivity.this,RecentListViewActivity.class));
+					Twitter twitter = new TwitterFactory().getInstance();
+					twitter.setOAuthConsumer(CONSUMER_KEY, CONSUMER_SERCRET);
+					try {
+						RequestToken requestToken = twitter.getOAuthRequestToken();
+						String authorizationURL = requestToken.getAuthorizationURL();
+						storeRequestToken(requestToken.getToken(), requestToken.getTokenSecret());
+						// twitter認証画面へ
+						Uri uri = Uri.parse(authorizationURL);
+						Intent i = new Intent(Intent.ACTION_VIEW,uri);
+						startActivity(i);
+						
+					} catch (TwitterException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
 					progressDialog.dismiss();
 				}
+
 			};
 			new Thread(runnable).start();
 			break;
@@ -100,9 +128,7 @@ public class NewAccountActivity extends Activity implements OnClickListener {
 		if (mBluetoothAdapter.isEnabled()) {
 			// -----[利用可能なので次の処理]
 			String mac_address = mBluetoothAdapter.getAddress();
-			String screen_name = ((EditText) findViewById(R.id.EditText01))
-					.getText().toString();
-			this.registerScreenName(screen_name, mac_address);
+//			this.registerScreenName(screen_name, mac_address);
 		} else {
 			// -----[利用不可なので許可アラート表示]
 			Intent enableBTIntent = new Intent(
@@ -129,9 +155,9 @@ public class NewAccountActivity extends Activity implements OnClickListener {
 		if (resultCode == RESULT_OK) {
 			// Bluetoothが利用可能になりました
 			String mac_address = mBluetoothAdapter.getAddress();
-			String screen_name = ((EditText) findViewById(R.id.EditText01))
-					.getText().toString();
-			this.registerScreenName(screen_name, mac_address);
+//			String screen_name = ((EditText) findViewById(R.id.EditText01))
+//					.getText().toString();
+//			this.registerScreenName(screen_name, mac_address);
 		} else if (resultCode == RESULT_CANCELED) {
 			// Bluetoothは利用不可です
 		}
