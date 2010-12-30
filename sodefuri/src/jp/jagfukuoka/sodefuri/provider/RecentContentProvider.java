@@ -20,6 +20,9 @@ public class RecentContentProvider extends ContentProvider {
 	public static final Uri CONTENT_URI = Uri
 			.parse("content://jp.jagfukuoka.sodefuri.provider.recentcontentprovider");
 	public static final String MAC_ADDRESS = "mac_address";
+	public static final String SCREEN_NAME = "screen_name";
+	public static final String TIME = "time";
+	
 	DatabaseHelper databaseHelper;
 
 	@Override
@@ -56,9 +59,8 @@ public class RecentContentProvider extends ContentProvider {
 
 	@Override
 	public int delete(Uri uri, String s, String[] as) {
-		// TODO
-		throw new UnsupportedOperationException(
-				"Not supported by this provider");
+		databaseHelper.onUpgrade(databaseHelper.getWritableDatabase(), 0, 0);
+		return 0;
 	}
 
 	@Override

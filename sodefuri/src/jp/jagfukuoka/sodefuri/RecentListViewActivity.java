@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import jp.jagfukuoka.sodefuri.preference.TwitterPreferenceManager;
@@ -28,11 +29,14 @@ import org.json.JSONObject;
 import android.app.ListActivity;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -50,14 +54,25 @@ public class RecentListViewActivity extends ListActivity {
 
 	boolean debug = true;
 	public static final String SCREEN_NAME = "SCREEN_NAME";
+
+	private static final int DEBUG_TOKEN_CLEAR_ID = 1;
+	private static final int DEBUG_RECENT_CLEAR_ID = 2;
 	
-	String[] projection = new String[] { RecentContentProvider.MAC_ADDRESS, };
+	String[] projection = new String[] { RecentContentProvider.MAC_ADDRESS };
 	List<String> screenNames;
 	private TwitterPreferenceManager tpm = new TwitterPreferenceManager(this);  
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		if(debug){
+	        ContentValues values = new ContentValues();
+			values.put(RecentContentProvider.MAC_ADDRESS,"00:00:00:00:00:00");
+			values.put(RecentContentProvider.MAC_ADDRESS,"E8:E5:D6:4C:52:3A");// _simo
+			values.put(RecentContentProvider.MAC_ADDRESS,"F8:DB:7F:02:2E:EE");// shikajiro
+	        getContentResolver().insert(RecentContentProvider.CONTENT_URI, values);
+		}
 		
 		//twitterToken‚ª–³‚¯‚ê‚Î“o˜^‰æ–Ê‚Ö‘JˆÚ‚·‚é
 		if(!tpm.isAccessToken()){
@@ -93,26 +108,43 @@ public class RecentListViewActivity extends ListActivity {
 		});
 
 	}
-	List<String> mArrayAdapter = new ArrayList<String>();
-
+	
 	private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
 	    public void onReceive(Context context, Intent intent) {
 			Toast.makeText(context, "Bluetooth‚ªŒ©‚Â‚©‚è‚Ü‚µ‚½", Toast.LENGTH_LONG).show();
-
-	        String action = intent.getAction();
-	        // When discovery finds a device
-	        if (BluetoothDevice.ACTION_FOUND.equals(action)) {
-	    		Toast.makeText(context, "ACTION_FOUND", Toast.LENGTH_LONG).show();
-
-	            // Get the BluetoothDevice object from the Intent
-	            BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-	            // Add the name and address to an array adapter to show in a ListView
-	            screenNames.add(device.getName() + "\n" + device.getAddress());
-	        }
+            BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+            Date date = new Date();
+            screenNames.add(device.getName() + "\n" + device.getAddress()+"\n"+date);
 			setListAdapter(new ArrayAdapter<String>(getApplicationContext(), R.layout.list_item, screenNames));
-
+			
+	        ContentValues values = new ContentValues();
+	        values.put(RecentContentProvider.MAC_ADDRESS, device.getAddress());
+	        values.put(RecentContentProvider.TIME, date.getTime());
+	        getContentResolver().insert(RecentContentProvider.CONTENT_URI, values);
 	    }
 	};
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		menu.add(0, DEBUG_TOKEN_CLEAR_ID, 0, "token clear");
+		menu.add(0, DEBUG_RECENT_CLEAR_ID, 0, "recent clear");
+		return super.onCreateOptionsMenu(menu);
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case DEBUG_TOKEN_CLEAR_ID:
+			tpm.clearAccessToken();
+			break;
+		case DEBUG_RECENT_CLEAR_ID:
+			getContentResolver().delete(null, null, null);
+			break;
+		default:
+			break;
+		}
+		return super.onOptionsItemSelected(item);
+	}
 
 	/**
 	 * server‚©‚çmac_address‚ð‚à‚Æ‚Éscreen_name‚ðŽæ“¾‚·‚é
@@ -187,8 +219,7 @@ public class RecentListViewActivity extends ListActivity {
 	 * @return
 	 */
 	private String getMacAddressJson() {
-		Cursor managedCursor = managedQuery(RecentContentProvider.CONTENT_URI,
-				projection, null, null, null);
+		Cursor managedCursor = managedQuery(RecentContentProvider.CONTENT_URI, projection, null, null, null);
 		JSONArray array = new JSONArray();
 		try {
 			List<String> list = getColumnData(managedCursor);
@@ -212,8 +243,7 @@ public class RecentListViewActivity extends ListActivity {
 	private List<String> getColumnData(Cursor cur) {
 		List<String> list = new ArrayList<String>();
 		if (cur.moveToFirst()) {
-			int int_mac_address = cur
-					.getColumnIndex(RecentContentProvider.MAC_ADDRESS);
+			int int_mac_address = cur.getColumnIndex(RecentContentProvider.MAC_ADDRESS);
 			do {
 				// Get the field values
 				String mac_address = cur.getString(int_mac_address);

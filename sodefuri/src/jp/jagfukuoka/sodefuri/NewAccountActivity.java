@@ -21,6 +21,8 @@ import org.json.JSONObject;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
+import twitter4j.conf.Configuration;
+import twitter4j.conf.ConfigurationBuilder;
 import twitter4j.http.RequestToken;
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -76,35 +78,24 @@ public class NewAccountActivity extends Activity implements OnClickListener {
 	 */
 	@Override
 	public void onClick(View v) {
-		switch (v.getId()) {
-		// -----[登録ボタンの設定]
-		case R.id.OKButton:
-			// TODO thread処理化
-			Runnable runnable = new Runnable() {
-				@Override
-				public void run() {
-					Twitter twitter = new TwitterFactory().getInstance();
-					twitter.setOAuthConsumer(TwitterPreferenceManager.CONSUMER_KEY, TwitterPreferenceManager.CONSUMER_SERCRET);
-					try {
-						RequestToken requestToken = twitter.getOAuthRequestToken();
-						String authorizationURL = requestToken.getAuthorizationURL();
-						tpm.storeRequestToken(requestToken.getToken(), requestToken.getTokenSecret());
-						// twitter認証画面へ
-						Uri uri = Uri.parse(authorizationURL);
-						Intent i = new Intent(Intent.ACTION_VIEW,uri);
-						startActivity(i);
-						
-					} catch (TwitterException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
-
-			};
-			new Thread(runnable).start();
-			break;
+		ConfigurationBuilder builder = new ConfigurationBuilder();
+		Configuration conf = builder.setDebugEnabled(true)
+		.setOAuthConsumerKey(TwitterPreferenceManager.CONSUMER_KEY)
+		.setOAuthConsumerSecret(TwitterPreferenceManager.CONSUMER_SERCRET)
+		.build();
+		Twitter twitter = new TwitterFactory(conf).getInstance();
+		try {
+			RequestToken requestToken = twitter.getOAuthRequestToken();
+			String authorizationURL = requestToken.getAuthorizationURL();
+			tpm.storeRequestToken(requestToken.getToken(), requestToken.getTokenSecret());
+			// twitter認証画面へ
+			Uri uri = Uri.parse(authorizationURL);
+			startActivity(new Intent(Intent.ACTION_VIEW,uri));
+			
+		} catch (TwitterException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-
 	}
 
 	/**
@@ -126,8 +117,7 @@ public class NewAccountActivity extends Activity implements OnClickListener {
 //			this.registerScreenName(screen_name, mac_address);
 		} else {
 			// -----[利用不可なので許可アラート表示]
-			Intent enableBTIntent = new Intent(
-					BluetoothAdapter.ACTION_REQUEST_ENABLE);
+			Intent enableBTIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
 			startActivityForResult(enableBTIntent, REQUEST_ENABLE_BT);
 			// Intent stateChangedBTIntent = new
 			// Intent(BluetoothAdapter.ACTION_STATE_CHANGED);

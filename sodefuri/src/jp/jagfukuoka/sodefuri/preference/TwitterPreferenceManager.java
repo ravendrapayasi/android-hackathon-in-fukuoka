@@ -48,6 +48,15 @@ public class TwitterPreferenceManager {
 		editor.putString(REQUEST_TOKEN_SERCRET, tokenSecret);
 		editor.commit();
 	}
+	
+	public void clearRequestToken(){
+		SharedPreferences preferences = PreferenceManager
+		.getDefaultSharedPreferences(context);
+		Editor editor = preferences.edit();
+		editor.putString(REQUEST_TOKEN, "");
+		editor.putString(REQUEST_TOKEN_SERCRET, "");
+		editor.commit();
+	}
 
 	/**
 	 * àÍéûï€ë∂ÇµÇΩrequestTokenÇéÊìæÇ∑ÇÈÅB
@@ -120,6 +129,15 @@ public class TwitterPreferenceManager {
 		Editor editor = preferences.edit();
 		editor.putString(ACCESS_TOKEN, accessToken);
 		editor.putString(ACCESS_TOKEN_SERCRET, accessTokenSercret);
+		editor.commit();
+	}
+	
+	public void clearAccessToken(){
+		SharedPreferences preferences = PreferenceManager
+		.getDefaultSharedPreferences(context);
+		Editor editor = preferences.edit();
+		editor.putString(ACCESS_TOKEN, "");
+		editor.putString(ACCESS_TOKEN_SERCRET, "");
 		editor.commit();
 	}
 

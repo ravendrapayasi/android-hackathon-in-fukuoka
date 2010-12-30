@@ -54,17 +54,17 @@ public class TimeLineActivity extends ListActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case FOLLOW:
-//			ConfigurationBuilder builder = new ConfigurationBuilder();
-//			Configuration conf = builder.setOAuthAccessToken(tpm.getAccessToken())
-//			.setOAuthAccessTokenSecret(tpm.getAccessTokenSercret())
-//			.setOAuthConsumerKey(TwitterPreferenceManager.CONSUMER_KEY)
-//			.setOAuthConsumerSecret(TwitterPreferenceManager.CONSUMER_SERCRET)
-//			.setDebugEnabled(true)
-//			.build();
-			Twitter twitter = new TwitterFactory().getInstance();
+			ConfigurationBuilder builder = new ConfigurationBuilder();
+			Configuration conf = builder.setOAuthAccessToken(tpm.getAccessToken())
+			.setOAuthAccessTokenSecret(tpm.getAccessTokenSercret())
+			.setOAuthConsumerKey(TwitterPreferenceManager.CONSUMER_KEY)
+			.setOAuthConsumerSecret(TwitterPreferenceManager.CONSUMER_SERCRET)
+			.setDebugEnabled(true)
+			.build();
+			Twitter twitter = new TwitterFactory(conf).getInstance();
 			try {
 				String screen_name = getIntent().getStringExtra("screen_name");
-				twitter.createFriendship(screen_name,true);
+				twitter.createFriendship(screen_name);
 				Toast.makeText(getApplicationContext(), "フォローしました。", Toast.LENGTH_LONG).show();
 			} catch (TwitterException e) {
 				// TODO Auto-generated catch block
