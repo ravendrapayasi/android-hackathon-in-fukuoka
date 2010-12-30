@@ -1,33 +1,37 @@
 package jp.jagfukuoka.sodefuri;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import jp.jagfukuoka.sodefuri.preference.TwitterPreferenceManager;
 
+import twitter4j.ResponseList;
+import twitter4j.Status;
+import twitter4j.Twitter;
+import twitter4j.TwitterException;
+import twitter4j.TwitterFactory;
+import twitter4j.conf.Configuration;
+import twitter4j.conf.ConfigurationBuilder;
+import twitter4j.http.AccessToken;
+import twitter4j.http.RequestToken;
 import android.app.ListActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
+
 /**
  * ユーザーのタイムラインを一覧で表示するActivity
+ * 
  * @author shikajiro
- *
+ * 
  */
 public class TimeLineActivity extends ListActivity {
-	private static final String TIMELINE_URL = "http://api.twitter.com/1/statuses/public_timeline.json";
+	private TwitterPreferenceManager tpm = new TwitterPreferenceManager(this);  
+
+	private static final int FOLLOW = 1;
+	private static final CharSequence FOLLOW_LABEL = "フォロー";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -37,42 +41,61 @@ public class TimeLineActivity extends ListActivity {
 		String screenName = getIntent().getStringExtra("screen_name");
 		List<String> list = this.getTimeLine(screenName);
 
-		setListAdapter(new ArrayAdapter<String>(this, R.layout.timeline_item, list));
+		setListAdapter(new ArrayAdapter<String>(this, R.layout.timeline_item,list));
 	}
 
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		menu.add(0, FOLLOW, 0, FOLLOW_LABEL);
+		return super.onCreateOptionsMenu(menu);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case FOLLOW:
+//			ConfigurationBuilder builder = new ConfigurationBuilder();
+//			Configuration conf = builder.setOAuthAccessToken(tpm.getAccessToken())
+//			.setOAuthAccessTokenSecret(tpm.getAccessTokenSercret())
+//			.setOAuthConsumerKey(TwitterPreferenceManager.CONSUMER_KEY)
+//			.setOAuthConsumerSecret(TwitterPreferenceManager.CONSUMER_SERCRET)
+//			.setDebugEnabled(true)
+//			.build();
+			Twitter twitter = new TwitterFactory().getInstance();
+			try {
+				String screen_name = getIntent().getStringExtra("screen_name");
+				twitter.createFriendship(screen_name,true);
+				Toast.makeText(getApplicationContext(), "フォローしました。", Toast.LENGTH_LONG).show();
+			} catch (TwitterException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			break;
+
+		default:
+			break;
+		}
+		return super.onOptionsItemSelected(item);
+	}
+
+	/**
+	 * 指定したユーザーのタイムラインを取得
+	 * 
+	 * @param screenName
+	 * @return
+	 */
 	private List<String> getTimeLine(String screenName) {
 		List<String> result = new ArrayList<String>();
 
-		HttpClient httpClient = new DefaultHttpClient();
-		HttpGet request = new HttpGet(TIMELINE_URL);
+		Twitter twitter = new TwitterFactory().getInstance();
+		ResponseList<Status> userTimeline;
 		try {
-			HttpResponse response = httpClient.execute(request);
-			if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
-				Toast.makeText(TimeLineActivity.this, "publicタイムラインを取得しました", Toast.LENGTH_LONG).show();
-
-				InputStream is = response.getEntity().getContent();
-				BufferedReader br = new BufferedReader(new InputStreamReader(is));
-				String line;
-				String responsJson = "";
-				while ((line = br.readLine()) != null) {
-					responsJson += line;
-				}
-
-				JSONArray jsonArrays = new JSONArray(responsJson);
-				for (int i = 0; i < jsonArrays.length(); i++) {
-					JSONObject jsonObj = jsonArrays.getJSONObject(i);
-					String screen_name = jsonObj.getString("text");
-					result.add(screen_name);
-				}
-
-			}else{
-				Toast.makeText(TimeLineActivity.this,"[タイムライン取得error]: " + response.getStatusLine(),	Toast.LENGTH_LONG).show();
+			userTimeline = twitter.getUserTimeline(screenName);
+			for (Status status : userTimeline) {
+				result.add(status.getText());
 			}
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (JSONException e) {
+		} catch (TwitterException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return result;

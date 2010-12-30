@@ -1,5 +1,6 @@
 package jp.jagfukuoka.sodefuri;
 
+import jp.jagfukuoka.sodefuri.preference.TwitterPreferenceManager;
 import twitter4j.ResponseList;
 import twitter4j.Status;
 import twitter4j.Twitter;
@@ -7,6 +8,7 @@ import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
 import twitter4j.http.AccessToken;
 import twitter4j.http.RequestToken;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,7 +16,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.EditText;
 
-public class PinActivity extends BaseActivity {
+public class PinActivity extends Activity {
+	private TwitterPreferenceManager tpm = new TwitterPreferenceManager(this);  
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -26,14 +29,14 @@ public class PinActivity extends BaseActivity {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				Twitter twitter = new TwitterFactory().getInstance();
-				twitter.setOAuthConsumer(CONSUMER_KEY, CONSUMER_SERCRET);
-				RequestToken requestToken = new RequestToken(getRequestToken(), getRequestTokenSercret());
+				twitter.setOAuthConsumer(TwitterPreferenceManager.CONSUMER_KEY, TwitterPreferenceManager.CONSUMER_SERCRET);
+				RequestToken requestToken = new RequestToken(tpm.getRequestToken(), tpm.getRequestTokenSercret());
 				try {
 					// pinコードを使用して認証する
 					String pin = ((EditText) findViewById(R.id.PinText)).getText().toString();
 					AccessToken oAuthAccessToken = twitter.getOAuthAccessToken(requestToken, pin);
-					storeAccessToken(oAuthAccessToken.getToken(), oAuthAccessToken.getTokenSecret());
-					storeScreenName(twitter.getScreenName());
+					tpm.storeAccessToken(oAuthAccessToken.getToken(), oAuthAccessToken.getTokenSecret());
+					tpm.storeScreenName(twitter.getScreenName());
 					
 					//自分のタイムラインを表示
 					ResponseList<Status> homeTimeline = twitter.getHomeTimeline();

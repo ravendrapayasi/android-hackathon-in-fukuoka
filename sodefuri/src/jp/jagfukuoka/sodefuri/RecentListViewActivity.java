@@ -8,7 +8,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
-import jp.jagfukuoka.sodefuri.preference.MainPreferenceActivity;
+import jp.jagfukuoka.sodefuri.preference.TwitterPreferenceManager;
 import jp.jagfukuoka.sodefuri.provider.RecentContentProvider;
 import jp.jagfukuoka.sodefuri.service.RecentReceiver;
 import jp.jagfukuoka.sodefuri.service.RecentService;
@@ -25,25 +25,14 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import twitter4j.Twitter;
-import twitter4j.TwitterException;
-import twitter4j.TwitterFactory;
-import twitter4j.http.AccessToken;
-import twitter4j.http.RequestToken;
 import android.app.ListActivity;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -61,30 +50,17 @@ public class RecentListViewActivity extends ListActivity {
 
 	boolean debug = true;
 	public static final String SCREEN_NAME = "SCREEN_NAME";
-
-
 	
 	String[] projection = new String[] { RecentContentProvider.MAC_ADDRESS, };
 	List<String> screenNames;
+	private TwitterPreferenceManager tpm = new TwitterPreferenceManager(this);  
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		//ê›íËÇ∑ÇÈÉXÉNÉäÅ[ÉìÉlÅ[ÉÄÇéÊìæÇ∑ÇÈ
-		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-		preferences.registerOnSharedPreferenceChangeListener(new OnSharedPreferenceChangeListener() {
-			@Override
-			public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
-					String key) {
-				// TODO screen_name ìoò^èàóù
-				if(key.equals("pre_twitter_name")){
-
-				}
-			}
-		});
-		String screen_name = preferences.getString("pre_twitter_name", "");
-		if(screen_name.length() < 1){
-			//ÉXÉNÉäÅ[ÉìÉlÅ[ÉÄÇìoò^ÇµÇƒÇ¢Ç»Ç¢èÍçáÇÕÅAìoò^âÊñ Ç÷
+		//twitterTokenÇ™ñ≥ÇØÇÍÇŒìoò^âÊñ Ç÷ëJà⁄Ç∑ÇÈ
+		if(!tpm.isAccessToken()){
 			startActivity(new Intent(this,NewAccountActivity.class));
 			return;
 		}
@@ -137,31 +113,6 @@ public class RecentListViewActivity extends ListActivity {
 
 	    }
 	};
-	private static final int GROUP_ID = 1;
-	private static final int SETTING_ITEM_ID = 1;
-	private static final String SETTING = "ê›íË";
-
-	/**
-	 * ÉIÉvÉVÉáÉìÉÅÉjÉÖÅ[
-	 */
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		menu.add(GROUP_ID, SETTING_ITEM_ID, 0, SETTING).setIcon(
-				android.R.drawable.ic_menu_preferences);
-		return super.onCreateOptionsMenu(menu);
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case SETTING_ITEM_ID:
-			startActivity(new Intent(this, MainPreferenceActivity.class));
-			break;
-		default:
-			break;
-		}
-		return super.onOptionsItemSelected(item);
-	}
 
 	/**
 	 * serverÇ©ÇÁmac_addressÇÇ‡Ç∆Ç…screen_nameÇéÊìæÇ∑ÇÈ

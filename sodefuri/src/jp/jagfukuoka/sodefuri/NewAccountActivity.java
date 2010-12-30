@@ -5,6 +5,8 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
+import jp.jagfukuoka.sodefuri.preference.TwitterPreferenceManager;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.NameValuePair;
@@ -19,22 +21,16 @@ import org.json.JSONObject;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
-import twitter4j.http.AccessToken;
 import twitter4j.http.RequestToken;
-
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Toast;
 
 /**
@@ -44,35 +40,37 @@ import android.widget.Toast;
  * @author shikajiro
  * 
  */
-public class NewAccountActivity extends BaseActivity implements OnClickListener {
+public class NewAccountActivity extends Activity implements OnClickListener {
 	private static final String REGISTER_URL = "http://sodefuri.appspot.com/register";
 
 	private static final int REQUEST_ENABLE_BT = 1;
 	private static final int REQUEST_STATE_CHANGE_BT = 2;
 	private BluetoothAdapter mBluetoothAdapter = null;
+	private TwitterPreferenceManager tpm = new TwitterPreferenceManager(this);  
 
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
 		setContentView(R.layout.screen_name);
 
 		Button okButton = (Button) findViewById(R.id.OKButton);
 		okButton.setOnClickListener(this);
 
 	}
+	/**
+	 * 認証途中なら暗証番号入力画面に。認証完了後はすれ違いリスト画面に。
+	 */
 	@Override
 	protected void onStart() {
 		super.onStart();
-		if(isRequestToken()){
+		if(tpm.isRequestToken()){
 			startActivity(new Intent(this,PinActivity.class));
-		}else if(isAccessToken()){
+		}else if(tpm.isAccessToken()){
 			startActivity(new Intent(this,RecentListViewActivity.class));
 		}
 	}
 	
-	ProgressDialog progressDialog;
 	/**
 	 * マウスクリック処理
 	 */
@@ -82,16 +80,15 @@ public class NewAccountActivity extends BaseActivity implements OnClickListener 
 		// -----[登録ボタンの設定]
 		case R.id.OKButton:
 			// TODO thread処理化
-			progressDialog = ProgressDialog.show(NewAccountActivity.this, null, "登録中...", true);
 			Runnable runnable = new Runnable() {
 				@Override
 				public void run() {
 					Twitter twitter = new TwitterFactory().getInstance();
-					twitter.setOAuthConsumer(CONSUMER_KEY, CONSUMER_SERCRET);
+					twitter.setOAuthConsumer(TwitterPreferenceManager.CONSUMER_KEY, TwitterPreferenceManager.CONSUMER_SERCRET);
 					try {
 						RequestToken requestToken = twitter.getOAuthRequestToken();
 						String authorizationURL = requestToken.getAuthorizationURL();
-						storeRequestToken(requestToken.getToken(), requestToken.getTokenSecret());
+						tpm.storeRequestToken(requestToken.getToken(), requestToken.getTokenSecret());
 						// twitter認証画面へ
 						Uri uri = Uri.parse(authorizationURL);
 						Intent i = new Intent(Intent.ACTION_VIEW,uri);
@@ -101,8 +98,6 @@ public class NewAccountActivity extends BaseActivity implements OnClickListener 
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					
-					progressDialog.dismiss();
 				}
 
 			};
@@ -164,7 +159,7 @@ public class NewAccountActivity extends BaseActivity implements OnClickListener 
 	}
 
 	/**
-	 * twitterのスクリーンネームとbluetootuのmacAddress登録処理
+	 * twitterのスクリーンネームとbluetoothのmacAddress登録処理
 	 * 
 	 * @param mac_address
 	 */
