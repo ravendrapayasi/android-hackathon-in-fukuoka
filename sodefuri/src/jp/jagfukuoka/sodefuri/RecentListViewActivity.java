@@ -31,15 +31,14 @@ import twitter4j.ProfileImage;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
-import twitter4j.ProfileImage.ImageSize;
 import twitter4j.conf.Configuration;
 import twitter4j.conf.ConfigurationBuilder;
-
 import android.app.ListActivity;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.bluetooth.BluetoothDevice;
-import android.content.BroadcastReceiver;
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.ContentObserver;
@@ -52,7 +51,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -107,6 +105,14 @@ public class RecentListViewActivity extends ListActivity {
 				//Listへの登録
 				RecentAdapter recentAdapter = new RecentAdapter(getApplicationContext(), R.layout.list_item, getRecentBeans());
 				setListAdapter(recentAdapter);
+				//notificationによるユーザーへの通知
+				NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+				Notification notification = new Notification(android.R.drawable.btn_default,"すれ違いました",System.currentTimeMillis());
+				//intentの設定
+				Intent intent = new Intent(getApplicationContext(),RecentListViewActivity.class);
+				PendingIntent contentIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, 0);
+				notification.setLatestEventInfo(getApplicationContext(),"sodefuri","多少の縁がありました。",contentIntent);
+				notificationManager.notify(R.string.app_name, notification);
 				super.onChange(selfChange);
 			}
 		};

@@ -19,6 +19,7 @@ public class BluetoothFoundReceiver extends BroadcastReceiver {
         Date date = new Date();
         ContentValues values = new ContentValues();
         values.put(RecentContentProvider.MAC_ADDRESS, device.getAddress());
+//        values.put(RecentContentProvider.SCREEN_NAME, device.getAddress());
         values.put(RecentContentProvider.TIME, date.getTime());
         context.getContentResolver().insert(RecentContentProvider.CONTENT_URI, values);
 	}
