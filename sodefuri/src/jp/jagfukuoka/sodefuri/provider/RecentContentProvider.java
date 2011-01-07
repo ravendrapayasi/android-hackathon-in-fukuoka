@@ -1,6 +1,7 @@
 package jp.jagfukuoka.sodefuri.provider;
 
 import android.content.ContentProvider;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -35,6 +36,7 @@ public class RecentContentProvider extends ContentProvider {
 	public Uri insert(Uri uri, ContentValues contentvalues) {
 		SQLiteDatabase db = databaseHelper.getWritableDatabase();
 		db.insert("test", null, contentvalues);
+		getContext().getContentResolver().notifyChange(uri, null);
 		return null;
 	}
 

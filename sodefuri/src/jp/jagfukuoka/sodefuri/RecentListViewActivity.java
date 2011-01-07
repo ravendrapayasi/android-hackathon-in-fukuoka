@@ -11,6 +11,7 @@ import java.util.List;
 
 import jp.jagfukuoka.sodefuri.preference.TwitterPreferenceManager;
 import jp.jagfukuoka.sodefuri.provider.RecentContentProvider;
+import jp.jagfukuoka.sodefuri.service.BluetoothFoundReceiver;
 import jp.jagfukuoka.sodefuri.service.RecentReceiver;
 import jp.jagfukuoka.sodefuri.service.RecentService;
 
@@ -33,8 +34,10 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.database.ContentObserver;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -57,6 +60,7 @@ public class RecentListViewActivity extends ListActivity {
 
 	private static final int DEBUG_TOKEN_CLEAR_ID = 1;
 	private static final int DEBUG_RECENT_CLEAR_ID = 2;
+	private static final int DEBUG_RECENT_ADD_ID = 3;
 	
 	String[] projection = new String[] { RecentContentProvider.MAC_ADDRESS };
 	List<String> screenNames;
@@ -82,10 +86,21 @@ public class RecentListViewActivity extends ListActivity {
 		
 		// bluetooth検索serviceの起動
 		startService(new Intent(this, RecentService.class));
+		// bluetooth検索処理
 		registerReceiver(new RecentReceiver(), new IntentFilter(RecentService.SEARCH));
-		
-		// bluetoothデバイスが見つかった時のreceiver登録
-		registerReceiver(mReceiver, new IntentFilter(BluetoothDevice.ACTION_FOUND));
+		// bluetoothデバイスが見つかった時
+		registerReceiver(new BluetoothFoundReceiver(), new IntentFilter(BluetoothDevice.ACTION_FOUND));
+		Handler handler = new Handler();
+		ContentObserver contentObserver = new ContentObserver(handler) {
+			@Override
+			public void onChange(boolean selfChange) {
+				screenNames = getScreenName();
+				//Listへの登録
+				setListAdapter(new ArrayAdapter<String>(getApplicationContext(), R.layout.list_item, screenNames));
+				super.onChange(selfChange);
+			}
+		};
+		getContentResolver().registerContentObserver(RecentContentProvider.CONTENT_URI, true, contentObserver);
 		
 		//サーバーにscreen_nameとmac_addressを登録する
 		screenNames = getScreenName();
@@ -111,16 +126,7 @@ public class RecentListViewActivity extends ListActivity {
 	
 	private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
 	    public void onReceive(Context context, Intent intent) {
-			Toast.makeText(context, "Bluetoothが見つかりました", Toast.LENGTH_LONG).show();
-            BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-            Date date = new Date();
-            screenNames.add(device.getName() + "\n" + device.getAddress()+"\n"+date);
-			setListAdapter(new ArrayAdapter<String>(getApplicationContext(), R.layout.list_item, screenNames));
-			
-	        ContentValues values = new ContentValues();
-	        values.put(RecentContentProvider.MAC_ADDRESS, device.getAddress());
-	        values.put(RecentContentProvider.TIME, date.getTime());
-	        getContentResolver().insert(RecentContentProvider.CONTENT_URI, values);
+
 	    }
 	};
 	
@@ -128,6 +134,7 @@ public class RecentListViewActivity extends ListActivity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		menu.add(0, DEBUG_TOKEN_CLEAR_ID, 0, "token clear");
 		menu.add(0, DEBUG_RECENT_CLEAR_ID, 0, "recent clear");
+		menu.add(0, DEBUG_RECENT_ADD_ID, 0, "add testdata");
 		return super.onCreateOptionsMenu(menu);
 	}
 	
@@ -140,7 +147,11 @@ public class RecentListViewActivity extends ListActivity {
 		case DEBUG_RECENT_CLEAR_ID:
 			getContentResolver().delete(null, null, null);
 			break;
-		default:
+		case DEBUG_RECENT_ADD_ID:
+	        ContentValues values = new ContentValues();
+	        values.put(RecentContentProvider.MAC_ADDRESS, "00:11:22:33:44:55");
+	        getContentResolver().insert(RecentContentProvider.CONTENT_URI, values);
+	    default:
 			break;
 		}
 		return super.onOptionsItemSelected(item);
