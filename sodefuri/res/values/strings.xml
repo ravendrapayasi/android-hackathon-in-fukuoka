@@ -6,4 +6,6 @@
     <string name="pref_twitter_name_title">twitterスクリーンネーム</string>
     <string name="pref_twitter_name_summary">twitterのスクリーンネームを設定します</string>
 	<string name="timeline">TimeLine</string>
+    <color name="screenname_color">#FFFFFF</color>  
+    <color name="text_color">#DFDFDF</color> 
 </resources>

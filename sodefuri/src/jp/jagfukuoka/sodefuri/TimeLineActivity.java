@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jp.jagfukuoka.sodefuri.preference.TwitterPreferenceManager;
-
 import twitter4j.ResponseList;
 import twitter4j.Status;
 import twitter4j.Twitter;
@@ -12,8 +11,6 @@ import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
 import twitter4j.conf.Configuration;
 import twitter4j.conf.ConfigurationBuilder;
-import twitter4j.http.AccessToken;
-import twitter4j.http.RequestToken;
 import android.app.ListActivity;
 import android.os.Bundle;
 import android.view.Menu;

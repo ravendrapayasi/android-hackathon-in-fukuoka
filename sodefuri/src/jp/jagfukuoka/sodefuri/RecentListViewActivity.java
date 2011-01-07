@@ -27,6 +27,14 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import twitter4j.ProfileImage;
+import twitter4j.Twitter;
+import twitter4j.TwitterException;
+import twitter4j.TwitterFactory;
+import twitter4j.ProfileImage.ImageSize;
+import twitter4j.conf.Configuration;
+import twitter4j.conf.ConfigurationBuilder;
+
 import android.app.ListActivity;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
@@ -38,6 +46,7 @@ import android.database.ContentObserver;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -70,6 +79,7 @@ public class RecentListViewActivity extends ListActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
+		//test daba insert
 		if(debug){
 	        ContentValues values = new ContentValues();
 			values.put(RecentContentProvider.MAC_ADDRESS,"00:00:00:00:00:00");
@@ -90,30 +100,28 @@ public class RecentListViewActivity extends ListActivity {
 		registerReceiver(new RecentReceiver(), new IntentFilter(RecentService.SEARCH));
 		// bluetoothデバイスが見つかった時
 		registerReceiver(new BluetoothFoundReceiver(), new IntentFilter(BluetoothDevice.ACTION_FOUND));
-		Handler handler = new Handler();
-		ContentObserver contentObserver = new ContentObserver(handler) {
+		//データ追加後の画面描画処理
+		ContentObserver contentObserver = new ContentObserver(new Handler()) {
 			@Override
 			public void onChange(boolean selfChange) {
-				screenNames = getScreenName();
 				//Listへの登録
-				setListAdapter(new ArrayAdapter<String>(getApplicationContext(), R.layout.list_item, screenNames));
+				RecentAdapter recentAdapter = new RecentAdapter(getApplicationContext(), R.layout.list_item, getRecentBeans());
+				setListAdapter(recentAdapter);
 				super.onChange(selfChange);
 			}
 		};
 		getContentResolver().registerContentObserver(RecentContentProvider.CONTENT_URI, true, contentObserver);
 		
-		//サーバーにscreen_nameとmac_addressを登録する
-		screenNames = getScreenName();
-		
 		//Listへの登録
-		setListAdapter(new ArrayAdapter<String>(getApplicationContext(), R.layout.list_item, screenNames));
+		RecentAdapter recentAdapter = new RecentAdapter(getApplicationContext(), R.layout.list_item, getRecentBeans());
+		setListAdapter(recentAdapter);
 		
 		ListView lv = getListView();
 		lv.setTextFilterEnabled(true);
 		lv.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				// 選択したscreenameをIntentで渡す。
-				TextView textView = (TextView)view;
+				TextView textView = (TextView)view.findViewById(R.id.toptext);
 				CharSequence screen_name = textView.getText();
 				
 				Intent intent = new Intent(RecentListViewActivity.this,TimeLineActivity.class);
@@ -123,12 +131,6 @@ public class RecentListViewActivity extends ListActivity {
 		});
 
 	}
-	
-	private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
-	    public void onReceive(Context context, Intent intent) {
-
-	    }
-	};
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -162,14 +164,40 @@ public class RecentListViewActivity extends ListActivity {
 	 * 
 	 * @return
 	 */
-	private List<String> getScreenName() {
+	private List<RecentBean> getRecentBeans() {
 
 		// json作成
 		String json = this.getMacAddressJson();
 
 		// jsonでスクリーンネームを問い合わせる
 		List<String> list = this.findScreenNames(json);
-		return list;
+		List<RecentBean> beans = new ArrayList<RecentBean>();
+		for(String str : list){
+			RecentBean recentBean = new RecentBean();
+			recentBean.setDate(new Date());
+			recentBean.setScreenName(str);
+			//とりあえず実装 TODO
+			String image ="";
+			ConfigurationBuilder builder = new ConfigurationBuilder();
+			Configuration conf = builder.setOAuthAccessToken(tpm.getAccessToken())
+			.setOAuthAccessTokenSecret(tpm.getAccessTokenSercret())
+			.setOAuthConsumerKey(TwitterPreferenceManager.CONSUMER_KEY)
+			.setOAuthConsumerSecret(TwitterPreferenceManager.CONSUMER_SERCRET)
+			.setDebugEnabled(true)
+			.build();
+			Twitter twitter = new TwitterFactory(conf).getInstance();
+			try {
+				ProfileImage profileImage = twitter.getProfileImage(str, ProfileImage.NORMAL);
+				image = profileImage.getURL();
+				Log.d("image", image);
+			} catch (TwitterException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			recentBean.setImage(image);
+			beans.add(recentBean);
+		}
+		return beans;
 	}
 
 	/**
