@@ -30,15 +30,15 @@ public class RecentAdapter extends ArrayAdapter<RecentBean> {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		// ƒrƒ…[‚ğó‚¯æ‚é
+		// ãƒ“ãƒ¥ãƒ¼ã‚’å—ã‘å–ã‚‹
 		View view = convertView;
 		if (view == null) {
-			// ó‚¯æ‚Á‚½ƒrƒ…[‚ªnull‚È‚çV‚µ‚­ƒrƒ…[‚ğ¶¬
+			// å—ã‘å–ã£ãŸãƒ“ãƒ¥ãƒ¼ãŒnullãªã‚‰æ–°ã—ããƒ“ãƒ¥ãƒ¼ã‚’ç”Ÿæˆ
 			view = inflater.inflate(R.layout.list_item, null);
-			// ”wŒi‰æ‘œ‚ğƒZƒbƒg‚·‚é
+			// èƒŒæ™¯ç”»åƒã‚’ã‚»ãƒƒãƒˆã™ã‚‹
 //			view.setBackgroundResource(R.drawable.back);
 		}
-		// •\¦‚·‚×‚«ƒf[ƒ^‚Ìæ“¾
+		// è¡¨ç¤ºã™ã¹ããƒ‡ãƒ¼ã‚¿ã®å–å¾—
 		RecentBean item = objects.get(position);
 		if (item != null) {
 			TextView screenName = (TextView) view.findViewById(R.id.toptext);
@@ -59,12 +59,12 @@ public class RecentAdapter extends ArrayAdapter<RecentBean> {
 					e.printStackTrace();
 				}
 			}
-			// ƒXƒNƒŠ[ƒ“ƒl[ƒ€‚ğƒrƒ…[‚ÉƒZƒbƒg
+			// ã‚¹ã‚¯ãƒªãƒ¼ãƒ³ãƒãƒ¼ãƒ ã‚’ãƒ“ãƒ¥ãƒ¼ã«ã‚»ãƒƒãƒˆ
 			if (screenName != null) {
 				screenName.setText(item.getScreenName());
 			}
 
-			// ƒeƒLƒXƒg‚ğƒrƒ…[‚ÉƒZƒbƒg
+			// ãƒ†ã‚­ã‚¹ãƒˆã‚’ãƒ“ãƒ¥ãƒ¼ã«ã‚»ãƒƒãƒˆ
 			TextView text = (TextView) view.findViewById(R.id.bottomtext);
 			if (text != null) {
 				text.setText(item.getDate().toString());

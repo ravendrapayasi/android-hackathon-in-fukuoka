@@ -76,7 +76,6 @@ public class NewAccountActivity extends Activity implements OnClickListener {
 	/**
 	 * マウスクリック処理
 	 */
-	@Override
 	public void onClick(View v) {
 		ConfigurationBuilder builder = new ConfigurationBuilder();
 		Configuration conf = builder.setDebugEnabled(true)

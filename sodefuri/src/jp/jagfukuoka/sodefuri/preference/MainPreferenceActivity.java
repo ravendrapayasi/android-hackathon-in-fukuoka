@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.preference.PreferenceActivity;
 
 /**
- * İ’è‰æ–Ê
+ * è¨­å®šç”»é¢
  * @author shikajiro
  *
  */

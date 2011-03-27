@@ -25,20 +25,17 @@ public class PinActivity extends Activity {
 		
 		View pinButton = findViewById(R.id.PinButton);
 		pinButton.setOnClickListener(new OnClickListener() {
-			@Override
+
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				Twitter twitter = new TwitterFactory().getInstance();
 				twitter.setOAuthConsumer(TwitterPreferenceManager.CONSUMER_KEY, TwitterPreferenceManager.CONSUMER_SERCRET);
 				RequestToken requestToken = new RequestToken(tpm.getRequestToken(), tpm.getRequestTokenSercret());
 				try {
-					// pinコードを使用して認証する
 					String pin = ((EditText) findViewById(R.id.PinText)).getText().toString();
 					AccessToken oAuthAccessToken = twitter.getOAuthAccessToken(requestToken, pin);
 					tpm.storeAccessToken(oAuthAccessToken.getToken(), oAuthAccessToken.getTokenSecret());
 					tpm.storeScreenName(twitter.getScreenName());
 					
-					//自分のタイムラインを表示
 					ResponseList<Status> homeTimeline = twitter.getHomeTimeline();
 					for(Status status : homeTimeline){
 						String text = status.getText();

@@ -7,20 +7,20 @@ import android.content.Intent;
 import android.widget.Toast;
 
 /**
- * 周辺のbluetoothを検索して、DBに登録するレシーバー
+ * 蜻ｨ霎ｺ縺ｮbluetooth繧呈､懃ｴ｢縺励※縲．B縺ｫ逋ｻ骭ｲ縺吶ｋ繝ｬ繧ｷ繝ｼ繝舌�ｼ
  * 
  * @author shikajiro
  * 
  */
 public class RecentReceiver extends BroadcastReceiver {
 	/**
-	 * 周辺のbluetoothを検索する
+	 * 蜻ｨ霎ｺ縺ｮbluetooth繧呈､懃ｴ｢縺吶ｋ
 	 */
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		Toast.makeText(context, "Bluetooth検索中", Toast.LENGTH_LONG).show();
+		Toast.makeText(context, "Bluetooth讀懃ｴ｢荳ｭ", Toast.LENGTH_LONG).show();
 		
-		// bluetooth検索
+		// bluetooth讀懃ｴ｢
 		BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 		bluetoothAdapter.startDiscovery();
 	}

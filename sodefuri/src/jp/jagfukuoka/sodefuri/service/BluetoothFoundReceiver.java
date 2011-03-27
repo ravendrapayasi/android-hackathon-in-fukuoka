@@ -14,7 +14,7 @@ public class BluetoothFoundReceiver extends BroadcastReceiver {
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		Toast.makeText(context, "Bluetooth‚ªŒ©‚Â‚©‚è‚Ü‚µ‚½", Toast.LENGTH_LONG).show();
+		Toast.makeText(context, "BluetoothãŒè¦‹ã¤ã‹ã‚Šã¾ã—ãŸ", Toast.LENGTH_LONG).show();
         BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
         Date date = new Date();
         ContentValues values = new ContentValues();

@@ -3,7 +3,7 @@ package jp.jagfukuoka.sodefuri;
 import java.util.Date;
 
 /**
- * ‚·‚êˆá‚Á‚½ˆê‚Â‚Ìƒf[ƒ^
+ * ã™ã‚Œé•ã£ãŸä¸€ã¤ã®ãƒ‡ãƒ¼ã‚¿
  * @author shikajiro
  *
  */

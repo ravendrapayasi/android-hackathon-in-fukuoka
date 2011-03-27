@@ -8,7 +8,7 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>1
+            </intent-filter>
         </activity>
         <activity android:name=".NewAccountActivity" android:label="@string/new_account" />
         <activity android:name=".TimeLineActivity" android:label="TimeLine" />

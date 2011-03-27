@@ -12,7 +12,7 @@ import android.net.Uri;
 import android.provider.BaseColumns;
 
 /**
- * すれ違ったbluetoothのmac_addressを保存するContentProvider
+ * 縺吶ｌ驕輔▲縺歟luetooth縺ｮmac_address繧剃ｿ晏ｭ倥☆繧気ontentProvider
  * 
  * @author shikajiro
  * 
@@ -71,7 +71,7 @@ public class RecentContentProvider extends ContentProvider {
 	}
 
 	/**
-	 * DBへアクセスするヘルパークラス
+	 * DB縺ｸ繧｢繧ｯ繧ｻ繧ｹ縺吶ｋ繝倥Ν繝代�ｼ繧ｯ繝ｩ繧ｹ
 	 * 
 	 * @author shikajiro
 	 * 

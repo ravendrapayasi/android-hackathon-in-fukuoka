@@ -19,7 +19,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 /**
- * ƒ†[ƒU[‚Ìƒ^ƒCƒ€ƒ‰ƒCƒ“‚ğˆê——‚Å•\¦‚·‚éActivity
+ * ãƒ¦ãƒ¼ã‚¶ãƒ¼ã®ã‚¿ã‚¤ãƒ ãƒ©ã‚¤ãƒ³ã‚’ä¸€è¦§ã§è¡¨ç¤ºã™ã‚‹Activity
  * 
  * @author shikajiro
  * 
@@ -28,13 +28,13 @@ public class TimeLineActivity extends ListActivity {
 	private TwitterPreferenceManager tpm = new TwitterPreferenceManager(this);  
 
 	private static final int FOLLOW = 1;
-	private static final CharSequence FOLLOW_LABEL = "ƒtƒHƒ[";
+	private static final CharSequence FOLLOW_LABEL = "ãƒ•ã‚©ãƒ­ãƒ¼";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		// timelineæ“¾ˆ—
+		// timelineå–å¾—å‡¦ç†
 		String screenName = getIntent().getStringExtra("screen_name");
 		List<String> list = this.getTimeLine(screenName);
 
@@ -62,7 +62,7 @@ public class TimeLineActivity extends ListActivity {
 			try {
 				String screen_name = getIntent().getStringExtra("screen_name");
 				twitter.createFriendship(screen_name);
-				Toast.makeText(getApplicationContext(), "ƒtƒHƒ[‚µ‚Ü‚µ‚½B", Toast.LENGTH_LONG).show();
+				Toast.makeText(getApplicationContext(), "ãƒ•ã‚©ãƒ­ãƒ¼ã—ã¾ã—ãŸã€‚", Toast.LENGTH_LONG).show();
 			} catch (TwitterException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -76,7 +76,7 @@ public class TimeLineActivity extends ListActivity {
 	}
 
 	/**
-	 * w’è‚µ‚½ƒ†[ƒU[‚Ìƒ^ƒCƒ€ƒ‰ƒCƒ“‚ğæ“¾
+	 * æŒ‡å®šã—ãŸãƒ¦ãƒ¼ã‚¶ãƒ¼ã®ã‚¿ã‚¤ãƒ ãƒ©ã‚¤ãƒ³ã‚’å–å¾—
 	 * 
 	 * @param screenName
 	 * @return

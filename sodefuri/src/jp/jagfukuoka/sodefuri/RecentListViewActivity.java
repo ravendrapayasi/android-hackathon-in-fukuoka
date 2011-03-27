@@ -55,7 +55,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 /**
- * ‚·‚êˆá‚Á‚½‡”Ô‚ÉƒXƒNƒŠ[ƒ“ƒl[ƒ€‚ª•\¦‚³‚ê‚éActivity
+ * ã™ã‚Œé•ã£ãŸé †ç•ªã«ã‚¹ã‚¯ãƒªãƒ¼ãƒ³ãƒãƒ¼ãƒ ãŒè¡¨ç¤ºã•ã‚Œã‚‹Activity
  * @author shikajiro
  *
  */
@@ -86,39 +86,39 @@ public class RecentListViewActivity extends ListActivity {
 	        getContentResolver().insert(RecentContentProvider.CONTENT_URI, values);
 		}
 		
-		//twitterToken‚ª–³‚¯‚ê‚Î“o˜^‰æ–Ê‚Ö‘JˆÚ‚·‚é
+		//twitterTokenãŒç„¡ã‘ã‚Œã°ç™»éŒ²ç”»é¢ã¸é·ç§»ã™ã‚‹
 		if(!tpm.isAccessToken()){
 			startActivity(new Intent(this,NewAccountActivity.class));
 			return;
 		}
 		
-		// bluetoothŒŸõservice‚Ì‹N“®
+		// bluetoothæ¤œç´¢serviceã®èµ·å‹•
 		startService(new Intent(this, RecentService.class));
-		// bluetoothŒŸõˆ—
+		// bluetoothæ¤œç´¢å‡¦ç†
 		registerReceiver(new RecentReceiver(), new IntentFilter(RecentService.SEARCH));
-		// bluetoothƒfƒoƒCƒX‚ªŒ©‚Â‚©‚Á‚½
+		// bluetoothãƒ‡ãƒã‚¤ã‚¹ãŒè¦‹ã¤ã‹ã£ãŸæ™‚
 		registerReceiver(new BluetoothFoundReceiver(), new IntentFilter(BluetoothDevice.ACTION_FOUND));
-		//ƒf[ƒ^’Ç‰ÁŒã‚Ì‰æ–Ê•`‰æˆ—
+		//ãƒ‡ãƒ¼ã‚¿è¿½åŠ å¾Œã®ç”»é¢æç”»å‡¦ç†
 		ContentObserver contentObserver = new ContentObserver(new Handler()) {
 			@Override
 			public void onChange(boolean selfChange) {
-				//List‚Ö‚Ì“o˜^
+				//Listã¸ã®ç™»éŒ²
 				RecentAdapter recentAdapter = new RecentAdapter(getApplicationContext(), R.layout.list_item, getRecentBeans());
 				setListAdapter(recentAdapter);
-				//notification‚É‚æ‚éƒ†[ƒU[‚Ö‚Ì’Ê’m
+				//notificationã«ã‚ˆã‚‹ãƒ¦ãƒ¼ã‚¶ãƒ¼ã¸ã®é€šçŸ¥
 				NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-				Notification notification = new Notification(android.R.drawable.btn_default,"‚·‚êˆá‚¢‚Ü‚µ‚½",System.currentTimeMillis());
-				//intent‚Ìİ’è
+				Notification notification = new Notification(android.R.drawable.btn_default,"ã™ã‚Œé•ã„ã¾ã—ãŸ",System.currentTimeMillis());
+				//intentã®è¨­å®š
 				Intent intent = new Intent(getApplicationContext(),RecentListViewActivity.class);
 				PendingIntent contentIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, 0);
-				notification.setLatestEventInfo(getApplicationContext(),"sodefuri","‘½­‚Ì‰‚ª‚ ‚è‚Ü‚µ‚½B",contentIntent);
+				notification.setLatestEventInfo(getApplicationContext(),"sodefuri","å¤šå°‘ã®ç¸ãŒã‚ã‚Šã¾ã—ãŸã€‚",contentIntent);
 				notificationManager.notify(R.string.app_name, notification);
 				super.onChange(selfChange);
 			}
 		};
 		getContentResolver().registerContentObserver(RecentContentProvider.CONTENT_URI, true, contentObserver);
 		
-		//List‚Ö‚Ì“o˜^
+		//Listã¸ã®ç™»éŒ²
 		RecentAdapter recentAdapter = new RecentAdapter(getApplicationContext(), R.layout.list_item, getRecentBeans());
 		setListAdapter(recentAdapter);
 		
@@ -126,7 +126,7 @@ public class RecentListViewActivity extends ListActivity {
 		lv.setTextFilterEnabled(true);
 		lv.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				// ‘I‘ğ‚µ‚½screename‚ğIntent‚Å“n‚·B
+				// é¸æŠã—ãŸscreenameã‚’Intentã§æ¸¡ã™ã€‚
 				TextView textView = (TextView)view.findViewById(R.id.toptext);
 				CharSequence screen_name = textView.getText();
 				
@@ -166,23 +166,23 @@ public class RecentListViewActivity extends ListActivity {
 	}
 
 	/**
-	 * server‚©‚çmac_address‚ğ‚à‚Æ‚Éscreen_name‚ğæ“¾‚·‚é
+	 * serverã‹ã‚‰mac_addressã‚’ã‚‚ã¨ã«screen_nameã‚’å–å¾—ã™ã‚‹
 	 * 
 	 * @return
 	 */
 	private List<RecentBean> getRecentBeans() {
 
-		// jsonì¬
+		// jsonä½œæˆ
 		String json = this.getMacAddressJson();
 
-		// json‚ÅƒXƒNƒŠ[ƒ“ƒl[ƒ€‚ğ–â‚¢‡‚í‚¹‚é
+		// jsonã§ã‚¹ã‚¯ãƒªãƒ¼ãƒ³ãƒãƒ¼ãƒ ã‚’å•ã„åˆã‚ã›ã‚‹
 		List<String> list = this.findScreenNames(json);
 		List<RecentBean> beans = new ArrayList<RecentBean>();
 		for(String str : list){
 			RecentBean recentBean = new RecentBean();
 			recentBean.setDate(new Date());
 			recentBean.setScreenName(str);
-			//‚Æ‚è‚ ‚¦‚¸À‘• TODO
+			//ã¨ã‚Šã‚ãˆãšå®Ÿè£… TODO
 			String image ="";
 			ConfigurationBuilder builder = new ConfigurationBuilder();
 			Configuration conf = builder.setOAuthAccessToken(tpm.getAccessToken())
@@ -207,7 +207,7 @@ public class RecentListViewActivity extends ListActivity {
 	}
 
 	/**
-	 * ƒXƒNƒŠ[ƒ“ƒl[ƒ€æ“¾ˆ—
+	 * ã‚¹ã‚¯ãƒªãƒ¼ãƒ³ãƒãƒ¼ãƒ å–å¾—å‡¦ç†
 	 * 
 	 * @param json
 	 * @param handler
@@ -216,8 +216,8 @@ public class RecentListViewActivity extends ListActivity {
 	public List<String> findScreenNames(String json) {
 		List<String> result = new ArrayList<String>();
 		try {
-			// -----[POST‘—M]
-			// -----[ƒNƒ‰ƒCƒAƒ“ƒgİ’è]
+			// -----[POSTé€ä¿¡]
+			// -----[ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆè¨­å®š]
 			List<NameValuePair> nameValuePair = new ArrayList<NameValuePair>();
 			nameValuePair.add(new BasicNameValuePair("json", json));
 			HttpClient httpclient = new DefaultHttpClient();
@@ -225,9 +225,9 @@ public class RecentListViewActivity extends ListActivity {
 			httpPost.setEntity(new UrlEncodedFormEntity(nameValuePair));
 			HttpResponse response = httpclient.execute(httpPost);
 
-			// -----[ƒT[ƒo[‚©‚ç‚Ì‰“š‚ğæ“¾]
+			// -----[ã‚µãƒ¼ãƒãƒ¼ã‹ã‚‰ã®å¿œç­”ã‚’å–å¾—]
 			if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
-				Toast.makeText(RecentListViewActivity.this, "ƒXƒNƒŠ[ƒ“ƒl[ƒ€‚ğæ“¾‚µ‚Ü‚µ‚½", Toast.LENGTH_LONG).show();
+				Toast.makeText(RecentListViewActivity.this, "ã‚¹ã‚¯ãƒªãƒ¼ãƒ³ãƒãƒ¼ãƒ ã‚’å–å¾—ã—ã¾ã—ãŸ", Toast.LENGTH_LONG).show();
 
 				InputStream is = response.getEntity().getContent();
 				BufferedReader br = new BufferedReader(
@@ -246,7 +246,7 @@ public class RecentListViewActivity extends ListActivity {
 				}
 
 		} else {
-			Toast.makeText(RecentListViewActivity.this, "[ƒXƒNƒŠ[ƒ“ƒl[ƒ€æ“¾error]: " + response.getStatusLine(),
+			Toast.makeText(RecentListViewActivity.this, "[ã‚¹ã‚¯ãƒªãƒ¼ãƒ³ãƒãƒ¼ãƒ å–å¾—error]: " + response.getStatusLine(),
 					Toast.LENGTH_LONG).show();
 		}
 		} catch (UnsupportedEncodingException e) {
@@ -260,7 +260,7 @@ public class RecentListViewActivity extends ListActivity {
 	}
 	
 	/**
-	 * jsonŒ^‚Ìmac_addressˆê——‚ğæ“¾‚·‚é
+	 * jsonå‹ã®mac_addressä¸€è¦§ã‚’å–å¾—ã™ã‚‹
 	 * @return
 	 */
 	private String getMacAddressJson() {
@@ -280,7 +280,7 @@ public class RecentListViewActivity extends ListActivity {
 	}
 
 	/**
-	 * DB‚©‚çmac_address‚Ìƒf[ƒ^‚ğ’Šo‚·‚é
+	 * DBã‹ã‚‰mac_addressã®ãƒ‡ãƒ¼ã‚¿ã‚’æŠ½å‡ºã™ã‚‹
 	 * 
 	 * @param cur
 	 * @return

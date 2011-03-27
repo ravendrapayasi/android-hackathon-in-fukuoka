@@ -7,14 +7,14 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
 /**
- * ’èŠú“I‚Ébluetooth‚ğŒŸõ‚·‚éƒT[ƒrƒX
+ * å®šæœŸçš„ã«bluetoothã‚’æ¤œç´¢ã™ã‚‹ã‚µãƒ¼ãƒ“ã‚¹
  * @author shikajiro
  *
  */
 public class RecentService extends Service {
 	protected static final String TAG = "RecentService";
 	public static final String SEARCH = "search";
-	// ƒ^ƒCƒ}[‚Ì•bŠÔŠu
+	// ã‚¿ã‚¤ãƒãƒ¼ã®ç§’é–“éš”
 	private static final int SECOND = 30;
 
 	private Timer timer;
@@ -25,7 +25,7 @@ public class RecentService extends Service {
 		return null;
 	}
 	/**
-	 * ˆê’èŠúŠÔ‚²‚Æ‚Ébluetooth‚ğŒŸõ‚·‚é
+	 * ä¸€å®šæœŸé–“ã”ã¨ã«bluetoothã‚’æ¤œç´¢ã™ã‚‹
 	 */
 	@Override
 	public void onCreate() {

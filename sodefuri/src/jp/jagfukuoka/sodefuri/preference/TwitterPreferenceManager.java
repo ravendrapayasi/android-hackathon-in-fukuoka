@@ -6,7 +6,7 @@ import android.content.SharedPreferences.Editor;
 import android.preference.PreferenceManager;
 
 /**
- * ‘S‚Ä‚Ìactivity‚ÌŠî’êƒNƒ‰ƒX
+ * å…¨ã¦ã®activityã®åŸºåº•ã‚¯ãƒ©ã‚¹
  * 
  * @author shikajiro
  * 
@@ -24,18 +24,18 @@ public class TwitterPreferenceManager {
 	}
 
 	// twitter consumer key & sercret
-	// TODO ŠO•”ƒtƒ@ƒCƒ‹‰»
+	// TODO å¤–éƒ¨ãƒ•ã‚¡ã‚¤ãƒ«åŒ–
 	public static final String CONSUMER_KEY = "OJLV3hMh1EAbkNIzjB3IqA";
 	public static final String CONSUMER_SERCRET = "Go0XfTVbHjtbxo2Asl3fMCLoXH7idRkQmjMv7quaMcI";
 
-	public static final String REQUEST_TOKEN = "request_token";
-	public static final String REQUEST_TOKEN_SERCRET = "request_token_sercret";
+	public static final String REQUEST_TOKEN = "shutter_request_token";
+	public static final String REQUEST_TOKEN_SERCRET = "shutter_request_token_sercret";
 
-	public static final String ACCESS_TOKEN = "access_token";
-	public static final String ACCESS_TOKEN_SERCRET = "access_token_sercret";
+	public static final String ACCESS_TOKEN = "shutter_access_token";
+	public static final String ACCESS_TOKEN_SERCRET = "shutter_access_token_sercret";
 
 	/**
-	 * pinƒL[‚ğ“ü—Í‚·‚é‚½‚ß‚ÉrequestToken‚ğ•Û‚·‚é
+	 * pinã‚­ãƒ¼ã‚’å…¥åŠ›ã™ã‚‹ãŸã‚ã«requestTokenã‚’ä¿æŒã™ã‚‹
 	 * 
 	 * @param token
 	 * @param tokenSecret
@@ -59,7 +59,7 @@ public class TwitterPreferenceManager {
 	}
 
 	/**
-	 * ˆê•Û‘¶‚µ‚½requestToken‚ğæ“¾‚·‚éB
+	 * ä¸€æ™‚ä¿å­˜ã—ãŸrequestTokenã‚’å–å¾—ã™ã‚‹ã€‚
 	 * 
 	 * @return
 	 */
@@ -69,7 +69,7 @@ public class TwitterPreferenceManager {
 	}
 
 	/**
-	 * ˆê•Û‘¶‚µ‚½requestTokenSercret‚ğæ“¾‚·‚éB
+	 * ä¸€æ™‚ä¿å­˜ã—ãŸrequestTokenSercretã‚’å–å¾—ã™ã‚‹ã€‚
 	 * 
 	 * @return
 	 */
@@ -79,7 +79,7 @@ public class TwitterPreferenceManager {
 	}
 
 	/**
-	 * twitter‚ÌrequestToken‚Ì—L–³‚ğƒ`ƒFƒbƒN‚·‚éB
+	 * twitterã®requestTokenã®æœ‰ç„¡ã‚’ãƒã‚§ãƒƒã‚¯ã™ã‚‹ã€‚
 	 * 
 	 * @return
 	 */
@@ -98,7 +98,7 @@ public class TwitterPreferenceManager {
 	}
 
 	/**
-	 * ‰i‘±‰»‚³‚ê‚Ä‚¢‚éaccess_token‚ğæ“¾‚·‚éB
+	 * æ°¸ç¶šåŒ–ã•ã‚Œã¦ã„ã‚‹access_tokenã‚’å–å¾—ã™ã‚‹ã€‚
 	 * 
 	 * @return
 	 */
@@ -108,7 +108,7 @@ public class TwitterPreferenceManager {
 	}
 
 	/**
-	 * ‰i‘±‰»‚³‚ê‚Ä‚¢‚éaccess_token‚ğæ“¾‚·‚éB
+	 * æ°¸ç¶šåŒ–ã•ã‚Œã¦ã„ã‚‹access_tokenã‚’å–å¾—ã™ã‚‹ã€‚
 	 * 
 	 * @return
 	 */
@@ -118,7 +118,7 @@ public class TwitterPreferenceManager {
 	}
 
 	/**
-	 * twitter‚Ìtoken‚ğİ’è‚·‚éB
+	 * twitterã®tokenã‚’è¨­å®šã™ã‚‹ã€‚
 	 * 
 	 * @param accessToken
 	 * @param accessTokenSercret
@@ -142,7 +142,7 @@ public class TwitterPreferenceManager {
 	}
 
 	/**
-	 * twitter‚Ìtoken‚Ì—L–³‚ğƒ`ƒFƒbƒN‚·‚éB
+	 * twitterã®tokenã®æœ‰ç„¡ã‚’ãƒã‚§ãƒƒã‚¯ã™ã‚‹ã€‚
 	 * 
 	 * @return
 	 */
@@ -161,7 +161,7 @@ public class TwitterPreferenceManager {
 	}
 
 	/**
-	 * twitter‚ÌƒXƒNƒŠ[ƒ“ƒl[ƒ€‚ğpreference‚É“o˜^‚·‚éB
+	 * twitterã®ã‚¹ã‚¯ãƒªãƒ¼ãƒ³ãƒãƒ¼ãƒ ã‚’preferenceã«ç™»éŒ²ã™ã‚‹ã€‚
 	 * 
 	 * @param screen_name
 	 */
