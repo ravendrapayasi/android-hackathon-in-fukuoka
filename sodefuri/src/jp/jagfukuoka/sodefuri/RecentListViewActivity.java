@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import jp.jagfukuoka.sodefuri.login.NewAccountActivity;
 import jp.jagfukuoka.sodefuri.preference.TwitterPreferenceManager;
 import jp.jagfukuoka.sodefuri.provider.RecentContentProvider;
 import jp.jagfukuoka.sodefuri.service.BluetoothFoundReceiver;

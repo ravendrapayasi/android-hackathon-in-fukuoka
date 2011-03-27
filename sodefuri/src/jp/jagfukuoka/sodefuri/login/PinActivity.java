@@ -1,5 +1,9 @@
-package jp.jagfukuoka.sodefuri;
+package jp.jagfukuoka.sodefuri.login;
 
+import jp.jagfukuoka.sodefuri.R;
+import jp.jagfukuoka.sodefuri.RecentListViewActivity;
+import jp.jagfukuoka.sodefuri.R.id;
+import jp.jagfukuoka.sodefuri.R.layout;
 import jp.jagfukuoka.sodefuri.preference.TwitterPreferenceManager;
 import twitter4j.ResponseList;
 import twitter4j.Status;

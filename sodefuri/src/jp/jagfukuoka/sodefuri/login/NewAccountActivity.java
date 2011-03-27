@@ -1,10 +1,14 @@
-package jp.jagfukuoka.sodefuri;
+package jp.jagfukuoka.sodefuri.login;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
+import jp.jagfukuoka.sodefuri.R;
+import jp.jagfukuoka.sodefuri.RecentListViewActivity;
+import jp.jagfukuoka.sodefuri.R.id;
+import jp.jagfukuoka.sodefuri.R.layout;
 import jp.jagfukuoka.sodefuri.preference.TwitterPreferenceManager;
 
 import org.apache.http.HttpResponse;
