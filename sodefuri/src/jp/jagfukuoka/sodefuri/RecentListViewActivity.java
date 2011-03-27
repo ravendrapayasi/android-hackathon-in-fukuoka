@@ -9,12 +9,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import jp.jagfukuoka.sodefuri.login.NewAccountActivity;
 import jp.jagfukuoka.sodefuri.preference.TwitterPreferenceManager;
 import jp.jagfukuoka.sodefuri.provider.RecentContentProvider;
-import jp.jagfukuoka.sodefuri.service.BluetoothFoundReceiver;
-import jp.jagfukuoka.sodefuri.service.RecentReceiver;
-import jp.jagfukuoka.sodefuri.service.RecentService;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -38,10 +34,8 @@ import android.app.ListActivity;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.bluetooth.BluetoothDevice;
 import android.content.ContentValues;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.database.ContentObserver;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -63,7 +57,6 @@ import android.widget.Toast;
 public class RecentListViewActivity extends ListActivity {
 	private static final String FIND_SCREEN_NAME_URL = "http://sodefuri.appspot.com/find_name";
 
-	boolean debug = true;
 	public static final String SCREEN_NAME = "SCREEN_NAME";
 
 	private static final int DEBUG_TOKEN_CLEAR_ID = 1;
@@ -78,27 +71,6 @@ public class RecentListViewActivity extends ListActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		//test daba insert
-		if(debug){
-	        ContentValues values = new ContentValues();
-			values.put(RecentContentProvider.MAC_ADDRESS,"00:00:00:00:00:00");
-			values.put(RecentContentProvider.MAC_ADDRESS,"E8:E5:D6:4C:52:3A");// _simo
-			values.put(RecentContentProvider.MAC_ADDRESS,"F8:DB:7F:02:2E:EE");// shikajiro
-	        getContentResolver().insert(RecentContentProvider.CONTENT_URI, values);
-		}
-		
-		//twitterTokenが無ければ登録画面へ遷移する
-		if(!tpm.isAccessToken()){
-			startActivity(new Intent(this,NewAccountActivity.class));
-			return;
-		}
-		
-		// bluetooth検索serviceの起動
-		startService(new Intent(this, RecentService.class));
-		// bluetooth検索処理
-		registerReceiver(new RecentReceiver(), new IntentFilter(RecentService.SEARCH));
-		// bluetoothデバイスが見つかった時
-		registerReceiver(new BluetoothFoundReceiver(), new IntentFilter(BluetoothDevice.ACTION_FOUND));
 		//データ追加後の画面描画処理
 		ContentObserver contentObserver = new ContentObserver(new Handler()) {
 			@Override

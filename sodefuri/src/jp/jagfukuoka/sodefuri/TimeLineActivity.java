@@ -64,7 +64,7 @@ public class TimeLineActivity extends ListActivity {
 				twitter.createFriendship(screen_name);
 				Toast.makeText(getApplicationContext(), "フォローしました。", Toast.LENGTH_LONG).show();
 			} catch (TwitterException e) {
-				// TODO Auto-generated catch block
+				Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
 				e.printStackTrace();
 			}
 			break;
