@@ -12,7 +12,9 @@ import twitter4j.TwitterFactory;
 import twitter4j.conf.Configuration;
 import twitter4j.conf.ConfigurationBuilder;
 import android.app.ListActivity;
+import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
@@ -29,16 +31,30 @@ public class TimeLineActivity extends ListActivity {
 
 	private static final int FOLLOW = 1;
 	private static final CharSequence FOLLOW_LABEL = "フォロー";
+	
+	Handler handler = new Handler();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		final ProgressDialog dialog = new ProgressDialog(this);
+		dialog.setMessage("timeline取得中");
+		dialog.show();
+		new Thread(new Runnable() {
+			public void run() {
+				// timeline取得処理
+				String screenName = getIntent().getStringExtra("screen_name");
+				final List<String> list = getTimeLine(screenName);
+				handler.post(new Runnable() {
+					public void run() {
+						setListAdapter(new ArrayAdapter<String>(TimeLineActivity.this, R.layout.timeline_item,list));
+						dialog.cancel();
+					}
+				});
+			}
+		}).start();
 
-		// timeline取得処理
-		String screenName = getIntent().getStringExtra("screen_name");
-		List<String> list = this.getTimeLine(screenName);
-
-		setListAdapter(new ArrayAdapter<String>(this, R.layout.timeline_item,list));
 	}
 
 	@Override

@@ -11,6 +11,7 @@ public class RecentBean {
 	private String screenName;
 	private String image;
 	private Date date;
+	private String profile;
 
 	public void setScreenName(String screenName) {
 		this.screenName = screenName;
@@ -34,5 +35,13 @@ public class RecentBean {
 
 	public Date getDate() {
 		return date;
+	}
+
+	public void setProfile(String profile) {
+		this.profile = profile;
+	}
+
+	public String getProfile() {
+		return profile;
 	}
 }

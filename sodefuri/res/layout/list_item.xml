@@ -5,15 +5,27 @@
     <ImageView android:id="@+id/twitter_icon" android:layout_width="wrap_content"  
         android:layout_height="fill_parent" android:layout_marginRight="6dip"  
         android:src="@drawable/twitter_logo_default" />  
-    <LinearLayout android:orientation="vertical"  
-        android:layout_width="0dip" android:layout_weight="1"  
+    <LinearLayout 
+    	android:orientation="vertical"  
+       	android:layout_width="fill_parent"
         android:layout_height="fill_parent">  
-        <TextView android:id="@+id/toptext" android:layout_width="fill_parent"  
-            android:layout_height="0dip" android:layout_weight="1"  
-            android:gravity="center_vertical"  
+        <TextView 
+        	android:id="@+id/toptext" 
+        	android:layout_width="fill_parent"
+	        android:layout_height="fill_parent"
+ 	       	android:layout_weight="1"
             android:textColor="@color/screenname_color"/>  
-        <TextView android:layout_width="fill_parent"  
-            android:layout_height="0dip" android:layout_weight="1" android:id="@+id/bottomtext"  
-            android:singleLine="true" android:ellipsize="marquee" android:textColor="@color/text_color"/>  
+        <TextView 
+        	android:id="@+id/profile" 
+        	android:layout_width="fill_parent"  
+			android:layout_height="fill_parent"  
+   		    android:layout_weight="1"
+            android:textColor="@color/screenname_color"/>  
+        <TextView 
+            android:id="@+id/recentDate"  
+        	android:layout_width="fill_parent"  
+            android:layout_height="fill_parent"  
+	        android:layout_weight="1"
+            android:textColor="@color/text_color"/>  
     </LinearLayout>  
 </LinearLayout>

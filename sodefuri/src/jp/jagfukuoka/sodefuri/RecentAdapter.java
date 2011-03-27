@@ -43,7 +43,8 @@ public class RecentAdapter extends ArrayAdapter<RecentBean> {
 		if (item != null) {
 			TextView screenName = (TextView) view.findViewById(R.id.toptext);
 			screenName.setTypeface(Typeface.DEFAULT_BOLD);
-
+			
+			//Icon Image
 			ImageView twitterIcon = (ImageView) view.findViewById(R.id.twitter_icon);
 			if(twitterIcon != null){
 				try {
@@ -52,22 +53,26 @@ public class RecentAdapter extends ArrayAdapter<RecentBean> {
 					Drawable drawable = Drawable.createFromStream(is, "src");
 					twitterIcon.setImageDrawable(drawable);
 				} catch (MalformedURLException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
-			// スクリーンネームをビューにセット
+			
+			// スクリーンネームを設定
 			if (screenName != null) {
 				screenName.setText(item.getScreenName());
 			}
 
-			// テキストをビューにセット
-			TextView text = (TextView) view.findViewById(R.id.bottomtext);
+			// すれ違い日付を設定
+			TextView text = (TextView) view.findViewById(R.id.recentDate);
 			if (text != null) {
 				text.setText(item.getDate().toString());
+			}
+			//プロフィールを設定
+			TextView profile = (TextView) view.findViewById(R.id.profile);
+			if(profile != null){
+				profile.setText(item.getProfile().toString());
 			}
 		}
 		return view;

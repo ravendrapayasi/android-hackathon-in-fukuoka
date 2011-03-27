@@ -146,12 +146,10 @@ public class TwitterPreferenceManager {
 	 * 
 	 * @return
 	 */
-	public boolean isAccessToken() {
-		SharedPreferences preferences = PreferenceManager
-				.getDefaultSharedPreferences(context);
+	public static boolean isAccessToken(Context context) {
+		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
 		String accessToken = preferences.getString(ACCESS_TOKEN, "");
-		String accessTokenSercret = preferences.getString(ACCESS_TOKEN_SERCRET,
-				"");
+		String accessTokenSercret = preferences.getString(ACCESS_TOKEN_SERCRET, "");
 		if (accessToken != null && accessToken.length() > 0) {
 			if (accessTokenSercret != null && accessTokenSercret.length() > 0) {
 				return true;

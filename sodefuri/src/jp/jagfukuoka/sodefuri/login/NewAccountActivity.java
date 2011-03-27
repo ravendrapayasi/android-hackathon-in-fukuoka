@@ -72,7 +72,7 @@ public class NewAccountActivity extends Activity implements OnClickListener {
 		super.onStart();
 		if(tpm.isRequestToken()){
 			startActivity(new Intent(this,PinActivity.class));
-		}else if(tpm.isAccessToken()){
+		}else if(TwitterPreferenceManager.isAccessToken(this)){
 			startActivity(new Intent(this,RecentListViewActivity.class));
 		}
 	}
