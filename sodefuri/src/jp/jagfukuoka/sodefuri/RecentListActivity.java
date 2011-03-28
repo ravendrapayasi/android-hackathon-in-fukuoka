@@ -36,7 +36,7 @@ import android.widget.TextView;
  * @author shikajiro
  * 
  */
-public class RecentListViewActivity extends ListActivity {
+public class RecentListActivity extends ListActivity {
 	
 	/*debug data*/
 	//debug flag
@@ -93,7 +93,7 @@ public class RecentListViewActivity extends ListActivity {
 						android.R.drawable.btn_default, "すれ違いました",
 						System.currentTimeMillis());
 				Intent intent = new Intent(getApplicationContext(),
-						RecentListViewActivity.class);
+						RecentListActivity.class);
 				PendingIntent contentIntent = PendingIntent.getActivity(
 						getApplicationContext(), 0, intent, 0);
 				notification.setLatestEventInfo(getApplicationContext(),
@@ -115,7 +115,7 @@ public class RecentListViewActivity extends ListActivity {
 				handler.post(new Runnable() {
 					public void run() {
 						setListAdapter(new RecentAdapter(
-								RecentListViewActivity.this,
+								RecentListActivity.this,
 								R.layout.recent_list, recents));
 						dialog.cancel();
 					}
@@ -131,7 +131,7 @@ public class RecentListViewActivity extends ListActivity {
 					int position, long id) {
 				TextView textView = (TextView) view.findViewById(R.id.toptext);
 				CharSequence screen_name = textView.getText();
-				Intent intent = new Intent(RecentListViewActivity.this,
+				Intent intent = new Intent(RecentListActivity.this,
 						TimeLineActivity.class);
 				intent.putExtra("screen_name", screen_name);
 				startActivity(intent);

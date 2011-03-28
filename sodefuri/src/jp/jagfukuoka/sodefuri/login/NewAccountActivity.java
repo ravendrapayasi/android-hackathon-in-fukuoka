@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jp.jagfukuoka.sodefuri.R;
-import jp.jagfukuoka.sodefuri.RecentListViewActivity;
+import jp.jagfukuoka.sodefuri.RecentListActivity;
 import jp.jagfukuoka.sodefuri.R.id;
 import jp.jagfukuoka.sodefuri.R.layout;
 import jp.jagfukuoka.sodefuri.preference.TwitterPreferences;
@@ -73,7 +73,7 @@ public class NewAccountActivity extends Activity implements OnClickListener {
 		if(tpm.isRequestToken()){
 			startActivity(new Intent(this,PinActivity.class));
 		}else if(TwitterPreferences.isAccessToken(this)){
-			startActivity(new Intent(this,RecentListViewActivity.class));
+			startActivity(new Intent(this,RecentListActivity.class));
 		}
 	}
 	

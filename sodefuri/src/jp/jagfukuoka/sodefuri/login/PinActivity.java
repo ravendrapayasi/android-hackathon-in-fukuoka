@@ -1,7 +1,7 @@
 package jp.jagfukuoka.sodefuri.login;
 
 import jp.jagfukuoka.sodefuri.R;
-import jp.jagfukuoka.sodefuri.RecentListViewActivity;
+import jp.jagfukuoka.sodefuri.RecentListActivity;
 import jp.jagfukuoka.sodefuri.R.id;
 import jp.jagfukuoka.sodefuri.R.layout;
 import jp.jagfukuoka.sodefuri.preference.TwitterPreferences;
@@ -47,7 +47,7 @@ public class PinActivity extends Activity {
 					}
 
 //					checkBluetooth();
-					startActivity(new Intent(getApplicationContext(),RecentListViewActivity.class));
+					startActivity(new Intent(getApplicationContext(),RecentListActivity.class));
 				} catch (TwitterException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
