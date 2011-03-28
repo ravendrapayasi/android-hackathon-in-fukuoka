@@ -1,5 +1,6 @@
 package jp.jagfukuoka.sodefuri.preference;
 
+import jp.jagfukuoka.sodefuri.RecentListViewActivity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -11,14 +12,14 @@ import android.preference.PreferenceManager;
  * @author shikajiro
  * 
  */
-public class TwitterPreferenceManager {
+public class TwitterPreferences {
 	private Context context;
 
-	private TwitterPreferenceManager() {
+	private TwitterPreferences() {
 		super();
 	}
 
-	public TwitterPreferenceManager(Context context) {
+	public TwitterPreferences(Context context) {
 		this();
 		this.context = context;
 	}
@@ -102,7 +103,7 @@ public class TwitterPreferenceManager {
 	 * 
 	 * @return
 	 */
-	public String getAccessToken() {
+	public static String getAccessToken(Context context) {
 		return PreferenceManager.getDefaultSharedPreferences(context)
 				.getString(ACCESS_TOKEN, "");
 	}
@@ -112,7 +113,7 @@ public class TwitterPreferenceManager {
 	 * 
 	 * @return
 	 */
-	public String getAccessTokenSercret() {
+	public static String getAccessTokenSercret(Context context) {
 		return PreferenceManager.getDefaultSharedPreferences(context)
 				.getString(ACCESS_TOKEN_SERCRET, "");
 	}
@@ -132,7 +133,7 @@ public class TwitterPreferenceManager {
 		editor.commit();
 	}
 	
-	public void clearAccessToken(){
+	public static void clearAccessToken(Context context){
 		SharedPreferences preferences = PreferenceManager
 		.getDefaultSharedPreferences(context);
 		Editor editor = preferences.edit();

@@ -9,7 +9,7 @@ import jp.jagfukuoka.sodefuri.R;
 import jp.jagfukuoka.sodefuri.RecentListViewActivity;
 import jp.jagfukuoka.sodefuri.R.id;
 import jp.jagfukuoka.sodefuri.R.layout;
-import jp.jagfukuoka.sodefuri.preference.TwitterPreferenceManager;
+import jp.jagfukuoka.sodefuri.preference.TwitterPreferences;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -52,7 +52,7 @@ public class NewAccountActivity extends Activity implements OnClickListener {
 	private static final int REQUEST_ENABLE_BT = 1;
 	private static final int REQUEST_STATE_CHANGE_BT = 2;
 	private BluetoothAdapter mBluetoothAdapter = null;
-	private TwitterPreferenceManager tpm = new TwitterPreferenceManager(this);  
+	private TwitterPreferences tpm = new TwitterPreferences(this);  
 
 	/** Called when the activity is first created. */
 	@Override
@@ -72,7 +72,7 @@ public class NewAccountActivity extends Activity implements OnClickListener {
 		super.onStart();
 		if(tpm.isRequestToken()){
 			startActivity(new Intent(this,PinActivity.class));
-		}else if(TwitterPreferenceManager.isAccessToken(this)){
+		}else if(TwitterPreferences.isAccessToken(this)){
 			startActivity(new Intent(this,RecentListViewActivity.class));
 		}
 	}
@@ -83,8 +83,8 @@ public class NewAccountActivity extends Activity implements OnClickListener {
 	public void onClick(View v) {
 		ConfigurationBuilder builder = new ConfigurationBuilder();
 		Configuration conf = builder.setDebugEnabled(true)
-		.setOAuthConsumerKey(TwitterPreferenceManager.CONSUMER_KEY)
-		.setOAuthConsumerSecret(TwitterPreferenceManager.CONSUMER_SERCRET)
+		.setOAuthConsumerKey(TwitterPreferences.CONSUMER_KEY)
+		.setOAuthConsumerSecret(TwitterPreferences.CONSUMER_SERCRET)
 		.build();
 		Twitter twitter = new TwitterFactory(conf).getInstance();
 		try {

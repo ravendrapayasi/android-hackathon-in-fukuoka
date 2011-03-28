@@ -4,7 +4,7 @@ import jp.jagfukuoka.sodefuri.R;
 import jp.jagfukuoka.sodefuri.RecentListViewActivity;
 import jp.jagfukuoka.sodefuri.R.id;
 import jp.jagfukuoka.sodefuri.R.layout;
-import jp.jagfukuoka.sodefuri.preference.TwitterPreferenceManager;
+import jp.jagfukuoka.sodefuri.preference.TwitterPreferences;
 import twitter4j.ResponseList;
 import twitter4j.Status;
 import twitter4j.Twitter;
@@ -21,7 +21,7 @@ import android.view.View.OnClickListener;
 import android.widget.EditText;
 
 public class PinActivity extends Activity {
-	private TwitterPreferenceManager tpm = new TwitterPreferenceManager(this);  
+	private TwitterPreferences tpm = new TwitterPreferences(this);  
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -32,7 +32,7 @@ public class PinActivity extends Activity {
 
 			public void onClick(View v) {
 				Twitter twitter = new TwitterFactory().getInstance();
-				twitter.setOAuthConsumer(TwitterPreferenceManager.CONSUMER_KEY, TwitterPreferenceManager.CONSUMER_SERCRET);
+				twitter.setOAuthConsumer(TwitterPreferences.CONSUMER_KEY, TwitterPreferences.CONSUMER_SERCRET);
 				RequestToken requestToken = new RequestToken(tpm.getRequestToken(), tpm.getRequestTokenSercret());
 				try {
 					String pin = ((EditText) findViewById(R.id.PinText)).getText().toString();
