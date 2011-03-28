@@ -1,4 +1,4 @@
-package jp.jagfukuoka.sodefuri.twitter;
+package jp.jagfukuoka.sodefuri.server.twitter;
 
 import java.util.ArrayList;
 import java.util.List;

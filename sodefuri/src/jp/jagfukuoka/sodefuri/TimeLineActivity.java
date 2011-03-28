@@ -2,7 +2,7 @@ package jp.jagfukuoka.sodefuri;
 
 import java.util.List;
 
-import jp.jagfukuoka.sodefuri.twitter.TwitterRequest;
+import jp.jagfukuoka.sodefuri.server.twitter.TwitterRequest;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
