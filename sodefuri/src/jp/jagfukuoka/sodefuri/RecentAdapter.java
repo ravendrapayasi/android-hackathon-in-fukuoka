@@ -34,7 +34,7 @@ public class RecentAdapter extends ArrayAdapter<RecentBean> {
 		View view = convertView;
 		if (view == null) {
 			// 受け取ったビューがnullなら新しくビューを生成
-			view = inflater.inflate(R.layout.list_item, null);
+			view = inflater.inflate(R.layout.recent_list, null);
 			// 背景画像をセットする
 //			view.setBackgroundResource(R.drawable.back);
 		}

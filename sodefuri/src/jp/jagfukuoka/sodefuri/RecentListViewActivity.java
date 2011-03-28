@@ -1,7 +1,5 @@
 package jp.jagfukuoka.sodefuri;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import jp.jagfukuoka.sodefuri.login.NewAccountActivity;
@@ -9,8 +7,6 @@ import jp.jagfukuoka.sodefuri.preference.TwitterPreferences;
 import jp.jagfukuoka.sodefuri.provider.ProviderManager;
 import jp.jagfukuoka.sodefuri.provider.RecentContentProvider;
 import jp.jagfukuoka.sodefuri.server.MatchingServer;
-import jp.jagfukuoka.sodefuri.server.converter.JSONConverter;
-import jp.jagfukuoka.sodefuri.server.twitter.TwitterRequest;
 import jp.jagfukuoka.sodefuri.service.BluetoothFoundReceiver;
 import jp.jagfukuoka.sodefuri.service.RecentReceiver;
 import jp.jagfukuoka.sodefuri.service.RecentService;
@@ -87,7 +83,7 @@ public class RecentListViewActivity extends ListActivity {
 			public void onChange(boolean selfChange) {
 				// ListViewの更新
 				RecentAdapter recentAdapter = new RecentAdapter(
-						getApplicationContext(), R.layout.list_item,
+						getApplicationContext(), R.layout.recent_list,
 						getRecentBeans());
 				setListAdapter(recentAdapter);
 				
@@ -120,7 +116,7 @@ public class RecentListViewActivity extends ListActivity {
 					public void run() {
 						setListAdapter(new RecentAdapter(
 								RecentListViewActivity.this,
-								R.layout.list_item, recents));
+								R.layout.recent_list, recents));
 						dialog.cancel();
 					}
 				});
