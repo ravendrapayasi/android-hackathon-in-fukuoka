@@ -1,4 +1,4 @@
-package jp.jagfukuoka.sodefuri.server.json;
+package jp.jagfukuoka.sodefuri.server.converter;
 
 import java.io.BufferedReader;
 import java.io.IOException;

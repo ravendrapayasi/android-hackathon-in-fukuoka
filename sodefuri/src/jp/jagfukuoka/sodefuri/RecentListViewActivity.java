@@ -13,7 +13,7 @@ import jp.jagfukuoka.sodefuri.preference.TwitterPreferences;
 import jp.jagfukuoka.sodefuri.provider.ProviderManager;
 import jp.jagfukuoka.sodefuri.provider.RecentContentProvider;
 import jp.jagfukuoka.sodefuri.server.MatchingServer;
-import jp.jagfukuoka.sodefuri.server.json.JSONConverter;
+import jp.jagfukuoka.sodefuri.server.converter.JSONConverter;
 import jp.jagfukuoka.sodefuri.server.twitter.TwitterRequest;
 import jp.jagfukuoka.sodefuri.service.BluetoothFoundReceiver;
 import jp.jagfukuoka.sodefuri.service.RecentReceiver;

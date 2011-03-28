@@ -15,10 +15,10 @@
         <activity android:name=".login.NewAccountActivity" android:label="@string/new_account" />
         <activity android:name=".login.PinActivity" android:label="Pin" />
         
-        <activity android:name=".preference.MainPreferenceActivity" android:label="Preference" />
+        <activity android:name="preference.MainPreferenceActivity" android:label="Preference" />
         
-        <service android:name=".service.RecentService"  android:enabled="true"/>
-		<provider android:name=".provider.RecentContentProvider"
+        <service android:name="service.RecentService"  android:enabled="true"/>
+		<provider android:name="provider.RecentContentProvider"
           android:authorities="jp.jagfukuoka.sodefuri.provider.recentcontentprovider" />
     </application>
 
