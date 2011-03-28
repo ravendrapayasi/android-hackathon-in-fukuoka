@@ -1,9 +1,5 @@
 package jp.jagfukuoka.sodefuri;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -18,13 +14,6 @@ import jp.jagfukuoka.sodefuri.server.twitter.TwitterRequest;
 import jp.jagfukuoka.sodefuri.service.BluetoothFoundReceiver;
 import jp.jagfukuoka.sodefuri.service.RecentReceiver;
 import jp.jagfukuoka.sodefuri.service.RecentService;
-
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.app.ListActivity;
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -35,10 +24,8 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.ContentObserver;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -54,20 +41,19 @@ import android.widget.TextView;
  * 
  */
 public class RecentListViewActivity extends ListActivity {
-
-	public static final String SCREEN_NAME = "SCREEN_NAME";
-
+	
+	/*debug data*/
+	//debug flag
+	private boolean debug = true;
+	//token clear
 	private static final int DEBUG_TOKEN_CLEAR_ID = 1;
+	//recent list data clear
 	private static final int DEBUG_RECENT_CLEAR_ID = 2;
+	//add recent data
 	private static final int DEBUG_RECENT_ADD_ID = 3;
 
-	private static final String TWITTER_TAG = "tiwitter_access";
-
-	List<String> screenNames;
-
+	//thread handler
 	Handler handler = new Handler();
-
-	private boolean debug;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -80,7 +66,7 @@ public class RecentListViewActivity extends ListActivity {
 		}
 
 		//test daba insert
-		if(true){
+		if(debug){
 	        ContentValues values = new ContentValues();
 			values.put(RecentContentProvider.MAC_ADDRESS,"00:00:00:00:00:00");
 			values.put(RecentContentProvider.MAC_ADDRESS,"E8:E5:D6:4C:52:3A");// _simo
@@ -95,7 +81,7 @@ public class RecentListViewActivity extends ListActivity {
 		// bluetoothデバイスが見つかった時の登録処理
 		registerReceiver(new BluetoothFoundReceiver(), new IntentFilter(BluetoothDevice.ACTION_FOUND));
 		
-		// データ追加後の画面描画処理
+		// データ追加後の画面描画処理とnotification
 		ContentObserver contentObserver = new ContentObserver(handler) {
 			@Override
 			public void onChange(boolean selfChange) {
@@ -123,7 +109,7 @@ public class RecentListViewActivity extends ListActivity {
 		getContentResolver().registerContentObserver(
 				RecentContentProvider.CONTENT_URI, true, contentObserver);
 
-		// Listへの登録
+		//今まですれ違ったデータをリストに表示する。
 		final ProgressDialog dialog = new ProgressDialog(this);
 		dialog.setMessage("すれ違い情報取得中");
 		dialog.show();
@@ -141,10 +127,10 @@ public class RecentListViewActivity extends ListActivity {
 			}
 		}).start();
 
+		// 選択したユーザーのタイムラインを表示する。
 		ListView lv = getListView();
 		lv.setTextFilterEnabled(true);
 		lv.setOnItemClickListener(new OnItemClickListener() {
-			// 選択したユーザーのタイムラインを表示する。
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
 				TextView textView = (TextView) view.findViewById(R.id.toptext);
@@ -196,53 +182,16 @@ public class RecentListViewActivity extends ListActivity {
 	 */
 	private List<RecentBean> getRecentBeans() {
 
-		// MAC_ADDRESSのjson作成
+		// DBに保存されている今まですれ違ったMAC_ADDRESSの一覧を取得
 		List<String> columnData = ProviderManager.getColumnData(this);
-		String json = JSONConverter.convertMacAddressJson(columnData);
 		
-		// jsonでスクリーンネームを問い合わせる
-		List<String> list = findScreenNames(json);
+		// MAC_ADDRESSの一覧を元にサーバーからスクリーンネームの一覧を取得する
+		List<String> list = MatchingServer.findName(columnData);
 		
-		//viewに表示するためのbeansを作成する
-		List<RecentBean> beans = new ArrayList<RecentBean>();
-		for (String str : list) {
-			RecentBean recentBean = new RecentBean();
-			recentBean.setDate(new Date());
-			recentBean.setScreenName(str);
-			String image = TwitterRequest.getImageUrl(this, str);
-			recentBean.setImage(image);
-			beans.add(recentBean);
-		}
+		//スクリーンネームの一覧をviewに表示するためのbeansを作成する
+		List<RecentBean> beans = RecentBean.createBeans(this, list);
+
 		return beans;
-	}
-
-	/**
-	 * スクリーンネーム取得処理
-	 * 
-	 * @param json
-	 * @param handler
-	 * @return
-	 */
-	private List<String> findScreenNames(String json) {
-		List<String> result = new ArrayList<String>();
-		try {
-			HttpResponse response = MatchingServer.findName(json);
-
-			// -----[サーバーからの応答を取得]
-			if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
-				Log.i(TWITTER_TAG, "スクリーンネームを取得しました");
-
-				InputStream is = response.getEntity().getContent();
-				result = JSONConverter.conertScreenNameJsons(is);
-
-			} else {
-				Log.i(TWITTER_TAG, "スクリーンネームの取得に失敗しました");
-			}
-		} catch (IOException e) {
-			Log.i(TWITTER_TAG, "レスポンス取得に失敗しました");
-			e.printStackTrace();
-		}
-		return result;
 	}
 
 }

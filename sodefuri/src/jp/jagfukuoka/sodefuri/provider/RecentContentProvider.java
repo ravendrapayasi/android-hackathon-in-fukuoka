@@ -1,7 +1,6 @@
 package jp.jagfukuoka.sodefuri.provider;
 
 import android.content.ContentProvider;
-import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -24,7 +23,7 @@ public class RecentContentProvider extends ContentProvider {
 	public static final String SCREEN_NAME = "screen_name";
 	public static final String TIME = "time";
 	
-	DatabaseHelper databaseHelper;
+	private DatabaseHelper databaseHelper;
 
 	@Override
 	public boolean onCreate() {

@@ -22,7 +22,7 @@ public class TimeLineActivity extends ListActivity {
 	private static final int FOLLOW = 1;
 	private static final CharSequence FOLLOW_LABEL = "フォロー";
 	
-	Handler handler = new Handler();
+	private Handler handler = new Handler();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

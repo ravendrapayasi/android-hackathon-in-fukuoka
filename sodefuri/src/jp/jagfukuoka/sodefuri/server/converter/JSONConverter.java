@@ -13,7 +13,18 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+/**
+ * JSON文字列に変換する処理
+ * @author shikajiro
+ *
+ */
 public class JSONConverter {
+	
+	/**
+	 * MAC_ADDRESSのJSON文字列を変換する。
+	 * @param list
+	 * @return
+	 */
 	public static String convertMacAddressJson(List<String> list) {
 		JSONArray array = new JSONArray();
 		try {
@@ -28,6 +39,11 @@ public class JSONConverter {
 		return array.toString();
 	}
 
+	/**
+	 * InputStreamからスクリーンネームのJSON配列を変換する。
+	 * @param is
+	 * @return
+	 */
 	public static List<String> conertScreenNameJsons(InputStream is) {
 		List<String> result = new ArrayList<String>();
 
