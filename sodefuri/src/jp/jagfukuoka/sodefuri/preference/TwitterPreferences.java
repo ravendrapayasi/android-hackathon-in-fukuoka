@@ -1,13 +1,12 @@
 package jp.jagfukuoka.sodefuri.preference;
 
-import jp.jagfukuoka.sodefuri.RecentListViewActivity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.preference.PreferenceManager;
 
 /**
- * 全てのactivityの基底クラス
+ * Twitterの情報を保持するPreferences
  * 
  * @author shikajiro
  * 
