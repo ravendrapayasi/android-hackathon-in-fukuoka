@@ -7,6 +7,7 @@ import jp.jagfukuoka.sodefuri.preference.TwitterPreferences;
 import jp.jagfukuoka.sodefuri.provider.ProviderManager;
 import jp.jagfukuoka.sodefuri.provider.RecentContentProvider;
 import jp.jagfukuoka.sodefuri.server.MatchingServer;
+import jp.jagfukuoka.sodefuri.server.twitter.TwitterRequest;
 import jp.jagfukuoka.sodefuri.service.BluetoothFoundReceiver;
 import jp.jagfukuoka.sodefuri.service.RecentReceiver;
 import jp.jagfukuoka.sodefuri.service.RecentService;
@@ -15,6 +16,7 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
+import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.ContentValues;
 import android.content.Intent;
@@ -29,6 +31,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * すれ違った順番にスクリーンネームが表示されるActivity
@@ -47,6 +50,9 @@ public class RecentListActivity extends ListActivity {
 	private static final int DEBUG_RECENT_CLEAR_ID = 2;
 	//add recent data
 	private static final int DEBUG_RECENT_ADD_ID = 3;
+	
+	private static final int REQUEST_ENABLE_BT = 1;
+	private BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
 	//thread handler
 	Handler handler = new Handler();
@@ -55,11 +61,18 @@ public class RecentListActivity extends ListActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
+		if(isBluetoothSupport()){
+			// Bluetoothはサポートされてません
+			Toast.makeText(this, "Bluetoothがサポートされていないため、このアプリは利用できません。", Toast.LENGTH_LONG).show();
+			finish();
+		}
+		
 		//twitterTokenが無ければ登録画面へ遷移する
 		if(!TwitterPreferences.isAccessToken(this)){
 			startActivity(new Intent(this,NewAccountActivity.class));
 			return;
 		}
+
 
 		//test daba insert
 		if(debug){
@@ -70,6 +83,10 @@ public class RecentListActivity extends ListActivity {
 	        getContentResolver().insert(RecentContentProvider.CONTENT_URI, values);
 		}
 		
+		//bluetoothの情報をサーバーに登録する。
+		//bluetoothが使えない場合は終了する。
+		registerBluetooth();
+
 		// bluetooth自動検索serviceのタイマー
 		startService(new Intent(this, RecentService.class));
 		// bluetooth検索処理
@@ -140,6 +157,13 @@ public class RecentListActivity extends ListActivity {
 
 	}
 
+	private boolean isBluetoothSupport() {
+		if (mBluetoothAdapter == null) {
+			return false;
+		}
+		return true;
+	}
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		if (debug) {
@@ -188,6 +212,46 @@ public class RecentListActivity extends ListActivity {
 		List<RecentBean> beans = RecentBean.createBeans(this, list);
 
 		return beans;
+	}
+
+	/**
+	 * Bluetoothのmac_addressを取得する
+	 */
+	private void registerBluetooth() {
+		if (mBluetoothAdapter.isEnabled()) {
+			// -----[利用可能なので次の処理]
+			String macAddress = mBluetoothAdapter.getAddress();
+			String screenName = TwitterRequest.getMyScreenName(this);
+			MatchingServer.register(screenName, macAddress);
+		} else {
+			// -----[利用不可なので許可アラート表示]
+			Intent enableBTIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+			startActivityForResult(enableBTIntent, REQUEST_ENABLE_BT);
+		}
+	}
+
+	/**
+	 * Bluetoothが起動されておらず、ユーザーにより起動が許可された場合に呼ばれる。
+	 * Bluetoothのmacaddressを取得し、サーバーに送信する
+	 * 
+	 * @author _simo
+	 */
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (requestCode != REQUEST_ENABLE_BT) {
+			return;
+		}
+
+		if (resultCode == RESULT_OK) {
+			// Bluetoothが利用可能になりました
+			String macAddress = mBluetoothAdapter.getAddress();
+			String screenName = TwitterRequest.getMyScreenName(this);
+			MatchingServer.register(screenName, macAddress);
+		} else if (resultCode == RESULT_CANCELED) {
+			// Bluetoothは利用不可です
+			Toast.makeText(this, "Bluetoothを起動できないため、このアプリは利用できません。", Toast.LENGTH_LONG).show();
+			finish();
+		}
 	}
 
 }

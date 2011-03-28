@@ -12,17 +12,6 @@ import android.preference.PreferenceManager;
  * 
  */
 public class TwitterPreferences {
-	private Context context;
-
-	private TwitterPreferences() {
-		super();
-	}
-
-	public TwitterPreferences(Context context) {
-		this();
-		this.context = context;
-	}
-
 	// twitter consumer key & sercret
 	// TODO 外部ファイル化
 	public static final String CONSUMER_KEY = "OJLV3hMh1EAbkNIzjB3IqA";
@@ -40,7 +29,7 @@ public class TwitterPreferences {
 	 * @param token
 	 * @param tokenSecret
 	 */
-	public void storeRequestToken(String token, String tokenSecret) {
+	public static void storeRequestToken(Context context, String token, String tokenSecret) {
 		SharedPreferences preferences = PreferenceManager
 				.getDefaultSharedPreferences(context);
 		Editor editor = preferences.edit();
@@ -49,7 +38,7 @@ public class TwitterPreferences {
 		editor.commit();
 	}
 	
-	public void clearRequestToken(){
+	public void clearRequestToken(Context context){
 		SharedPreferences preferences = PreferenceManager
 		.getDefaultSharedPreferences(context);
 		Editor editor = preferences.edit();
@@ -63,7 +52,7 @@ public class TwitterPreferences {
 	 * 
 	 * @return
 	 */
-	public String getRequestToken() {
+	public static String getRequestToken(Context context) {
 		return PreferenceManager.getDefaultSharedPreferences(context)
 				.getString(REQUEST_TOKEN, "");
 	}
@@ -73,7 +62,7 @@ public class TwitterPreferences {
 	 * 
 	 * @return
 	 */
-	public String getRequestTokenSercret() {
+	public static String getRequestTokenSercret(Context context) {
 		return PreferenceManager.getDefaultSharedPreferences(context)
 				.getString(REQUEST_TOKEN_SERCRET, "");
 	}
@@ -83,7 +72,7 @@ public class TwitterPreferences {
 	 * 
 	 * @return
 	 */
-	public boolean isRequestToken() {
+	public static boolean isRequestToken(Context context) {
 		SharedPreferences preferences = PreferenceManager
 				.getDefaultSharedPreferences(context);
 		String requestToken = preferences.getString(REQUEST_TOKEN, "");
@@ -123,7 +112,7 @@ public class TwitterPreferences {
 	 * @param accessToken
 	 * @param accessTokenSercret
 	 */
-	public void storeAccessToken(String accessToken,String accessTokenSercret) {
+	public static void storeAccessToken(Context context, String accessToken,String accessTokenSercret) {
 		SharedPreferences preferences = PreferenceManager
 				.getDefaultSharedPreferences(context);
 		Editor editor = preferences.edit();
@@ -163,11 +152,12 @@ public class TwitterPreferences {
 	 * 
 	 * @param screen_name
 	 */
-	public void storeScreenName(String screen_name) {
+	public static void storeScreenName(Context context, String screen_name) {
 		SharedPreferences preferences = PreferenceManager
 				.getDefaultSharedPreferences(context);
 		Editor editor = preferences.edit();
 		editor.putString("pre_twitter_name", screen_name);
 		editor.commit();
 	}
+
 }

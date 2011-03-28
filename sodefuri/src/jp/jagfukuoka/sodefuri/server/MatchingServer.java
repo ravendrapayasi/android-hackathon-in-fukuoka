@@ -17,6 +17,8 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.util.Log;
 
@@ -29,9 +31,12 @@ import android.util.Log;
 public class MatchingServer {
 	//マッチングサーバーのURL
 	private static final String FIND_SCREEN_NAME_URL = "http://sodefuri.appspot.com/find_name";
+	//MAC_ADDRESSとtwitterIDを登録するURL
+	private static final String REGISTER_URL = "http://sodefuri.appspot.com/register";
 
 	// logging
 	private static final String MATCHING_TAG = "tiwitter_access";
+	private static final String MATCH_TAG = null;
 
 	/**
 	 * スクリーンネーム取得処理
@@ -72,5 +77,48 @@ public class MatchingServer {
 		}
 
 		return result;
+	}
+	
+
+	/**
+	 * twitterのスクリーンネームとbluetoothのmacAddress登録処理
+	 * 
+	 * @param macAddress
+	 */
+	public static void register(String screenName, String macAddress) {
+
+		// -----[クライアント設定]
+		HttpClient httpclient = new DefaultHttpClient();
+		HttpPost httppost = new HttpPost(REGISTER_URL);
+
+		// -----[JSONの作成]
+		JSONObject jsonObject = new JSONObject();
+		try {
+			jsonObject.put("screen_name", screenName);
+			jsonObject.put("mac_address", macAddress);
+
+			String json = jsonObject.toString();
+
+			// -----[POST送信するListを作成]
+			List<NameValuePair> nameValuePair = new ArrayList<NameValuePair>();
+			nameValuePair.add(new BasicNameValuePair("json", json));
+
+			// -----[POST送信]
+			httppost.setEntity(new UrlEncodedFormEntity(nameValuePair));
+			HttpResponse response = httpclient.execute(httppost);
+			
+			// -----[サーバーからの応答を取得]
+			if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+				Log.d(MATCH_TAG, "スクリーンネームとbluetooth機器を登録しました。");
+			} else {
+				Log.d(MATCH_TAG, "[error]:スクリーンネームとbluetooth機器を登録できませんでした。");
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }

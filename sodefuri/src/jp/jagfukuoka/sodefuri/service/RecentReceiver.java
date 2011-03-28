@@ -18,7 +18,7 @@ public class RecentReceiver extends BroadcastReceiver {
 	 */
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		Toast.makeText(context, "Bluetooth検索中", Toast.LENGTH_LONG).show();
+		Toast.makeText(context, "Bluetooth検索中", Toast.LENGTH_SHORT).show();
 		
 		// bluetooth検索
 		BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();

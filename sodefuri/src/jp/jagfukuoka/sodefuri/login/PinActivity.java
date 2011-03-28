@@ -2,26 +2,20 @@ package jp.jagfukuoka.sodefuri.login;
 
 import jp.jagfukuoka.sodefuri.R;
 import jp.jagfukuoka.sodefuri.RecentListActivity;
-import jp.jagfukuoka.sodefuri.R.id;
-import jp.jagfukuoka.sodefuri.R.layout;
-import jp.jagfukuoka.sodefuri.preference.TwitterPreferences;
-import twitter4j.ResponseList;
-import twitter4j.Status;
-import twitter4j.Twitter;
-import twitter4j.TwitterException;
-import twitter4j.TwitterFactory;
-import twitter4j.http.AccessToken;
-import twitter4j.http.RequestToken;
+import jp.jagfukuoka.sodefuri.server.twitter.TwitterRequest;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.EditText;
 
+/**
+ * PinCode入力画面
+ * @author shikajiro
+ *
+ */
 public class PinActivity extends Activity {
-	private TwitterPreferences tpm = new TwitterPreferences(this);  
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -31,27 +25,9 @@ public class PinActivity extends Activity {
 		pinButton.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
-				Twitter twitter = new TwitterFactory().getInstance();
-				twitter.setOAuthConsumer(TwitterPreferences.CONSUMER_KEY, TwitterPreferences.CONSUMER_SERCRET);
-				RequestToken requestToken = new RequestToken(tpm.getRequestToken(), tpm.getRequestTokenSercret());
-				try {
-					String pin = ((EditText) findViewById(R.id.PinText)).getText().toString();
-					AccessToken oAuthAccessToken = twitter.getOAuthAccessToken(requestToken, pin);
-					tpm.storeAccessToken(oAuthAccessToken.getToken(), oAuthAccessToken.getTokenSecret());
-					tpm.storeScreenName(twitter.getScreenName());
-					
-					ResponseList<Status> homeTimeline = twitter.getHomeTimeline();
-					for(Status status : homeTimeline){
-						String text = status.getText();
-						Log.d("hometimeline", text);
-					}
-
-//					checkBluetooth();
-					startActivity(new Intent(getApplicationContext(),RecentListActivity.class));
-				} catch (TwitterException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				String pincode = ((EditText) findViewById(R.id.PinText)).getText().toString();
+				TwitterRequest.setPinCode(getApplicationContext(), pincode);
+				startActivity(new Intent(getApplicationContext(),RecentListActivity.class));
 			}
 
 		});

@@ -13,6 +13,8 @@ import twitter4j.TwitterFactory;
 import twitter4j.User;
 import twitter4j.conf.Configuration;
 import twitter4j.conf.ConfigurationBuilder;
+import twitter4j.http.AccessToken;
+import twitter4j.http.RequestToken;
 import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
@@ -20,6 +22,48 @@ import android.widget.Toast;
 public class TwitterRequest {
 	
 	private static final String TWITTER_REQUEST = "TWITTER_REQUEST";
+	
+	/**
+	 * 認証ページのURLを取得する。
+	 * @param context
+	 * @return
+	 */
+	public static String getAuthUrl(Context context){
+			
+		ConfigurationBuilder builder = new ConfigurationBuilder();
+		Configuration conf = builder.setDebugEnabled(true)
+		.setOAuthConsumerKey(TwitterPreferences.CONSUMER_KEY)
+		.setOAuthConsumerSecret(TwitterPreferences.CONSUMER_SERCRET)
+		.build();
+		Twitter twitter = new TwitterFactory(conf).getInstance();
+		String authorizationURL = "";
+		try {
+			RequestToken requestToken = twitter.getOAuthRequestToken();
+			authorizationURL = requestToken.getAuthorizationURL();
+			TwitterPreferences.storeRequestToken(context, requestToken.getToken(), requestToken.getTokenSecret());
+		} catch (TwitterException e) {
+			e.printStackTrace();
+		}
+		return authorizationURL;
+	}
+	
+	/**
+	 * pincodeを設定してtwitterの認証を完了する。
+	 * @param context
+	 * @param pincode
+	 */
+	public static void setPinCode(Context context, String pincode){
+		Twitter twitter = new TwitterFactory().getInstance();
+		twitter.setOAuthConsumer(TwitterPreferences.CONSUMER_KEY, TwitterPreferences.CONSUMER_SERCRET);
+		RequestToken requestToken = new RequestToken(TwitterPreferences.getRequestToken(context), TwitterPreferences.getRequestTokenSercret(context));
+		try {
+			AccessToken oAuthAccessToken = twitter.getOAuthAccessToken(requestToken, pincode);
+			TwitterPreferences.storeAccessToken(context, oAuthAccessToken.getToken(), oAuthAccessToken.getTokenSecret());
+			TwitterPreferences.storeScreenName(context, twitter.getScreenName());
+		} catch (TwitterException e) {
+			e.printStackTrace();
+		}
+	}
 
 	/**
 	 * 指定したユーザーのプロフィール画像URLを取得する。
@@ -114,6 +158,30 @@ public class TwitterRequest {
 			Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
 			e.printStackTrace();
 		}
+	}
+
+	/**
+	 * 自分のスクリーンネームを取得する。
+	 * @return
+	 */
+	public static String getMyScreenName(Context context) {
+		ConfigurationBuilder builder = new ConfigurationBuilder();
+		Configuration conf = builder.setOAuthAccessToken(TwitterPreferences.getAccessToken(context))
+		.setOAuthAccessTokenSecret(TwitterPreferences.getAccessTokenSercret(context))
+		.setOAuthConsumerKey(TwitterPreferences.CONSUMER_KEY)
+		.setOAuthConsumerSecret(TwitterPreferences.CONSUMER_SERCRET)
+		.setDebugEnabled(true)
+		.build();
+		Twitter twitter = new TwitterFactory(conf).getInstance();		
+		String screenName = "";
+		try {
+			screenName = twitter.getScreenName();
+		} catch (IllegalStateException e) {
+			e.printStackTrace();
+		} catch (TwitterException e) {
+			e.printStackTrace();
+		}
+		return screenName;
 	}
 
 }
