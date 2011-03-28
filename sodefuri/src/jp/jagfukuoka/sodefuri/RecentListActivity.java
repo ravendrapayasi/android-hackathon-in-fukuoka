@@ -45,26 +45,31 @@ public class RecentListActivity extends ListActivity {
 	//debug flag
 	private boolean debug = true;
 	//token clear
-	private static final int DEBUG_TOKEN_CLEAR_ID = 1;
+	private static final int DEBUG_TOKEN_CLEAR_ID = -1;
 	//recent list data clear
-	private static final int DEBUG_RECENT_CLEAR_ID = 2;
+	private static final int DEBUG_RECENT_CLEAR_ID = -2;
 	//add recent data
-	private static final int DEBUG_RECENT_ADD_ID = 3;
+	private static final int DEBUG_RECENT_ADD_ID = -3;
+
+	//menu ID
+	private static final int UPDATE_ID = 1;
 	
+	//bluetooth ID
 	private static final int REQUEST_ENABLE_BT = 1;
+	
 	private BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
 	//thread handler
-	Handler handler = new Handler();
+	private Handler handler = new Handler();
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		if(isBluetoothSupport()){
+		if(!isBluetoothSupport()){
 			// Bluetoothはサポートされてません
 			Toast.makeText(this, "Bluetoothがサポートされていないため、このアプリは利用できません。", Toast.LENGTH_LONG).show();
-			finish();
+			return;
 		}
 		
 		//twitterTokenが無ければ登録画面へ遷移する
@@ -72,7 +77,6 @@ public class RecentListActivity extends ListActivity {
 			startActivity(new Intent(this,NewAccountActivity.class));
 			return;
 		}
-
 
 		//test daba insert
 		if(debug){

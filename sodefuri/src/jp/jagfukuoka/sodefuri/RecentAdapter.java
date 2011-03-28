@@ -9,6 +9,7 @@ import java.util.List;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -67,7 +68,9 @@ public class RecentAdapter extends ArrayAdapter<RecentBean> {
 			// すれ違い日付を設定
 			TextView text = (TextView) view.findViewById(R.id.recentDate);
 			if (text != null) {
-				text.setText(item.getDate().toString());
+				java.text.DateFormat format = DateFormat.getDateFormat(getContext());
+				String formatDate = format.format(item.getDate());
+				text.setText(formatDate);
 			}
 			//プロフィールを設定
 			TextView profile = (TextView) view.findViewById(R.id.profile);
