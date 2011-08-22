@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <resources>
+        <string-array name="Poemes">
+            <item>大江山 いく野の道の 遠ければ まだふみも見ず 天の橋立</item>
+            <item>朝ぼらけ 宇治の川霧 たえだえに あらはれわたる 瀬々の網代木</item>
+            <item>夜をこめて 鳥のそら音は はかるとも よに逢坂の 関は許さじ</item>
+        </string-array>
+        <string-array name="writers">
+            <item>小式部内侍</item>
+            <item>権中納言定頼</item>
+            <item>清少納言</item>
+        </string-array>
+    </resources>
+

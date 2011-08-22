@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    >
+
+<jp.or.missusoft.hyakunin.CharDrawViewMultiLine 
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:text="@string/def_poeme" 
+	android:id="@+id/poeme" 
+	android:inputType="textMultiLine"
+	android:editable="false">
+    <requestFocus></requestFocus>
+</jp.or.missusoft.hyakunin.CharDrawViewMultiLine>
+<jp.or.missusoft.hyakunin.CharDrawView 
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:id="@+id/writer" 
+ />
+
+    
+</FrameLayout>

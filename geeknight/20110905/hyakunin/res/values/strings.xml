@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="hello">Hello World, Poeme_HyakuninActivity!</string>
+    <string name="app_name">Poeme_Hyakunin</string>
+    <string name="def_poeme">Poeme</string>
+    <string name="def_writer">writer</string>
+</resources>
