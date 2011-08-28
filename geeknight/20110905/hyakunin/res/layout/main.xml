@@ -19,6 +19,18 @@
 	android:layout_height="fill_parent"
 	android:id="@+id/writer" 
  />
+<RelativeLayout 
+	android:id="@+id/relativeLayout1" 
+	android:layout_width="fill_parent" 
+	android:layout_height="match_parent">
+<Button 
+    android:text="@string/Speech" 
+    android:id="@+id/buttonSpeech" 
+    android:layout_width="wrap_content" 
+    android:layout_height="wrap_content" 
+    android:layout_alignParentBottom="true" 
+    android:layout_centerHorizontal="true"/>
+</RelativeLayout>
 
     
 </FrameLayout>

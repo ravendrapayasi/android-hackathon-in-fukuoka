@@ -4,4 +4,5 @@
     <string name="app_name">Poeme_Hyakunin</string>
     <string name="def_poeme">Poeme</string>
     <string name="def_writer">writer</string>
+    <string name="Speech">Speech</string>
 </resources>

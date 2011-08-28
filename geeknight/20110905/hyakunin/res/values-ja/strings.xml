@@ -4,4 +4,5 @@
     <string name="app_name">百人一首</string>
     <string name="def_poeme">歌</string>
     <string name="def_writer">作者</string>
+    <string name="Speech">詠む</string>
 </resources>
